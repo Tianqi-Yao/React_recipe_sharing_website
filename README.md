@@ -6,10 +6,10 @@ The project is for people sharing their recipe and finding local restaurants, wh
 
 
 Group members: 
-Yujie He		10469279
-Yuyang Peng		10459469
-Tianqi Yao		10473064
-Songhan Yu      	10470449           
+Yujie He		
+Yuyang Peng		
+Tianqi Yao		
+Songhan Yu      	           
 
 Course Technologies:
 React
