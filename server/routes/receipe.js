@@ -51,7 +51,7 @@ router.post('/search', async (req, res) => {
     else {
     // If the term is not in the set, you will add it to the set and set the initial value to 1. 
     // query the API endpoint for the search term
-      const searchedReceipe = await receipeData.getRecipesBySearch(searchTerm);  
+      const searchedReceipe = await receipeData.getRecipesBySearchTerm(searchTerm);  
       let setReceipe = await client.setAsync(`${searchTerm}`,  JSON.stringify(searchedReceipe));
       let newCacheSearchedReceipe  = await client.getAsync(`${searchTerm}`);
 
@@ -72,6 +72,24 @@ router.get('/popularsearches', async (req, res) => {
     res.json(topPopularTerm);
   } catch (e) {
     res.status(404).json({ error: 'Server /receipe/popularsearches Error.' });
+  }
+});
+
+
+
+router.post('/randomReceipe', async (req, res) => {
+  try {
+    let searchTerm = 'chicken';
+
+    if (!searchTerm || searchTerm == ' ') {  //give a response status code of 400 on the page, and render an HTML page with a paragraph class called error
+      res.status(400);
+      throw '"You should input text into form for searching and the text cannot just be spaces.';
+    }
+      
+    const randomReceipe = await receipeData.getRandomRecipesBySearchTerm(searchTerm);  
+    res.json(randomReceipe);
+  } catch (e) {
+    console.log(e);
   }
 });
 

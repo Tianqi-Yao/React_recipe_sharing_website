@@ -19,12 +19,29 @@ let exportedMethods = {
     }
   },
 
-  async getRecipesBySearch(term) {
-    if (term === undefined || term === null) throw "The term does not exit";
+
+  async getRecipesBySearchTerm(term) {
+    if (term === undefined || term === null) throw "The query term is undefined";
     if (typeof term !== 'string') term = term.toString();
 
     try {
       const { data } = await axios.get(`https://api.edamam.com/api/recipes/v2?type=public&q=${term}&app_id=${app_id}&app_key=${app_key}`);
+      const parsedData = data;  // parse the data from JSON into a normal JS Object
+      if (!parsedData) throw `We're sorry, but no results were found for ${term}.`;
+
+      return parsedData;
+    } catch (e) {
+      throw `No results were found for search term: ${term}`;
+    }
+  },
+
+
+  async getRandomRecipesBySearchTerm(term) {
+    if (term === undefined || term === null) throw "The query term is undefined";
+    if (typeof term !== 'string') term = term.toString();
+
+    try {
+      const { data } = await axios.get(`https://api.edamam.com/api/recipes/v2?type=public&q=${term}&app_id=${app_id}&app_key=${app_key}&random=true`);
       const parsedData = data;  // parse the data from JSON into a normal JS Object
       if (!parsedData) throw `We're sorry, but no results were found for ${term}.`;
 
