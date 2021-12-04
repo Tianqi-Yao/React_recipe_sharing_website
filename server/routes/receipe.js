@@ -77,7 +77,7 @@ router.get('/popularsearches', async (req, res) => {
 
 
 
-router.post('/randomReceipe', async (req, res) => {
+router.post('/randomSearch', async (req, res) => {
   try {
     let searchTerm = 'chicken';
 
