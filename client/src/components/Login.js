@@ -1,5 +1,6 @@
 import React, {useRef, useState} from "react"
 import {Alert, Button, Card, Form} from "react-bootstrap"
+import axios from "axios"
 import {useAuth} from "../contexts/AuthContext"
 import {Link, useHistory} from "react-router-dom"
 
@@ -17,7 +18,8 @@ export default function Login() {
         try {
             setError("")
             setLoading(true)
-            await login(emailRef.current.value, passwordRef.current.value)
+            let newUserObj = await login(emailRef.current.value, passwordRef.current.value)
+            await axios.post('http://localhost:3030/users', {uid: newUserObj.user.uid})
             history.push("/")
         } catch {
             setError("Failed to log in")

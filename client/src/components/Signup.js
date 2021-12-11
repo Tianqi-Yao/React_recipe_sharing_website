@@ -2,6 +2,7 @@ import React, {useRef, useState} from "react"
 import {Alert, Button, Card, Form} from "react-bootstrap"
 import {useAuth} from "../contexts/AuthContext"
 import {Link, useHistory} from "react-router-dom"
+import axios from "axios"
 
 export default function Signup() {
     const emailRef = useRef()
@@ -22,7 +23,9 @@ export default function Signup() {
         try {
             setError("")
             setLoading(true)
-            await signup(emailRef.current.value, passwordRef.current.value)
+            let newUserObj = await signup(emailRef.current.value, passwordRef.current.value)
+            await axios.post('http://localhost:3030/users', {uid: newUserObj.user.uid})
+            console.log(e)
             history.push("/")
         } catch {
             setError("Failed to create an account")
