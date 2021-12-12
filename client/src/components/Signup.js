@@ -25,13 +25,13 @@ export default function Signup() {
             setError("")
             setLoading(true)
             let newUserObj = await signup(emailRef.current.value, passwordRef.current.value)
-            newUserObj.userName = userNameRef.current.value
-            newUserObj.email = emailRef.current.value
+            // newUserObj.userName = userNameRef.current.value
+            // newUserObj.email = emailRef.current.value
             await axios.post('http://localhost:3030/users', {
                 uid: newUserObj.user.uid,
                 userName: userNameRef.current.value
             })
-            updateCurrentUser(newUserObj)
+            // updateCurrentUser(newUserObj)
             history.push("/")
         } catch (e) {
             console.log(e)
