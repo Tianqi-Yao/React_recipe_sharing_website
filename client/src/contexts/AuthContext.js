@@ -19,7 +19,8 @@ export function AuthProvider({children}) {
         resetPassword,
         updateEmail,
         updatePassword,
-        updateCurrentUser
+        getCurrentUser
+        // updateCurrentUser
     }
 
     useEffect(() => {
@@ -29,12 +30,23 @@ export function AuthProvider({children}) {
         })
     }, [])
 
-    function updateCurrentUser(user) {
-        return setCurrentUser(user)
+    function signup(email, password, username) {
+        return auth.createUserWithEmailAndPassword(email, password).then(
+            (res) => {
+                const user = auth.currentUser
+                return user.updateProfile({
+                    displayName: username
+                })
+            })
+        // function (res) {
+        //     return res.user.updateProfile({
+        //         displayName: username
+        //     })
+        // })
     }
 
-    function signup(email, password) {
-        return auth.createUserWithEmailAndPassword(email, password)
+    function getCurrentUser() {
+        return auth.currentUser
     }
 
     function login(email, password) {

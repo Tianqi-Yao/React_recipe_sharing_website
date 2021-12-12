@@ -9,7 +9,7 @@ export default function Signup() {
     const passwordRef = useRef()
     const passwordConfirmRef = useRef()
     const userNameRef = useRef()
-    const {signup, updateCurrentUser} = useAuth()
+    const {signup, getCurrentUser} = useAuth()
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const history = useHistory()
@@ -24,12 +24,14 @@ export default function Signup() {
         try {
             setError("")
             setLoading(true)
-            let newUserObj = await signup(emailRef.current.value, passwordRef.current.value)
+            await signup(emailRef.current.value, passwordRef.current.value, userNameRef.current.value)
+            let newUserObj = getCurrentUser()
+            console.log(newUserObj)
             // newUserObj.userName = userNameRef.current.value
             // newUserObj.email = emailRef.current.value
             await axios.post('http://localhost:3030/users', {
-                uid: newUserObj.user.uid,
-                userName: userNameRef.current.value
+                uid: newUserObj.uid,
+                userName: newUserObj.displayName
             })
             // updateCurrentUser(newUserObj)
             history.push("/")
