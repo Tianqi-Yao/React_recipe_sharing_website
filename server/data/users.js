@@ -28,9 +28,9 @@ let exportedMethods = {
         return await this.getUserById(newInsertInformation.insertedId)
     },
 
-    async addUserByUid(uid) {
+    async addUserByUidAndUsername(uid, userName) {
         const userCollection = await users()
-        const newInsertInformation = await userCollection.insertOne({_id: uid})
+        const newInsertInformation = await userCollection.insertOne({_id: uid, userName: userName})
         if (newInsertInformation.insertedCount === 0) throw 'Insert failed!'
         return await this.getUserById(newInsertInformation.insertedId)
     },

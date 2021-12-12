@@ -8,7 +8,8 @@ export default function Signup() {
     const emailRef = useRef()
     const passwordRef = useRef()
     const passwordConfirmRef = useRef()
-    const {signup} = useAuth()
+    const userNameRef = useRef()
+    const {signup, updateCurrentUser} = useAuth()
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const history = useHistory()
@@ -24,10 +25,16 @@ export default function Signup() {
             setError("")
             setLoading(true)
             let newUserObj = await signup(emailRef.current.value, passwordRef.current.value)
-            await axios.post('http://localhost:3030/users', {uid: newUserObj.user.uid})
-            console.log(e)
+            newUserObj.userName = userNameRef.current.value
+            newUserObj.email = emailRef.current.value
+            await axios.post('http://localhost:3030/users', {
+                uid: newUserObj.user.uid,
+                userName: userNameRef.current.value
+            })
+            updateCurrentUser(newUserObj)
             history.push("/")
-        } catch {
+        } catch (e) {
+            console.log(e)
             setError("Failed to create an account")
         }
 
@@ -41,6 +48,10 @@ export default function Signup() {
                     <h2 className="text-center mb-4">Sign Up</h2>
                     {error && <Alert variant="danger">{error}</Alert>}
                     <Form onSubmit={handleSubmit}>
+                        <Form.Group id="username">
+                            <Form.Label>username</Form.Label>
+                            <Form.Control type="username" ref={userNameRef} required/>
+                        </Form.Group>
                         <Form.Group id="email">
                             <Form.Label>Email</Form.Label>
                             <Form.Control type="email" ref={emailRef} required/>

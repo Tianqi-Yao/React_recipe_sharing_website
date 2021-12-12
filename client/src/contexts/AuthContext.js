@@ -18,7 +18,8 @@ export function AuthProvider({children}) {
         logout,
         resetPassword,
         updateEmail,
-        updatePassword
+        updatePassword,
+        updateCurrentUser
     }
 
     useEffect(() => {
@@ -27,6 +28,10 @@ export function AuthProvider({children}) {
             setLoading(false)
         })
     }, [])
+
+    function updateCurrentUser(user) {
+        return setCurrentUser(user)
+    }
 
     function signup(email, password) {
         return auth.createUserWithEmailAndPassword(email, password)

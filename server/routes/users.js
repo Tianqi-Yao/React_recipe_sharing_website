@@ -24,9 +24,9 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     // Not implemented
-    const {uid} = req.body
+    const {uid, userName} = req.body
     try {
-        const user = await userData.addUserByUid(uid)
+        const user = await userData.addUserByUidAndUsername(uid, userName)
         return res.json(user)
     } catch (e) {
         console.log(e)
