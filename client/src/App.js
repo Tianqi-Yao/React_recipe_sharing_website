@@ -21,9 +21,9 @@ function App() {
             The project is for people to make and find tasty foods' receipe. Users can see other users’ sharing information on this platform. 
             Users can find and upload their recipe as well as use a task tracker to plan buying different ingredients. 
           </p>
-          <Link className="showlink" to="/">Home</Link>
-          <Link className="showlink" to="/todo">TodoList</Link>
-          <Link className="showlink" to="/receipe/page/0">ReceipePage</Link>
+          <Link className="homelink" to="/">Home</Link> &nbsp;&nbsp;
+          <Link className="todolink" to="/todo">TodoList</Link> &nbsp;&nbsp;
+          <Link className="receipelink" to="/receipe/page/0">ReceipePage</Link> &nbsp;&nbsp;
         </header>
         <br />
         <br />

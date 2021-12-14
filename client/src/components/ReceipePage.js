@@ -137,6 +137,10 @@ const ReceipePage = (props) => {
     setReceipeTerm(searchTerm);
   }
 
+  const submitReceipeTerm = async (submitTerm) => {
+    setReceipeTerm(submitTerm);
+  }
+
   // card UI
   const buildCard = (receipe) => {
     return (
@@ -220,6 +224,7 @@ const ReceipePage = (props) => {
     }
     else if (props.match.params.page === 0) {  // 1st page
       return <div>
+          <SubmitForm searchValue={submitReceipeTerm}/>
           <SearchForm searchValue={searchReceipeTerm}/>
           <button onClick={() => { increPageNum(); buttonChangeUrl();}}>
             Next Page
@@ -234,6 +239,7 @@ const ReceipePage = (props) => {
     else if (props.match.params.page === lastPageNum) {  // last page
       return (
         <div>
+          <SubmitForm searchValue={submitReceipeTerm}/>
           <SearchForm searchValue={searchReceipeTerm}/>
           <button onClick={() => { decrePageNum(); buttonChangeUrl();}}>
             Previous Page
@@ -251,6 +257,7 @@ const ReceipePage = (props) => {
       <div>
         {props.match.params.page < lastPageNum && props.match.params.page > 0 && (
           <div>
+            <SubmitForm searchValue={submitReceipeTerm}/>
             <SearchForm searchValue={searchReceipeTerm}/>
             <button onClick={() => { decrePageNum(); buttonChangeUrl();}}>   {/* https://upmostly.com/tutorials/multiple-onclick-events-in-react-with-examples#call-multiple-functions */}
               Previous Page
