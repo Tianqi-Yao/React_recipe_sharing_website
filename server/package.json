@@ -4,17 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "seed": "node ./tasks/seed.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
     "bluebird": "^3.4.7",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-handlebars": "^5.3.4",
     "express-session": "^1.17.0",
     "flat": "^2.0.1",
+    "mongodb": "^4.2.1",
     "node-redis": "^0.1.7",
     "redis": "^3.0.2"
   }
