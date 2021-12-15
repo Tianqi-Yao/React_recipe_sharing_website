@@ -17,7 +17,9 @@
     "express-handlebars": "^5.3.4",
     "express-session": "^1.17.0",
     "flat": "^2.0.1",
+    "mongodb": "^4.2.2",
     "node-redis": "^0.1.7",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "uuid": "^8.3.2"
   }
 }

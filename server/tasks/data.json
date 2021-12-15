@@ -1,0 +1,50 @@
+{
+  "id": 644387,
+  "title": "Garlicky Kale",
+  "image": "https://spoonacular.com/recipeImages/644387-312x231.jpg",
+  "instructionsReadOnly": "Start by making the tomato sauce.\nFinely chop 1 onion.\nPeel 600g of tomatoes with a serrated peeler. Chop the peeled tomatoes into small pieces.\nAdd 2 tablespoons of olive oil in a sauce pan. Add the chopped onions.\nAdd a pinch of Pimenton de la Vera (Dulce), which is Spanish smoked sweet paprika. I used 1/4 teaspoon. Add more if you prefer the sauce to be spicy.\nAdd the chopped tomatoes to the onions mixture and stir well to combine.\nAdd 1 fresh bay leaf. I used 2 dried pieces here because I couldnt find fresh ones.\nAdd 1 teaspoon of sugar andd salt and pepper to taste. I added 1/2 teaspoon of salt and 1/4 teaspoon of ground black pepper. Adjust seasoning to taste.\nCover the sauce pan and reduce the heat to a medium-low and let the tomato mixture simmer gently till it reduces to a sauce like consistency.\nIn the meantime, make the meatballs by adding 1/2 an onion to a food processor.\nAdd 2 cloves of garlic. I used 1 tablespoon of minced garlic. Process till the onions and garlic are finely chopped.\nSweat the onion-garlic mixture in a frying pan with some olive oil. I just realised that I had missed this step. The meatballs still tasted great.\nAdd the onion-garlic mixture to 500g ground beef in a mixing bowl.\nSlice off the crust of 4 slices of white bread. Cut the soft white bread into small cubes of 1cm all round.\nAdd the chopped bread to the beef mixture.\nAdd 2 tablespoons of chopped parsley. Use Italian flat parsley where possible. I couldnt find any, so I used English parsley.\nAdd 1 large egg.\nAdd salt and pepper to taste. I used approximately 1/4 teaspoon of salt and a pinch of black pepper.\nMix well to combine.\nShape the meat mixture into balls that are slightly bigger than the size of a golf ball size. Roll the meat tightly to form meatballs.\nAdd 3/4 cup of olive oil to frying pan. The layer of oil should be approximately 3/4cm in the pan.\nPut the pan on medium-high heat and add the meatballs to the oil. Gently roll them around in the oil to brown all surfaces and ensure even cooking.\nWhen the meatballs are a deep golden brown, remove them from the frying pan and set aside.\nThe tomatoes-onion mixture should have reduced to a sauce consistency now. You can use a hand blender to puree the mixture. Or leave the small bits of tomatoes and onions as they are.\nAdd the meatballs to the tomato sauce and let the meatballs warm through.\nGarnish with more chopped parsley",
+  "cookingMinutes": null,
+  "ingredients": [
+    {
+      "amount": 1.0,
+      "unitShort": "",
+      "name": "bay leaf"
+    },
+    {
+      "amount": 2.0,
+      "unitShort": "cloves",
+      "name": "garlic"
+    },
+    {
+      "amount": 1.0,
+      "unitShort": "lb",
+      "name": "ground beef"
+    },
+    {
+      "amount": 1.0,
+      "unitShort": "cup",
+      "name": "olive oil"
+    },
+    {
+      "amount": 2.0,
+      "unitShort": "Tbsp",
+      "name": "olive oil"
+    },
+    {
+      "amount": 0.5,
+      "unitShort": "cup",
+      "name": "onion"
+    },
+    {
+      "amount": 20.0,
+      "unitShort": "servings",
+      "name": "onion"
+    },
+    {
+      "amount": 2.0,
+      "unitShort": "Tbsp",
+      "name": "parsley"
+    }
+  ],
+  "author": "Mike"
+}

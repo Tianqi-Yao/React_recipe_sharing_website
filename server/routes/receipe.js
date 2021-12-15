@@ -3,9 +3,10 @@ const router = express.Router();
 
 const data = require('../data');
 const receipeData = data.receipes;  // "../data/pokemons" through ../data/index.js
+const postData = data.posts;
 
 // connect to redis
-const redis = require('redis');  
+const redis = require('redis');
 const client = redis.createClient();
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis.RedisClient.prototype);
@@ -28,7 +29,7 @@ router.get('/page/:page', async (req, res) => {
       }
 
       if (parseInt(offset) < 0 || parseInt(limit) < 0) throw "Page parameters for offset and limit must be positive number"
-      
+
       const receipePage = await receipeData.getReceipesPageList(parseInt(offset), parseInt(limit));
       res.json(receipePage);
       let cacheReceipePage = await client.setAsync(`receipePage${req.params.page}`, JSON.stringify(receipePage));  // store receipePage in cache
@@ -40,23 +41,77 @@ router.get('/page/:page', async (req, res) => {
 
 
 router.get('/:id', async (req, res) => {
-    try {
-      if (!req.params.id) throw 'You must specify a receipeId to get';
+  try {
+    if (!req.params.id) throw 'You must specify a receipeId to get';
 
-      let cacheOfReceipe = await client.getAsync(`recepieId${req.params.id}`);
-      if (cacheOfReceipe) {
-        res.send(JSON.parse(cacheOfReceipe));
-      } else {  // receipe not in cache
-        const singleReceipe = await receipeData.getRecipesById(req.params.id);
-        res.json(singleReceipe);
-        let cacheReceipe = await client.setAsync(`recepieId${req.params.id}`, JSON.stringify(singleReceipe));  // store pokemonPage in cache
-      }
-    } catch (e) {
-      console.log(e);
-      res.status(404).json({ message: 'Server /receipe/:id Error. Receipe not found with id' });
+    let cacheOfReceipe = await client.getAsync(`recepieId${req.params.id}`);
+    if (cacheOfReceipe) {
+      res.send(JSON.parse(cacheOfReceipe));
+    } else {  // receipe not in cache
+      const singleReceipe = await receipeData.getRecipesById(req.params.id);
+      res.json(singleReceipe);
+      let cacheReceipe = await client.setAsync(`recepieId${req.params.id}`, JSON.stringify(singleReceipe));  // store pokemonPage in cache
     }
+  } catch (e) {
+    console.log(e);
+    res.status(404).json({ message: 'Server /receipe/:id Error. Receipe not found with id' });
+  }
 });
 
+router.get('/mongodb/:id', async (req, res) => {
+  try {
+    if (!req.params.id) throw 'You must specify a receipeId to get';
+
+    const singleReceipe = await postData.getPostById(req.params.id);
+    console.log("singleReceipe",singleReceipe);
+    res.json(singleReceipe);
+  } catch (e) {
+    console.log(e);
+    res.status(404).json({ message: 'Server /receipe/:id Error. Receipe not found with id' });
+  }
+});
+
+router.post('/create', async (req, res) => {
+  try {
+    // check input
+    let title = req.body.title;
+    if (!title || title == ' ') {  //give a response status code of 400 on the page, and render an HTML page with a paragraph class called error
+      res.status(400);
+      throw '"You should input title.';
+    }
+    let instructionsReadOnly = req.body.instructionsReadOnly;
+    if (!instructionsReadOnly || instructionsReadOnly == ' ') {  //give a response status code of 400 on the page, and render an HTML page with a paragraph class called error
+      res.status(400);
+      throw '"You should input instructions.';
+    }
+
+    const searchedReceipe = await postData.addPost(title,req.body.image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, "90f50928-3f1a-4a81-9f14-2036519622c8");  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
+    res.json(searchedReceipe);
+  } catch (e) {
+    res.status(404).json({ error: `Server /create Error.` });
+  }
+})
+
+router.patch('/update', async (req, res) => {
+  try {
+    // check input
+    let title = req.body.title;
+    if (!title || title == ' ') {  //give a response status code of 400 on the page, and render an HTML page with a paragraph class called error
+      res.status(400);
+      throw '"You should input title.';
+    }
+    let instructionsReadOnly = req.body.instructionsReadOnly;
+    if (!instructionsReadOnly || instructionsReadOnly == ' ') {  //give a response status code of 400 on the page, and render an HTML page with a paragraph class called error
+      res.status(400);
+      throw '"You should input instructions.';
+    }
+
+    const searchedReceipe = await postData.updatePost(req.body.id, title,req.body.image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, "90f50928-3f1a-4a81-9f14-2036519622c8");  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
+    res.json(searchedReceipe);
+  } catch (e) {
+    res.status(404).json({ error: `Server /create Error.` });
+  }
+})
 
 router.post('/search', async (req, res) => {
   try {
@@ -66,21 +121,21 @@ router.post('/search', async (req, res) => {
       res.status(400);
       throw '"You should input text into form for searching and the text cannot just be spaces.';
     }
-    
+
     // Check the cache to see if it has search results for that search term. If it does you will send those cached results to the client.
     let doesTermExist = await client.existsAsync(`${searchTerm}`);
     if (doesTermExist) {  // Exist. you will increment the search term counter in the sorted set.
       const existReceipe = await client.getAsync(`${searchTerm}`);
-      await client.zincrbyAsync('receipeSortedSet', 1, `${searchTerm}`); 
+      await client.zincrbyAsync('receipeSortedSet', 1, `${searchTerm}`);
       // console.log(existReceipe);
       res.json(JSON.parse(existReceipe));
     }
     else {
-    // If the term is not in the set, you will add it to the set and set the initial value to 1. 
-    // query the API endpoint for the search term
-      const searchedReceipe = await receipeData.getRecipesByTerm(searchTerm);  
-      let setReceipe = await client.setAsync(`${searchTerm}`,  JSON.stringify(searchedReceipe));
-      let newCacheSearchedReceipe  = await client.getAsync(`${searchTerm}`);
+      // If the term is not in the set, you will add it to the set and set the initial value to 1. 
+      // query the API endpoint for the search term
+      const searchedReceipe = await receipeData.getRecipesByTerm(searchTerm);
+      let setReceipe = await client.setAsync(`${searchTerm}`, JSON.stringify(searchedReceipe));
+      let newCacheSearchedReceipe = await client.getAsync(`${searchTerm}`);
 
       let addToSortedSort = await client.zaddAsync('receipeSortedSet', 1, `${searchTerm}`);
       res.json(searchedReceipe);
@@ -103,8 +158,8 @@ router.get('/popularSearches', async (req, res) => {
 
 
 router.get('/randomSearch', async (req, res) => {
-  try {      
-    const randomReceipe = await receipeData.getRandomRecipes();  
+  try {
+    const randomReceipe = await receipeData.getRandomRecipes();
     res.json(randomReceipe);
   } catch (e) {
     console.log(e);
