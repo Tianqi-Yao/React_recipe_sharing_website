@@ -79,7 +79,7 @@ const ReceipePage = (props) => {
   }, []);
 
 
-  // 2. receipeTerm fire this
+  // 2. receipeTerm in 'SearchForm' fire this
   useEffect(() => {  // search form keyword fire this
     async function fetchData() {
       try {
@@ -93,7 +93,6 @@ const ReceipePage = (props) => {
       }
     }
     if (receipeTerm) {
-      console.log('receipeTerm is set');
       fetchData();
     }
   }, [receipeTerm]);
@@ -133,9 +132,13 @@ const ReceipePage = (props) => {
     history.push(`/receipe/page/${props.match.params.page}`);
   }
 
-  const searchReceipeTerm = async (searchTerm) => {
+  const searchReceipeTerm = async (searchTerm) => {  // SearchForm
     setReceipeTerm(searchTerm);
   }
+
+  // const submitReceipeTerm = async (submitTerm) => {  //! SubmitForm, I need a hook that is triggered by 'submitTerm', and in this hook, I need axios to call /search in server side and store returned json
+  //   setReceipeTerm(submitTerm);
+  // }
 
   // card UI
   const buildCard = (receipe) => {
@@ -221,7 +224,7 @@ const ReceipePage = (props) => {
     else if (props.match.params.page === 0) {  // 1st page
       return <div>
           <SearchForm searchValue={searchReceipeTerm}/>
-          <button onClick={() => { increPageNum(); buttonChangeUrl();}}>
+          <button onClick={() => { increPageNum(); buttonChangeUrl();}} className='btn'>
             Next Page
           </button>
           <br />
@@ -235,7 +238,7 @@ const ReceipePage = (props) => {
       return (
         <div>
           <SearchForm searchValue={searchReceipeTerm}/>
-          <button onClick={() => { decrePageNum(); buttonChangeUrl();}}>
+          <button onClick={() => { decrePageNum(); buttonChangeUrl();}} className='btn'>
             Previous Page
           </button>
           <br />
@@ -252,10 +255,10 @@ const ReceipePage = (props) => {
         {props.match.params.page < lastPageNum && props.match.params.page > 0 && (
           <div>
             <SearchForm searchValue={searchReceipeTerm}/>
-            <button onClick={() => { decrePageNum(); buttonChangeUrl();}}>   {/* https://upmostly.com/tutorials/multiple-onclick-events-in-react-with-examples#call-multiple-functions */}
+            <button onClick={() => { decrePageNum(); buttonChangeUrl();}} className='btn'>   {/* https://upmostly.com/tutorials/multiple-onclick-events-in-react-with-examples#call-multiple-functions */}
               Previous Page
             </button> &nbsp;&nbsp;
-            <button onClick={() => { increPageNum(); buttonChangeUrl();}}>
+            <button onClick={() => { increPageNum(); buttonChangeUrl();}} className='btn'>
               Next Page
             </button>
             <br />

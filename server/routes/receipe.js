@@ -83,8 +83,7 @@ router.post('/search', async (req, res) => {
       let newCacheSearchedReceipe  = await client.getAsync(`${searchTerm}`);
 
       let addToSortedSort = await client.zaddAsync('receipeSortedSet', 1, `${searchTerm}`);
-
-      res.json(JSON.parse(searchedReceipe));
+      res.json(searchedReceipe);
     }
   } catch (e) {
     res.status(404).json({ error: `Server /receipe/search Error. No results were found with search term: ${searchTerm}` });
