@@ -7,6 +7,7 @@ import Home from './components/Home';
 import TodoList from './components/Todo';
 import ReceipePage from './components/ReceipePage';
 import Receipe from './components/Receipe';
+import PopularSearch from './components/PopularSearch';
 // import ReceipeSearch from './components/ReceipeSearch';
 // import Header from './components/Header'
 
@@ -22,8 +23,9 @@ function App() {
             Users can find and upload their recipe as well as use a task tracker to plan buying different ingredients. 
           </p>
           <Link className="homelink" to="/">Home</Link> &nbsp;&nbsp;
-          <Link className="todolink" to="/todo">TodoList</Link> &nbsp;&nbsp;
           <Link className="receipelink" to="/receipe/page/0">ReceipePage</Link> &nbsp;&nbsp;
+          <Link className="todolink" to="/todo">TodoList</Link> &nbsp;&nbsp;
+          <Link className="receipelink" to="/popularSearch">popularSearch</Link> &nbsp;&nbsp;
         </header>
         <br />
         <br />
@@ -32,7 +34,7 @@ function App() {
           <Route exact path="/todo" component={TodoList} />
           <Route exact path="/receipe/page/:page" component={ReceipePage} />
           <Route exact path="/receipe/:id" component={Receipe} />
-          {/* <Route exact path="/search" component={ReceipeSearch} /> */}
+          <Route exact path="/popularSearch" component={PopularSearch} />
         </div>
       </div>
     </Router>

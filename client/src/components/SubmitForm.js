@@ -8,10 +8,11 @@ const SubmitSearchForm = (props) => {
   };
 
   return (
-    <form method="POST" action="/receipe/search" name="search-form" className="search-form center">
+    <form method="POST" action="/receipe/search" onSubmit={(e) => {e.preventDefault();}} name="search-form" className="search-form center">
       Search Receipe:
-      <input autoComplete="off" type="text" name="searchTerm" placeholder="Search Term" onSubmit={handleSubmit}/>
-      <button type="submit">Submit search term</button>
+      <input autoComplete="off" type="text" name="searchTerm" placeholder="Search Term" onChange={handleSubmit}/>
+      {/* <button type="submit">Submit search term</button> */}
+      <input type='submit' value='Search' className='btn' />
     </form>
   );
 }
