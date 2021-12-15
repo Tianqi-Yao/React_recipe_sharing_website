@@ -7,7 +7,7 @@ import * as imageCmp from 'imagecmp';
 const UpdateReceipe = () => {
     const [post, setPost] = useState(undefined);
     const [id, setID] = useState([]);
-    const [fields, setFields] = useState([{ value: null }]);
+    const [fields, setFields] = useState([]);
     const [imageUrl, setImageUrl] = useState(undefined);
     // const [images, setImages] = React.useState([]);
     // const maxNumber = 1;
@@ -126,7 +126,7 @@ const UpdateReceipe = () => {
             <div className="App">
                 {fields.map((field, idx) => {
                     return (
-                        <div key={`${field}-${idx}`}>
+                        <div key={`${idx}`}>
                             <label>
                                 Ingredient {idx}:
                                 <input
@@ -150,6 +150,7 @@ const UpdateReceipe = () => {
     }
 
     function handleChange(i, event) {
+        //event.preventDefault();
         const values = [...fields];
         values[i] = event.target.value;
         setFields(values);
