@@ -189,7 +189,7 @@ const CreateReceipe = () => {
         console.log("post", post);
 
         setPost(post);
-        const { data } = await axios.post('http://localhost:3008/receipe/create', post, {
+        const { data } = await axios.post('http://localhost:3001/receipe/create', post, {
             headers: { Accept: 'application/json' }
         });
         console.log("ddddd", data);

@@ -12,7 +12,7 @@ const UpdateReceipe = () => {
     // const [images, setImages] = React.useState([]);
     // const maxNumber = 1;
     let receipeID = "3ce9608b-0743-4cb5-b301-2607b0fd35ab"  // ! for test
-    let url = "http://localhost:3008/receipe/mongodb/" + receipeID
+    let url = "http://localhost:3001/receipe/mongodb/" + receipeID
 
     useEffect(() => {
         const getData = async () => {
@@ -218,7 +218,7 @@ const UpdateReceipe = () => {
         //   }
 
         setPost(post);
-        const { data } = await axios.patch('http://localhost:3008/receipe/update', post, {
+        const { data } = await axios.patch('http://localhost:3001/receipe/update', post, {
             headers: { Accept: 'application/json' }
         });
         console.log("data", data, fields);
