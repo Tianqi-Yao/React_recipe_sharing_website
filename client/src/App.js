@@ -25,7 +25,7 @@ function App() {
           <Link className="homelink" to="/">Home</Link> &nbsp;&nbsp;
           <Link className="receipelink" to="/receipe/page/0">ReceipePage</Link> &nbsp;&nbsp;
           <Link className="todolink" to="/todo">TodoList</Link> &nbsp;&nbsp;
-          <Link className="receipelink" to="/popularSearch">popularSearch</Link> &nbsp;&nbsp;
+          {/* <Link className="receipelink" to="/popularSearch">popularSearch</Link> &nbsp;&nbsp; */}
         </header>
         <br />
         <br />
@@ -34,7 +34,7 @@ function App() {
           <Route exact path="/todo" component={TodoList} />
           <Route exact path="/receipe/page/:page" component={ReceipePage} />
           <Route exact path="/receipe/:id" component={Receipe} />
-          <Route exact path="/popularSearch" component={PopularSearch} />
+          {/* <Route exact path="/popularSearch" component={PopularSearch} /> */}
         </div>
       </div>
     </Router>
