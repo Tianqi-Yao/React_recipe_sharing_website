@@ -15,28 +15,6 @@ function EditProfile(props) {
     return (
         <div className="add">
             <div className="input-selection">
-                {/* <label>
-                    UserName:
-                    <input
-                        onChange={(e) => handleChange(e)}
-                        value={props.user.userName}
-                        id="userName"
-                        name="userName"
-                    />
-                </label>
-                <br />
-                <br />
-                <label>
-                    Password:
-                    <input
-                        onChange={(e) => handleChange(e)}
-                        value={props.user.password}
-                        id="Password"
-                        name="Password"
-                    />
-                </label>
-                <br />
-                <br /> */}
                 <Image src={props.match.params.img} thumbnail />
                 <label>
                     upload picture:
