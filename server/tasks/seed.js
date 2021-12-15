@@ -39,6 +39,18 @@ async function main() {
     [],
     aiden._id
   );
+
+    let p1 = await recipes.addPost("1", "111");
+    let p2 = await recipes.addPost("1", "111");
+    let p3 = await recipes.addPost("1", "111");
+    let p4 = await recipes.addPost("1", "111");
+
+    let u1 = await users.addUser("user", "123", [p1._id, p2._id, p3._id, p4._id], [p1._id, p2._id, p3._id, p4._id]);
+    console.log(u1);
+
+    await db.serverConfig.close();
+    console.log('Done!');
+
   console.log('Done seeding database');
   await db.serverConfig.close();
 }

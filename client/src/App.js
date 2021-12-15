@@ -1,5 +1,7 @@
 import React from 'react'
 // import logo from './img/pokeBall.png';
+import logo from './logo.svg';
+import React from "react";
 import './App.css';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
@@ -13,6 +15,15 @@ import UpdateReceipe from './components/UpdateReceipe';
 import PopularSearch from './components/PopularSearch';
 // import ReceipeSearch from './components/ReceipeSearch';
 // import Header from './components/Header'
+import UserProfile from './components/UserProfile';
+import UserRecipe from './components/UserRecipe';
+import EditProfile from './components/EditProfile';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  NavLink
+} from "react-router-dom";
 
 function App() {
   return (
