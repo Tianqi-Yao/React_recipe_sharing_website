@@ -7,6 +7,9 @@ import Home from './components/Home';
 import TodoList from './components/Todo';
 import ReceipePage from './components/ReceipePage';
 import Receipe from './components/Receipe';
+import CreateReceipe from './components/CreateReceipe';
+import UpdateReceipe from './components/UpdateReceipe';
+
 // import ReceipeSearch from './components/ReceipeSearch';
 // import Header from './components/Header'
 
@@ -24,6 +27,8 @@ function App() {
           <Link className="showlink" to="/">Home</Link>
           <Link className="showlink" to="/todo">TodoList</Link>
           <Link className="showlink" to="/receipe/page/0">ReceipePage</Link>
+          <Link className="showlink" to="/createReceipe">Create Receipe</Link>
+          <Link className="showlink" to="/updateReceipe">Update Receipe</Link>
         </header>
         <br />
         <br />
@@ -32,6 +37,8 @@ function App() {
           <Route exact path="/todo" component={TodoList} />
           <Route exact path="/receipe/page/:page" component={ReceipePage} />
           <Route exact path="/receipe/:id" component={Receipe} />
+          <Route exact path="/createReceipe" component={CreateReceipe} />
+          <Route exact path="/updateReceipe" component={UpdateReceipe} />
           {/* <Route exact path="/search" component={ReceipeSearch} /> */}
         </div>
       </div>

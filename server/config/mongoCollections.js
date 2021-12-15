@@ -17,5 +17,6 @@ const getCollectionFn = (collection) => {  //collection parameter is collection'
 
 /* Now, you can list your collections here: */
 module.exports = {  //I can create myself collection here
-  users: getCollectionFn('users'),
+  posts: getCollectionFn('posts'),
+  users: getCollectionFn('users')
 };

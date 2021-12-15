@@ -2,7 +2,7 @@ const MongoClient = require('mongodb').MongoClient;
 const settings = {
     mongoConfig: {
         serverUrl: 'mongodb://localhost:27017/',
-        database: 'Fall2021WEB Team' //database name
+        database: 'Fall2021WEB_Team' //database name
     }
 };
 const mongoConfig = settings.mongoConfig;
