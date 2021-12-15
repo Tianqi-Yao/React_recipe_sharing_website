@@ -95,4 +95,26 @@ router.patch('/unlike', async (req, res) => {
 
 
 
+router.get('/', async (req, res) => {
+    try {
+        const userList = await userData.getAllUsers()
+        res.json(userList)
+    } catch (e) {
+        // Something went wrong with the server!
+        res.status(500).send()
+    }
+})
+
+router.post('/', async (req, res) => {
+    // Not implemented
+    const {uid, userName} = req.body
+    try {
+        const user = await userData.addUserByUidAndUsername(uid, userName)
+        return res.json(user)
+    } catch (e) {
+        console.log(e)
+        res.status(501).send()
+    }
+})
+
 module.exports = router;
