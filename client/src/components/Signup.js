@@ -29,7 +29,7 @@ export default function Signup() {
             console.log(newUserObj)
             // newUserObj.userName = userNameRef.current.value
             // newUserObj.email = emailRef.current.value
-            await axios.post('http://localhost:3030/users', {
+            await axios.post('http://localhost:3001/users', {
                 uid: newUserObj.uid,
                 userName: newUserObj.displayName
             })
