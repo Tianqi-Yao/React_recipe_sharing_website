@@ -11,7 +11,7 @@ let exportedMethods = {
         }
         const userCollection = await users()
 
-        let user = await userCollection.findOne({_id: ObjectId(id)})
+        let user = await userCollection.findOne({_id: id})
         if (user === null) {
             throw "No user found"
         }

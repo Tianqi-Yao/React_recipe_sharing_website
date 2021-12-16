@@ -21,7 +21,7 @@ function UserProfile(props) {
     const ChangeProfile = async () => {
         let userName = document.getElementById('userName').value;
         let password = document.getElementById('Password').value;
-        let newUser = await axios.patch(`http://localhost:4000/users/updateProfile`, { params: { id: props.match.params.uid, userName: userName, password: password } });
+        let newUser = await axios.patch(`http://localhost:3001/users/updateProfile`, { params: { id: props.match.params.uid, userName: userName, password: password } });
         setBtnToggle(false);
     };
     const CancelChange = () => {
@@ -34,7 +34,7 @@ function UserProfile(props) {
             console.log("useEffect fired")
             async function fetchData() {
                 try {
-                    const { data } = await axios.get(`http://localhost:4000/users/${props.match.params.uid}`);
+                    const { data } = await axios.get(`http://localhost:3001/users/${props.match.params.uid}`);
                     // const recipe = await axios.get(`http://localhost:4000/users/recipe/${props.match.params.uid}`);
                     // setRecipeData(recipe.data);
                     setUserData(data);

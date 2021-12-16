@@ -34,7 +34,7 @@ export default function Signup() {
                 userName: newUserObj.displayName
             })
             // updateCurrentUser(newUserObj)
-            history.push("/")
+            history.push(`/userprofile/${newUserObj.uid}`)
         } catch (e) {
             console.log(e)
             setError("Failed to create an account")
