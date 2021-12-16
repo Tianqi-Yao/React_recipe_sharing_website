@@ -122,6 +122,16 @@ let exportedMethods = {
         }
         return this.getUserById(uid);
 
+    },
+    async uploadUserImg(uid, img) {
+        const userCollection = await users();
+        // let user = await userCollection.findOne({ _id: ObjectId(uid) });
+
+        let updateInformation = await userCollection.updateOne({ _id: ObjectId(uid) }, { $set: { Photo: img } });
+        if (updateInformation.modifiedCount === 0) {
+            throw 'could not edit the username successfully';
+        }
+        return this.getUserById(uid);
     }
 
 

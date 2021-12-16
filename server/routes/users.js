@@ -93,6 +93,18 @@ router.patch('/unlike', async (req, res) => {
     }
 });
 
+router.patch('/uploadimg', async (req, res) => {
+    let img = req.body.params.img;
+    let uid = req.body.params.uid;
+
+    try {
+        const user = await userData.uploadUserImg(uid, img);
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ e: error });
+    }
+});
+
 
 
 module.exports = router;

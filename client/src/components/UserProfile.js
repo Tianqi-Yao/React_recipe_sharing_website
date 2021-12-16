@@ -46,7 +46,7 @@ function UserProfile(props) {
             }
             fetchData();
         },
-        [userData]
+        [props.match.params.uid]
     );
 
     const buildProfile = (user) => {
@@ -103,7 +103,8 @@ function UserProfile(props) {
                 <Row>
                     <Col sm={4}>
                         <Card>
-                            <Link to={`/editprofile/${userData.Photo}`} >
+                            <Link to={`/editprofile/${userData._id}`} >
+                            {/* <Link to={{EditProfile}}> */}
                                 {userData.Photo ? (<Card.Img variant="top" src={userData.Photo} />) : (<Card.Img variant="top" src={testLogo} />)}
                             </Link>
                             {userProfile}

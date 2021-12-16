@@ -27,7 +27,7 @@ function App() {
           </Route>
           {/* <Route exact path="/userrecipe" component={UserRecipe}>
           </Route> */}
-          <Route exact path="/editprofile/:img" component={EditProfile}>
+          <Route exact path="/editprofile/:uid" component={EditProfile}>
           </Route>
         </Switch>
       </div>
