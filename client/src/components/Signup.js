@@ -43,15 +43,24 @@ export default function Signup() {
         setLoading(false)
     }
 
+    function handleChange(e) {
+        e.preventDefault()
+        if (passwordRef.current.value.length < 6) {
+            setError("At least six length")
+        } else {
+            setError("")
+        }
+    }
+
     return (
         <>
             <Card>
                 <Card.Body>
                     <h2 className="text-center mb-4">Sign Up</h2>
                     {error && <Alert variant="danger">{error}</Alert>}
-                    <Form onSubmit={handleSubmit}>
+                    <Form onSubmit={handleSubmit} onChange={handleChange}>
                         <Form.Group id="username">
-                            <Form.Label>username</Form.Label>
+                            <Form.Label>Username</Form.Label>
                             <Form.Control type="username" ref={userNameRef} required/>
                         </Form.Group>
                         <Form.Group id="email">

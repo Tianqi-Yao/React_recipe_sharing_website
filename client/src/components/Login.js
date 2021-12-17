@@ -32,7 +32,10 @@ export default function Login() {
         e.preventDefault()
         try {
             let newUserObj = await googleSignInWithPopup()
-            await axios.post('http://localhost:3001/users', {uid: newUserObj.user.uid})
+            await axios.post('http://localhost:3001/users', {
+                uid: newUserObj.user.uid,
+                userName: newUserObj.user.displayName
+            })
             history.push(`/userprofile/${newUserObj.user.uid}`)
         } catch {
             setError("Failed to log in")
