@@ -7,7 +7,7 @@ import {Link, useHistory} from "react-router-dom"
 export default function Login() {
     const emailRef = useRef()
     const passwordRef = useRef()
-    const {login} = useAuth()
+    const {login, googleSignInWithPopup} = useAuth()
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const history = useHistory()
@@ -26,6 +26,17 @@ export default function Login() {
         }
 
         setLoading(false)
+    }
+
+    async function handleGoogleSign(e) {
+        e.preventDefault()
+        try {
+            let newUserObj = await googleSignInWithPopup()
+            await axios.post('http://localhost:3001/users', {uid: newUserObj.user.uid})
+            history.push(`/userprofile/${newUserObj.user.uid}`)
+        } catch {
+            setError("Failed to log in")
+        }
     }
 
     return (
@@ -47,6 +58,9 @@ export default function Login() {
                             Log In
                         </Button>
                     </Form>
+                    <Button onClick={handleGoogleSign}>
+                        Google Login
+                    </Button>
                     <div className="w-100 text-center mt-3">
                         <Link to="/forgot-password">Forgot Password?</Link>
                     </div>
