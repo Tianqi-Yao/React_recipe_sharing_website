@@ -52,9 +52,7 @@ const Todo = () => {
     <div className='container'>
       <Header title='To Do List' onAdd={() => setShowAddTodo(!showAddTodo)} showAdd={showAddTodo} />
       {showAddTodo && <AddTask onAdd={addTask} />}
-      {tasks.length > 0 
-        ? <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder}/> 
-      : ('No Todo. Add Your Todo Now !')}
+      {tasks.length > 0 ? <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder}/> : ('No Todo. Add Your Todo Now !')}
 
       <Footer />
     </div>

@@ -7,7 +7,6 @@ import { Link, useHistory } from 'react-router-dom';
 // import Button from 'react-bootstrap/Button';
 import '../App.css';
 import { makeStyles, Card, CardContent, CardMedia, Typography, CardHeader, CardActionArea, CardActions } from '@material-ui/core';
-
 // const actions = require('../actions');
 
 
@@ -98,7 +97,7 @@ const Receipe = (props) => {
     // receipeData.types.forEach((obj) => {
     //   typeList.push(obj.type.name);
     // })
-
+    const regex = /(<([^>]+)>)/gi;  // for summary
     return (
       <Card className={classes.card} variant="outlined">
         <CardHeader className={classes.titleHead} title={receipeData.title} />
@@ -109,9 +108,49 @@ const Receipe = (props) => {
           alt={receipeData.title}>
         </img>
 
-        {/* <div>
-          {`Type: ${typeList}`}
-        </div> */}
+        <br/>
+        <dl>
+          <dt>Id:</dt> {(receipeData && receipeData.id) || 'No Summary'}
+          <br/>
+          <dt>Title:</dt> {( receipeData && receipeData.title) || 'No Title'}
+          <br/>
+          <dt>ReadyInMinutes:</dt> {(receipeData && receipeData.readyInMinutes) || 'No ReadyInMinutes'}
+          <br/>
+          <dt>SourceUrl:</dt> {( receipeData && <a href={`${receipeData.sourceUrl}`}>{`${receipeData.sourceUrl}`}</a>) || 'No SourceUrl'}
+          <br/>
+          <dt>SpoonacularUrl:</dt> {( receipeData && <a href={`${receipeData.spoonacularSourceUrl}`}>{`${receipeData.spoonacularSourceUrl}`}</a>) || 'No SpoonacularUrl'}
+          <br/>
+          <dt>DishTypes:</dt> {(receipeData && receipeData.dishTypes) || 'No DishTypes'}
+        </dl>
+        {/* <dl>
+          <dt>Cuisines:</dt> {(receipeData && receipeData.cuisines &&
+            receipeData.cuisines.map((cuisine) => {
+              return <dt key={cuisine}>{cuisine}&nbsp;&nbsp;</dt> ;
+            })) ||
+            'No Cuisines'}
+        </dl> */}
+        <p>
+          <dt>Summary:</dt> {(receipeData && 
+            receipeData.summary && 
+            receipeData.summary.replace(regex, '')) || 
+            'No Summary'}
+        </p>
+        <p>
+          <dt>Instructions</dt> {(receipeData && 
+            receipeData.instructions && 
+            receipeData.instructions.replace(regex, '')) || 
+            'No Instructions'}
+        </p>
+        {/* <dl>
+          <dt>Instructions Step:</dt> {(receipeData && 
+          receipeData.analyzedInstructions &&
+          receipeData.analyzedInstructions.steps &&
+            receipeData.analyzedInstructions.steps.map((step) => {
+              return (
+                <div>{step.step}</div>
+              );
+            }))}
+        </dl> */}
         <CardContent>
           <Typography>
             <Link to={`/receipe/page/0`}>Back to all receipe list...</Link>

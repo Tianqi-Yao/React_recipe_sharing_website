@@ -6,9 +6,9 @@ const recipes = data.receipes
 
 async function main() {
     const db = await dbConnection()
+    await db.dropDatabase();  //Removes the current database, deleting the associated data files.
 
-    await db.dropDatabase()
-
+    // test case
     const patrick = await users.addUser('Patrick', 'Hill')
     const id = patrick._id
 
@@ -49,11 +49,9 @@ async function main() {
     let u1 = await users.addUser("user", "123", [p1._id, p2._id, p3._id, p4._id], [p1._id, p2._id, p3._id, p4._id])
     console.log(u1)
 
+    // close database connection
     await db.serverConfig.close()
-    console.log('Done!')
-
     console.log('Done seeding database')
-    await db.serverConfig.close()
 }
 
 main().catch((error) => {

@@ -30,8 +30,8 @@ const AddTask = (props) => {
       </div>
 
       <div className='form-control'>
-        <label>Day & Time</label>
-        <input type='text' placeholder='Add Day & Time' value={day} onChange={(e) => setDay(e.target.value)}></input>
+        <label>Time</label>
+        <input type='text' placeholder='Add Time' value={day} onChange={(e) => setDay(e.target.value)}></input>
       </div>
 
       <div className='form-control form-control-check'>
