@@ -78,7 +78,7 @@ const UserRecipe = (props) => {
             return buildCard(recipe);
         });
     } else {
-        card = (<div>Share Your Recipe Now! <Link>Click To Create Recipe</Link></div>)
+        card = (<div>Share Your Recipe Now! <Link to="/createReceipe">Click To Create Recipe</Link></div>)
 
     }
 

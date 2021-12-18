@@ -35,7 +35,7 @@ export default function Signup() {
                 userName: newUserObj.displayName
             })
             // updateCurrentUser(newUserObj)
-            history.replace("/")
+            window.location.href = "/";
         } catch (e) {
             console.log(e)
             setError("Failed to create an account")

@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from "react"
-import {Tabs, Tab, Card, Container, Row, Col, Button} from 'react-bootstrap'
+import React, { useState, useEffect } from "react"
+import { Tabs, Tab, Card, Container, Row, Col, Button } from 'react-bootstrap'
 import axios from "axios"
 // import EditProfile from './EditProfile';
 import UserRecipe from './UserRecipe'
 import WishList from './WishList'
 import testLogo from '../img/image.jpg'
 import '../App.css'
-import {Link, useHistory} from "react-router-dom"
-import {useAuth} from "../contexts/AuthContext"
+import { Link, useHistory } from "react-router-dom"
+import { useAuth } from "../contexts/AuthContext"
 import database from "../config/awsUrl"
 
 function UserProfile(props) {
@@ -15,12 +15,12 @@ function UserProfile(props) {
     const [key, setKey] = useState('userRecipe')
     const [loading, setLoading] = useState(true)
     const [userData, setUserData] = useState(undefined)
-    const {currentUser} = useAuth()
+    const { currentUser } = useAuth()
     const [recipeData, setRecipeData] = useState(undefined)
-    const [formData, setFormData] = useState({task: '', taskDesc: ''})
+    const [formData, setFormData] = useState({ task: '', taskDesc: '' })
     const history = useHistory()
     const handleChange = (e) => {
-        setFormData((prev) => ({...prev, [e.target.name]: e.target.value}))
+        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
     }
     const ChangeProfile = async (e) => {
         let userName = document.getElementById('userName').value
@@ -51,7 +51,7 @@ function UserProfile(props) {
 
             async function fetchData() {
                 try {
-                    const {data} = await axios.get(`${database}/users/${props.match.params.uid}`)
+                    const { data } = await axios.get(`${database}/users/${props.match.params.uid}`)
                     // const recipe = await axios.get(`http://localhost:4000/users/recipe/${props.match.params.uid}`);
                     // setRecipeData(recipe.data);
                     setUserData(data)
@@ -70,7 +70,7 @@ function UserProfile(props) {
     const buildProfile = (user) => {
         if (editBtnToggle === false) {
             return (<Card.Body> <Card.Title>{user.userName}</Card.Title><Button variant="primary"
-                                                                                onClick={goUpdatePage}>Edit
+                onClick={goUpdatePage}>Edit
                 Profile</Button></Card.Body>)
         } else {
             return (
@@ -86,8 +86,8 @@ function UserProfile(props) {
                                 name="userName"
                             />
                         </label>
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
                         <label>
                             Password:
                             <input
@@ -124,8 +124,8 @@ function UserProfile(props) {
                     <Col sm={4}>
                         <Card>
                             <Link to={`/editprofile/${userData._id}`}>
-                                {userData.Photo ? (<Card.Img variant="top" src={userData.Photo} alt="User Icon"/>) : (
-                                    <Card.Img variant="top" src={testLogo} alt="User Icon"/>)}
+                                {userData.Photo ? (<Card.Img variant="top" src={userData.Photo} alt="User Icon" />) : (
+                                    <Card.Img variant="top" src={testLogo} alt="User Icon" />)}
                             </Link>
                             {userProfile}
                             {/* {!editBtnToggle ? (<Card.Body> <Card.Title>{userData.userName}</Card.Title>
@@ -141,11 +141,11 @@ function UserProfile(props) {
                             className="mb-3"
                         >
                             <Tab eventKey="userRecipe" title="UserRecipe">
-                                <UserRecipe user={userData}/>
+                                <UserRecipe user={userData} />
                             </Tab>
                             <Tab eventKey="wishList" title="WishList">
                                 {/* wishlist */}
-                                <WishList user={userData}/>
+                                <WishList user={userData} />
                             </Tab>
                         </Tabs>
                     </Col>
