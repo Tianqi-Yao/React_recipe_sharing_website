@@ -23,6 +23,8 @@ import UserProfile from "./components/UserProfile"
 import PrivateLink from "./components/PrivateLink"
 import UserSignLogin from "./components/UserSignLogin"
 
+// import EditProfile from "./components/EditProfile"
+
 function App() {
     return (
         <Router>
@@ -56,9 +58,8 @@ function App() {
                                 <Route exact path="/receipe/:id" component={Receipe}/>
                                 <Route exact path="/createReceipe" component={CreateReceipe}/>
                                 <Route exact path="/updateReceipe" component={UpdateReceipe}/>
-                                <Route exact path="/userprofile/:uid" component={UserProfile}></Route>
-                                <Route exact path="/editprofile/:uid" component={EditProfile}></Route>
-                                {/* <PrivateRoute path="/userprofile/:uid" component={UserProfile}/> */}
+                                {/*<PrivateRoute exact path="/editprofile/:uid" component={EditProfile}/>*/}
+                                <PrivateRoute exact path="/userprofile/:uid" component={UserProfile}/>
                                 <Container
                                     className="border-0 d-flex align-items-center justify-content-center">
                                     <div className="w-100" style={{maxWidth: "400px"}}>

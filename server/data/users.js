@@ -2,7 +2,7 @@ const {ObjectId} = require('mongodb')
 const mongoCollections = require('../config/mongoCollections')
 const users = mongoCollections.users
 const recipesData = require('./recipes')
-const uuid = require('uuid').v4;
+const uuid = require('uuid').v4
 // const recipes = mongoCollections.recipes;
 
 let exportedMethods = {
@@ -17,7 +17,7 @@ let exportedMethods = {
             throw "No user found"
         }
         return user
-    }, 
+    },
     async addUser(userName, password, post, likes) {
         const userCollection = await users()
 
@@ -28,7 +28,7 @@ let exportedMethods = {
         const newInsertInformation = await userCollection.insertOne(newUser)
         if (newInsertInformation.insertedCount === 0) throw 'Insert failed!'
         return await this.getUserById(newInsertInformation.insertedId)
-    }, 
+    },
     async updateUserInfo(id, newUser) {
         const userCollection = await users()
         let updateInfo = {}
@@ -50,10 +50,10 @@ let exportedMethods = {
             throw 'could not edit the username successfully'
         }
         return this.getUserById(id)
-    }, 
+    },
     async getRecipeByUid(uid) {
-        if(!uid || typeof uid !== 'string') {
-            throw 'You must provide a valid uid'; 
+        if (!uid || typeof uid !== 'string') {
+            throw 'You must provide a valid uid'
         }
 
         const userCollection = await users()
@@ -63,16 +63,16 @@ let exportedMethods = {
         let result = []
         for (let i of userRecipes) {
             let recipeInformation = await recipesData.getRecipeById(i)
-            result.push(recipeInformation);
+            result.push(recipeInformation)
         }
-        return result;
-    }, 
+        return result
+    },
     async removeRecipeFromUser(uid, rid) {
-        if(!uid || typeof uid !== 'string') {
-            throw 'You must provide a valid uid'; 
+        if (!uid || typeof uid !== 'string') {
+            throw 'You must provide a valid uid'
         }
-        if(!rid || typeof rid !== 'string') {
-            throw 'You must provide a valid postId'; 
+        if (!rid || typeof rid !== 'string') {
+            throw 'You must provide a valid postId'
         }
 
         const userCollection = await users()
@@ -94,10 +94,10 @@ let exportedMethods = {
         }
         return this.getUserById(uid)
 
-    }, 
+    },
     async getLikesFromUser(uid) {
-        if(!uid || typeof uid !== 'string') {
-            throw 'You must provide a valid uid'; 
+        if (!uid || typeof uid !== 'string') {
+            throw 'You must provide a valid uid'
         }
         const userCollection = await users()
         let user = await userCollection.findOne({_id: uid})
@@ -109,13 +109,13 @@ let exportedMethods = {
             result.push(recipeInformation)
         }
         return result
-    }, 
+    },
     async removeLikesFromUser(uid, rid) {
-        if(!uid || typeof uid !== 'string') {
-            throw 'You must provide a valid uid'; 
+        if (!uid || typeof uid !== 'string') {
+            throw 'You must provide a valid uid'
         }
-        if(!rid || typeof rid !== 'string') {
-            throw 'You must provide a valid postId'; 
+        if (!rid || typeof rid !== 'string') {
+            throw 'You must provide a valid postId'
         }
         const userCollection = await users()
         let user = await userCollection.findOne({_id: uid})
@@ -134,16 +134,27 @@ let exportedMethods = {
         }
         return this.getUserById(uid)
 
-    }, 
+    },
     async uploadUserImg(uid, img) {
-        const userCollection = await users();
+        const userCollection = await users()
         // let user = await userCollection.findOne({ _id: ObjectId(uid) });
 
-        let updateInformation = await userCollection.updateOne({ _id: uid }, { $set: { Photo: img } });
+        let updateInformation = await userCollection.updateOne({_id: uid}, {$set: {Photo: img}})
         if (updateInformation.modifiedCount === 0) {
-            throw 'could not edit the username successfully';
+            throw 'could not edit the username successfully'
         }
-        return this.getUserById(uid);
+        return this.getUserById(uid)
+    },
+    async addNewUser(uid, userName) {
+        const userCollection = await users()
+        let newUserScheme = {
+            _id: uid,
+            userName: userName,
+            Photo: "",
+            Post: []
+        }
+        const newInsertInformation = await userCollection.insertOne(newUserScheme)
+        return await this.getUserById(newInsertInformation.insertedId)
     },
     async addUserByUidAndUsername(uid, userName) {
         const userCollection = await users()
@@ -159,7 +170,7 @@ let exportedMethods = {
             throw `Could not delete user with id of ${id}`
         }
         return true
-    }, 
+    },
     async updateUser(id, firstName, lastName) {
         const user = await this.getUserById(id)
         console.log(user)
