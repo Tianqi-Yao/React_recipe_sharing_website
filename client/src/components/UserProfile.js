@@ -9,6 +9,7 @@ import '../App.css'
 import {Link, useHistory} from "react-router-dom"
 import {useAuth} from "../contexts/AuthContext"
 import database from "../config/awsUrl"
+
 function UserProfile(props) {
     const [editBtnToggle, setBtnToggle] = useState(false)
     const [key, setKey] = useState('userRecipe')
@@ -63,7 +64,7 @@ function UserProfile(props) {
 
             fetchData()
         },
-        [props.match.params.uid, currentUser]
+        [history]
     )
 
     const buildProfile = (user) => {
