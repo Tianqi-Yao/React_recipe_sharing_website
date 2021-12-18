@@ -18,17 +18,18 @@ const UserRecipe = (props) => {
     async function deleteRecipe(rid) {
         // dispatch(actions.deleteRecipeByUser(props.userData._id, rid));
         // document.getElementById('trainerName').value = '';
-        const { data } = await axios.delete(`http://localhost:4000/users/deleteRecipe?uid=${props.user._id}&rid=${rid}`);
+        const { data } = await axios.delete(`http://localhost:3001/users/deleteRecipe?uid=${props.user._id}&rid=${rid}`);
         setDeleteData(data);
+        // setRecipeData(data);
     };
 
     useEffect(
         () => {
-            console.log("useEffect fired")
+            console.log("UserRecipe fired")
             async function fetchData() {
                 try {
                     // const { data } = await axios.get(`http://localhost:4000/users/${props.match.params.uid}`);
-                    const recipe = await axios.get(`http://localhost:4000/users/recipe/${props.user._id}`);
+                    const recipe = await axios.get(`http://localhost:3001/users/recipe/${props.user._id}`);
                     setRecipeData(recipe.data);
                     setLoading(false);
                 } catch (e) {
@@ -52,12 +53,12 @@ const UserRecipe = (props) => {
                         borderRadius: 5
                     }}
                 >
-                    {/* <Card.Img variant="top" src={recipe.Photo} className="recipeImg" /> */}
-                    <Card.Img variant="top" src={testLogo} className="recipeImg" />
+                    <Card.Img variant="top" src={recipe.image} className="recipeImg" />
+                    {/* <Card.Img variant="top" src={testLogo} className="recipeImg" /> */}
                     <Card.Body>
                         <Link to=""><Card.Title>{recipe.title}</Card.Title></Link>
                         <Card.Text>
-                            {recipe.postContent}
+                            {recipe.instructionsReadOnly}
                         </Card.Text>
                         <Button variant="danger" onClick={() => deleteRecipe(recipe._id)}>Delete</Button>
                     </Card.Body>

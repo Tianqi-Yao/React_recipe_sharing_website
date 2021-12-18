@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Tabs, Tab, Card, Container, Row, Col, Button } from 'react-bootstrap';
 import axios from "axios";
-import EditProfile from './EditProfile';
+// import EditProfile from './EditProfile';
 import UserRecipe from './UserRecipe';
 import WishList from './WishList';
 import testLogo from '../img/image.jpg';
@@ -46,7 +46,7 @@ function UserProfile(props) {
             }
             fetchData();
         },
-        [userData]
+        [props.match.params.uid]
     );
 
     const buildProfile = (user) => {
@@ -103,7 +103,7 @@ function UserProfile(props) {
                 <Row>
                     <Col sm={4}>
                         <Card>
-                            <Link to={`/editprofile/${userData.Photo}`} >
+                            <Link to={`/editprofile/${userData._id}`} >
                                 {userData.Photo ? (<Card.Img variant="top" src={userData.Photo} />) : (<Card.Img variant="top" src={testLogo} />)}
                             </Link>
                             {userProfile}
