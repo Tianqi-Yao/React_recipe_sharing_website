@@ -4,7 +4,7 @@ import axios from "axios"
 // import EditProfile from './EditProfile';
 import UserRecipe from './UserRecipe'
 import WishList from './WishList'
-import testLogo from '../img/image.jpg'
+import noImg from '../img/download.jpeg'
 import '../App.css'
 import { Link, useHistory } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
@@ -125,7 +125,7 @@ function UserProfile(props) {
                         <Card>
                             <Link to={`/editprofile/${userData._id}`}>
                                 {userData.Photo ? (<Card.Img variant="top" src={userData.Photo} alt="User Icon" />) : (
-                                    <Card.Img variant="top" src={testLogo} alt="User Icon" />)}
+                                    <Card.Img variant="top" src={noImg} alt="No User Photo" />)}
                             </Link>
                             {userProfile}
                             {/* {!editBtnToggle ? (<Card.Body> <Card.Title>{userData.userName}</Card.Title>
@@ -146,6 +146,9 @@ function UserProfile(props) {
                             <Tab eventKey="wishList" title="WishList">
                                 {/* wishlist */}
                                 <WishList user={userData} />
+                            </Tab>
+                            <Tab eventKey="createRecipe" title="Create Recipe">
+                                <Link to={`/createReceipe`}>Click To Create Recipe</Link>
                             </Tab>
                         </Tabs>
                     </Col>
