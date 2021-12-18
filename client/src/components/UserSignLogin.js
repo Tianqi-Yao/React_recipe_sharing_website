@@ -1,9 +1,10 @@
 import React from "react"
 import {useAuth} from "../contexts/AuthContext"
-import {Link} from "react-router-dom"
+import {Link, useHistory} from "react-router-dom"
 
 export default function UserSignLogin() {
     const {currentUser, logout} = useAuth()
+    const history = useHistory()
 
     async function handleLogout() {
         try {
@@ -13,14 +14,15 @@ export default function UserSignLogin() {
         }
     }
 
-    const noUserLink = <>
-        <Link className="showlink" to="/signup">Signup</Link>
-        <Link className="showlink" to="/login">Login</Link>
-    </>
-
-    const hasUserLink = <>
-        <Link className="showlink" onClick={handleLogout}>Logout</Link>
-    </>
-
-    return (currentUser ? hasUserLink : noUserLink)
+    if (currentUser) {
+        return <>
+            <Link className="showlink" to={`/userprofile/${currentUser.uid}`}>Hello {currentUser.displayName}</Link>
+            <Link className="showlink" to="/" onClick={handleLogout}>Logout</Link>
+        </>
+    } else {
+        return <>
+            <Link className="showlink" to="/signup">Signup</Link>
+            <Link className="showlink" to="/login">Login</Link>
+        </>
+    }
 }
