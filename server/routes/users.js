@@ -140,7 +140,7 @@ router.post('/', async (req, res) => {
     // Not implemented
     const { uid, userName } = req.body
     try {
-        const user = await userData.addUserByUidAndUsername(uid, userName)
+        const user = await userData.addNewUser(uid, userName)
         return res.json(user)
     } catch (e) {
         console.log(e)

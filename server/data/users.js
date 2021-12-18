@@ -2,6 +2,7 @@ const {ObjectId} = require('mongodb')
 const mongoCollections = require('../config/mongoCollections')
 const users = mongoCollections.users
 const recipesData = require('./recipes')
+const uuid = require('uuid').v4
 // const recipes = mongoCollections.recipes;
 
 let exportedMethods = {
@@ -149,7 +150,18 @@ let exportedMethods = {
         if (updateInformation.modifiedCount === 0) {
             throw 'could not edit the username successfully';
         }
-        return this.getUserById(uid);
+        return this.getUserById(uid)
+    },
+    async addNewUser(uid, userName) {
+        const userCollection = await users()
+        let newUserScheme = {
+            _id: uid,
+            userName: userName,
+            Photo: "",
+            Post: []
+        }
+        const newInsertInformation = await userCollection.insertOne(newUserScheme)
+        return await this.getUserById(newInsertInformation.insertedId)
     },
     async addUserByUidAndUsername(uid, userName) {
         const userCollection = await users()
