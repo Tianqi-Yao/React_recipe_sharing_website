@@ -21,7 +21,7 @@ let exportedMethods = {
         const userCollection = await users()
 
         if (!Array.isArray(todos)) {
-            todos = [];
+            todos = []
         }
         let newUser = {
             userName: userName,
@@ -29,7 +29,7 @@ let exportedMethods = {
             Photo: null,
             Post: post,
             likes: likes,
-            todos: todos,  // Array
+            todos: todos  // Array
         }
 
         const newInsertInformation = await userCollection.insertOne(newUser)
@@ -59,8 +59,8 @@ let exportedMethods = {
         return this.getUserById(id)
     },
     async getRecipeByUid(uid) {
-        if(!uid || typeof uid !== 'string') {
-            throw 'You must provide a valid uid';
+        if (!uid || typeof uid !== 'string') {
+            throw 'You must provide a valid uid'
         }
 
         const userCollection = await users()
@@ -70,16 +70,16 @@ let exportedMethods = {
         let result = []
         for (let i of userRecipes) {
             let recipeInformation = await recipesData.getRecipeById(i)
-            result.push(recipeInformation);
+            result.push(recipeInformation)
         }
-        return result;
+        return result
     },
     async removeRecipeFromUser(uid, rid) {
-        if(!uid || typeof uid !== 'string') {
-            throw 'You must provide a valid uid';
+        if (!uid || typeof uid !== 'string') {
+            throw 'You must provide a valid uid'
         }
-        if(!rid || typeof rid !== 'string') {
-            throw 'You must provide a valid postId';
+        if (!rid || typeof rid !== 'string') {
+            throw 'You must provide a valid postId'
         }
 
         const userCollection = await users()
@@ -103,8 +103,8 @@ let exportedMethods = {
 
     },
     async getLikesFromUser(uid) {
-        if(!uid || typeof uid !== 'string') {
-            throw 'You must provide a valid uid';
+        if (!uid || typeof uid !== 'string') {
+            throw 'You must provide a valid uid'
         }
         const userCollection = await users()
         let user = await userCollection.findOne({_id: uid})
@@ -118,11 +118,11 @@ let exportedMethods = {
         return result
     },
     async removeLikesFromUser(uid, rid) {
-        if(!uid || typeof uid !== 'string') {
-            throw 'You must provide a valid uid';
+        if (!uid || typeof uid !== 'string') {
+            throw 'You must provide a valid uid'
         }
-        if(!rid || typeof rid !== 'string') {
-            throw 'You must provide a valid postId';
+        if (!rid || typeof rid !== 'string') {
+            throw 'You must provide a valid postId'
         }
         const userCollection = await users()
         let user = await userCollection.findOne({_id: uid})
@@ -143,12 +143,12 @@ let exportedMethods = {
 
     },
     async uploadUserImg(uid, img) {
-        const userCollection = await users();
+        const userCollection = await users()
         // let user = await userCollection.findOne({ _id: ObjectId(uid) });
 
-        let updateInformation = await userCollection.updateOne({ _id: uid }, { $set: { Photo: img } });
+        let updateInformation = await userCollection.updateOne({_id: uid}, {$set: {Photo: img}})
         if (updateInformation.modifiedCount === 0) {
-            throw 'could not edit the username successfully';
+            throw 'could not edit the username successfully'
         }
         return this.getUserById(uid)
     },
@@ -158,6 +158,8 @@ let exportedMethods = {
             _id: uid,
             userName: userName,
             Photo: "",
+            todos: [],
+            likes: [],
             Post: []
         }
         const newInsertInformation = await userCollection.insertOne(newUserScheme)
@@ -193,16 +195,16 @@ let exportedMethods = {
         return await this.getUserById(id)
     },
     async getUserByUserId(userId) {  // for Todo List
-        if (!userId) throw 'You must provide an userId to get';
-        if (typeof userId !== 'string' || userId.length === 0) throw "for getTodoByUid(userId), the userId must be string type and not an empty string";
-        if (!ObjectId.isValid(userId)) throw "the userId provided is not a valid ObjectId";  //MongoDB Node check if objectid is valid. https://stackoverflow.com/questions/11985228/mongodb-node-check-if-objectid-is-valid
-        let parsedId = ObjectId(userId);
+        if (!userId) throw 'You must provide an userId to get'
+        if (typeof userId !== 'string' || userId.length === 0) throw "for getTodoByUid(userId), the userId must be string type and not an empty string"
+        if (!ObjectId.isValid(userId)) throw "the userId provided is not a valid ObjectId"  //MongoDB Node check if objectid is valid. https://stackoverflow.com/questions/11985228/mongodb-node-check-if-objectid-is-valid
+        let parsedId = ObjectId(userId)
 
-        const userCollection = await users();
-        let user = await userCollection.findOne({ _id: parsedId});  //return a document
-        if (user=== null) throw "No user with that userId";
-        user._id = user._id.toString();
-        return user;  //user object
+        const userCollection = await users()
+        let user = await userCollection.findOne({_id: parsedId})  //return a document
+        if (user === null) throw "No user with that userId"
+        user._id = user._id.toString()
+        return user  //user object
     }
 
 }
