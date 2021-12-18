@@ -3,11 +3,45 @@ import axios from 'axios';
 import '../App.css';
 // import ImageUploading from "react-images-uploading";
 import * as imageCmp from 'imagecmp';
+import { useAuth } from "../contexts/AuthContext"
+import noImage from '../img/download.jpeg'; 
+// import { Card, CardContent, Grid, Typography, makeStyles } from '@material-ui/core';
+
+// const useStyles = makeStyles({
+//     card: {
+//       maxWidth: 250,
+//       height: 'auto',
+//       marginLeft: 'auto',
+//       marginRight: 'auto',
+//       borderRadius: 5,
+//       border: '1px solid #1e8678',
+//       boxShadow: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);'
+//     },
+//     titleHead: {
+//       borderBottom: '1px solid #1e8678',
+//       fontWeight: 'bold'
+//     },
+//     grid: {
+//       flexGrow: 1,
+//       flexDirection: 'row'
+//     },
+//     media: {
+//       height: '100%',
+//       width: '100%'
+//     },
+//     button: {
+//       color: '#1e8678',
+//       fontWeight: 'bold',
+//       fontSize: 12
+//     }
+//   });
 
 const CreateReceipe = () => {
     const [post, setPost] = useState(undefined);
     const [fields, setFields] = useState([{ value: null }]);
     const [imageUrl, setImageUrl] = useState(undefined);
+    const { currentUser, updatePassword, updateEmail } = useAuth()
+    // const classes = useStyles(); 
     // const [images, setImages] = React.useState([]);
     // const maxNumber = 1;
     // const onChange = (imageList, addUpdateIndex) => {
@@ -16,16 +50,28 @@ const CreateReceipe = () => {
     //     setImages(imageList);
     // };
 
+    // useEffect(() => {
+    //     console.log("currentUser",currentUser);
+    //     if (currentUser === null){
+    //         alert("please login");
+    //         window.history.back(-1);
+    //     }
+
+    // }, []);
     const imageCmpFunc = () => {
         // const dataURL = document.getElementById('image').src;
         // console.log("dataURL",dataURL);
         // const file = imageCmp.dataURLtoFile(dataURL);
         const file = document.getElementById('image').files[0];
         console.log("imageCmp ", typeof file, file);
+        if (file == null) {
+            setImageUrl(undefined);
+            return;
+        }
         imageCmp.compressAccurately(file, 50).then(res => {
             console.log(res);
             imageCmp.filetoDataURL(res).then(res => {
-                console.log("dataURL",res);
+                console.log("dataURL", res);
                 setImageUrl(res)
             })
         })
@@ -36,7 +82,7 @@ const CreateReceipe = () => {
 
     const showImage = () => {
         return (
-            <img src={imageUrl} alt="" width="100" />
+            <img src={imageUrl === undefined ? noImage : imageUrl} alt="" />
         );
     }
 
@@ -115,13 +161,13 @@ const CreateReceipe = () => {
                                     onChange={e => handleChange(idx, e)}
                                 />
                             </label>
-                            <button type="button" onClick={() => handleRemove(idx)}>
+                            <button type="button" className="showlink" onClick={() => handleRemove(idx)}>
                                 remove
                             </button>
                         </div>
                     );
                 })}
-                <button type="button" onClick={() => handleAdd()}>
+                <button type="button" className="showlink" onClick={() => handleAdd()}>
                     add a ingredient
                 </button>
             </div>
@@ -199,61 +245,72 @@ const CreateReceipe = () => {
         // document.getElementById('image').value = '';
         document.getElementById('cookingMinutes').value = '';
         document.getElementById('instructionsReadOnly').value = '';
+        document.getElementById('image').value = null;
         fields.map((item, i) => {
             document.getElementById(i).value = '';
         });
+        setImageUrl(undefined);
         setFields([{ value: null }]);
     };
 
 
     return (
-        <div>
+        <div className="container">
             <form id="simple-form" onSubmit={formSubmit}>
-                <label>
-                    Title:
-                    <input
-                        id="title"
-                        name="title"
-                        type="text"
-                        placeholder="Receipe name (must input)"
-                        required
-                    />
-                </label>
-                <br />
-                <label>
-                    image:
-                    <input id="image" type="file" onChange={imageCmpFunc} />
-                </label>
-                <br />
-                    {imageUrl !== undefined ? showImage() : ""}
-                <br />
-                <label>
-                    Cooking Minutes:
-                    <input
-                        id="cookingMinutes"
-                        name="cookingMinutes"
-                        type="text"
-                        placeholder="optional"
-                    />
-                </label>
-                <br />
-                <label>
-                    Instructions:
-                    <input
-                        id="instructionsReadOnly"
-                        name="instructionsReadOnly"
-                        type="text"
-                        placeholder="must input"
-                        required
-                    />
-                </label>
-                <br />
+                <div className="receipeTitle">
+                    <label>
+                        Title:
+                        <input
+                            id="title"
+                            name="title"
+                            type="text"
+                            placeholder="Receipe name (must input)"
+                            required
+                        />
+                    </label>
+                </div>
+                <div className="receipeImage">
+                    <div className="imageInput">
+                        <label>
+                            image:
+                            <input id="image" type="file" onChange={imageCmpFunc} />
+                        </label>
+                    </div>
+                    <div className="img">
+                        {showImage()}
+                    </div>
+                </div>
+                <div className="receipeDetile">
+                    <div className="min">
+                        <label>
+                            Cooking Minutes:
+                            <input
+                                id="cookingMinutes"
+                                name="cookingMinutes"
+                                type="text"
+                                placeholder="optional"
+                            />
+                        </label>
+                    </div>
+                    <div className="instruction">
+                        <label>
+                            Instructions:
+                        </label>
+                        <textarea
+                            id="instructionsReadOnly"
+                            name="instructionsReadOnly"
+                            type="text"
+                            placeholder="must input"
+                            required
+                            rows="5" cols="33"
+                        />
 
-                {ingredientsView()}
-
-                <br />
-                <br />
-                <input type="submit" value="Submit" />
+                    </div>
+                </div>
+                <div className="ingredident">
+                    {ingredientsView()}
+                </div>
+                <input className="showlink" type="submit" value="Submit" />
             </form>
         </div>
     );

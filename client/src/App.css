@@ -167,6 +167,182 @@ dd {
 	margin-left: 5px;
 }
 
+.container {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 1fr 1fr 1fr 1fr;
+	gap: 0px 0px;
+	grid-auto-flow: row;
+	grid-template-areas:
+	  "receipeTitle"
+	  "receipeImage"
+	  "receipeDetile"
+	  "ingredident";
+  }
+  
+  .receipeTitle { grid-area: receipeTitle; }
+  
+  .receipeImage {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr;
+	gap: 0px 0px;
+	grid-auto-flow: row;
+	grid-template-areas: 
+    ". img img"
+    "imageInput img img"
+    ". img img";
+	grid-area: receipeImage;
+  }
+  
+  .imageInput { grid-area: imageInput; }
+  
+  .img { grid-area: img; }
+  
+  .receipeDetile {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
+	gap: 0px 0px;
+	grid-auto-flow: row;
+	grid-template-areas:
+	  "min min min"
+	  "instruction instruction instruction";
+	grid-area: receipeDetile;
+  }
+  
+  .min { grid-area: min; }
+  
+  .instruction { grid-area: instruction; }
+  
+  .ingredident { grid-area: ingredident; }
+
+
+   
+   /* Image input */
+   #simple-form .receipeImage .imageInput{
+	transform:translatex(187px) translatey(0px);
+	width:390px;
+   }
+
+   /* Image input */
+#simple-form .receipeImage .imageInput{
+	position:relative;
+	left:-34px;
+   }
+   
+   /* Img */
+   #simple-form .receipeImage .img{
+	position:relative;
+	left:-4px;
+	padding-left:0px;
+	margin-left:166px;
+	display:inline-block;
+	transform:translatex(0px) translatey(0px) !important;
+   }
+   
+   /* Image */
+   .receipeImage .img img{
+	display:inline-block;
+	min-height:230px;
+	width:320px;
+   }
+   
+   /* Image */
+.receipeImage .img img{
+	height:240px;
+   }
+   
+   /* Img */
+   #simple-form .receipeImage .img{
+	margin-bottom:21px;
+   }
+   
+   
+   
+   /* Receipe detile */
+   #simple-form .receipeDetile{
+	min-height:80px;
+   }
+   
+
+   
+   /* Container */
+#root .App .container{
+	transform:translatex(0px) translatey(0px);
+   }
+   
+   /* App */
+   #root .App .App{
+	min-height:74px;
+	transform:translatex(0px) translatey(0px);
+   }
+   
+   /* Division */
+   #simple-form .App div{
+	min-height:39px;
+	position:relative;
+   }
+   
+   /* Button */
+   #simple-form .App > button{
+	position:relative;
+   }
+   
+   /* Input */
+   #simple-form > input{
+	position:relative;
+   }
+   
+   /* Submitbtn */
+#simple-form .submitbtn{
+	top:8px;
+   }
+   
+   /* Simple form */
+   #simple-form{
+	min-height:317px;
+	transform:translatex(0px) translatey(0px);
+   }
+   
+   
+   /* Receipe image */
+#simple-form .receipeImage{
+	min-height:236px;
+	transform:translatex(0px) translatey(0px);
+   }
+
+   
+
+   
+   /* Label */
+   #simple-form .receipeTitle label{
+	width:368px;
+	min-height:45px;
+   }
+   
+   /* Receipe title */
+   #simple-form .receipeTitle{
+	min-height:47px;
+   }
+   
+   /* Title */
+   #title{
+	width:319px;
+	min-height:41px;
+   }
+
+   /* Label */
+.receipeDetile .instruction label{
+	position:relative;
+	top:-61px;
+	left:-8px;
+   }
+   
+   
+   
+   
+
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
 
 /* .bi::before {

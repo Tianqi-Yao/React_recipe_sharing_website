@@ -3,18 +3,27 @@ import axios from 'axios';
 import '../App.css';
 // import ImageUploading from "react-images-uploading";
 import * as imageCmp from 'imagecmp';
+import { useAuth } from "../contexts/AuthContext"
+import noImage from '../img/download.jpeg';
 
 const UpdateReceipe = () => {
     const [post, setPost] = useState(undefined);
     const [id, setID] = useState([]);
     const [fields, setFields] = useState([]);
     const [imageUrl, setImageUrl] = useState(undefined);
+    const { currentUser, updatePassword, updateEmail } = useAuth()
     // const [images, setImages] = React.useState([]);
     // const maxNumber = 1;
-    let receipeID = "3ce9608b-0743-4cb5-b301-2607b0fd35ab"  // ! for test
+    let receipeID = "8d7c5269-29c8-4af3-8708-cc8fcca9a0c9"  // ! for test
     let url = "http://localhost:3001/receipe/mongodb/" + receipeID
 
     useEffect(() => {
+
+        // if (currentUser === null) {
+        //     alert("please login");
+        //     window.history.back(-1);
+        // }
+
         const getData = async () => {
             const { data } = await axios.get(url, {
                 headers: { Accept: 'application/json' }
@@ -24,7 +33,7 @@ const UpdateReceipe = () => {
             let fields = data.ingredients;
             setFields(fields)
             setID(data._id)
-            console.log("post",data);
+            console.log("post", data);
             console.log("id: ", data._id);
         }
         getData();
@@ -44,10 +53,14 @@ const UpdateReceipe = () => {
         // const file = imageCmp.dataURLtoFile(dataURL);
         const file = document.getElementById('image').files[0];
         console.log("imageCmp ", typeof file, file);
+        if (file == null) {
+            setImageUrl(undefined);
+            return;
+        }
         imageCmp.compressAccurately(file, 50).then(res => {
             console.log(res);
             imageCmp.filetoDataURL(res).then(res => {
-                console.log("dataURL",res);
+                console.log("dataURL", res);
                 setImageUrl(res)
             })
         })
@@ -56,9 +69,9 @@ const UpdateReceipe = () => {
         // setImageUrl(dataURL)
     }
 
-    const showImage = ()=>{
+    const showImage = () => {
         return (
-            <img src={imageUrl} alt="" width="100" />
+            <img src={imageUrl === undefined ? noImage : imageUrl} alt="" />
         );
     }
 
@@ -136,13 +149,13 @@ const UpdateReceipe = () => {
                                     onChange={e => handleChange(idx, e)}
                                 />
                             </label>
-                            <button type="button" onClick={() => handleRemove(idx)}>
+                            <button type="button" className="showlink" onClick={() => handleRemove(idx)}>
                                 remove
                             </button>
                         </div>
                     );
                 })}
-                <button type="button" onClick={() => handleAdd()}>
+                <button type="button" className="showlink"  onClick={() => handleAdd()}>
                     add a ingredient
                 </button>
             </div>
@@ -238,57 +251,66 @@ const UpdateReceipe = () => {
 
 
     return (
-        <div>
+        <div className="container">
             <form id="simple-form" onSubmit={formSubmit}>
-                <label>
-                    Title:
-                    <input
-                        id="title"
-                        name="title"
-                        type="text"
-                        defaultValue={post && post.title}
-                        required
-                    />
-                </label>
-                <br />
-                <label>
-                    image:
-                    <input id="image" type="file" onChange={imageCmpFunc} />
-                </label>
-                <br />
-                    {imageUrl !== undefined ? showImage() : ""}
-                {/* {loadimageView()} */}
-                <br />
-                <label>
-                    Cooking Minutes:
-                    <input
-                        id="cookingMinutes"
-                        name="cookingMinutes"
-                        type="text"
-                        defaultValue={post && post.cookingMinutes}
-                    />
-                </label>
-                <br />
-                <label>
-                    Instructions:
-                    <input
-                        id="instructionsReadOnly"
-                        name="instructionsReadOnly"
-                        type="text"
-                        defaultValue={post && post.instructionsReadOnly}
-                        required
-                    />
-                </label>
-                <br />
+                <div className="receipeTitle">
+                    <label>
+                        Title:
+                        <input
+                            id="title"
+                            name="title"
+                            type="text"
+                            defaultValue={post && post.title}
+                            required
+                        />
+                    </label>
+                </div>
+                <div className="receipeImage">
+                    <div className="imageInput">
+                        <label>
+                            image:
+                            <input id="image" type="file" onChange={imageCmpFunc} />
+                        </label>
+                    </div>
+                    <div className="img">
+                        {showImage()}
+                        {/* {loadimageView()} */}
+                    </div>
+                </div>
+                <div className="receipeDetile">
+                    <div className="min">
+                        <label>
+                            Cooking Minutes:
+                            <input
+                                id="cookingMinutes"
+                                name="cookingMinutes"
+                                type="text"
+                                defaultValue={post && post.cookingMinutes}
+                            />
+                        </label>
+                    </div>
+                    <div className="instruction">
+                        <label>
+                            Instructions:
+                        </label>
+                        <textarea
+                            id="instructionsReadOnly"
+                            name="instructionsReadOnly"
+                            type="text"
+                            defaultValue={post && post.instructionsReadOnly}
+                            required
+                            rows="5" cols="33"
+                        />
 
-                {ingredientsView()}
-
+                    </div>
+                </div >
+                <div className="ingredident">
+                    {ingredientsView()}
+                </div>
                 <br />
-                <br />
-                <input type="submit" value="Submit" />
-            </form>
-
-        </div>
+                <input type="submit" className="showlink" value="Submit" />
+            </form >
+        </div >
     );
 }
 

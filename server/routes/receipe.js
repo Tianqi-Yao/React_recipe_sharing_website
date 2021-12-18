@@ -4,6 +4,10 @@ const router = express.Router();
 const data = require('../data');
 const receipeData = data.receipes;  // "../data/pokemons" through ../data/index.js
 const postData = data.posts;
+const base64ToImage = require('base64-to-image');
+var fs = require('fs');
+var gm = require('gm');
+const imageCmp = require("imagecmp");
 
 // connect to redis
 const redis = require('redis');
@@ -63,7 +67,7 @@ router.get('/mongodb/:id', async (req, res) => {
     if (!req.params.id) throw 'You must specify a receipeId to get';
 
     const singleReceipe = await postData.getPostById(req.params.id);
-    console.log("singleReceipe",singleReceipe);
+    console.log("singleReceipe", singleReceipe);
     res.json(singleReceipe);
   } catch (e) {
     console.log(e);
@@ -85,7 +89,31 @@ router.post('/create', async (req, res) => {
       throw '"You should input instructions.';
     }
 
-    const searchedReceipe = await postData.addPost(title,req.body.image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, "90f50928-3f1a-4a81-9f14-2036519622c8");  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
+    let image = req.body.image;
+    if (image) {
+      //save image to public
+      let base64Str = image;
+      let path = 'public/';
+      let optionalObj = { 'fileName': 'uploadImage', 'type': 'png' };
+      let imageInfo = base64ToImage(base64Str, path, optionalObj);
+      console.log("imageInfo", imageInfo);
+
+      //add Watermark
+      let readStream = fs.createReadStream('public/uploadImage.png');
+      gm(readStream, 'uploadImage.png')
+        .fontSize(40)
+        .fill('#95a5a6')
+        .drawText(0, 50, "Fall2021WEB_Team_Watermark", 'Center')
+        .write("./public/uploadImage_new.png", function (err) {
+          // ...
+        });
+
+      let bitmap = fs.readFileSync('./public/uploadImage_new.png');
+      imageData = new Buffer(bitmap).toString('base64');
+      image = 'data:image/png;base64,' + imageData;
+    }
+
+    const searchedReceipe = await postData.addPost(title, image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, "90f50928-3f1a-4a81-9f14-2036519622c8");  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
     res.json(searchedReceipe);
   } catch (e) {
     res.status(404).json({ error: `Server /create Error.` });
@@ -106,7 +134,7 @@ router.patch('/update', async (req, res) => {
       throw '"You should input instructions.';
     }
 
-    const searchedReceipe = await postData.updatePost(req.body.id, title,req.body.image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, "90f50928-3f1a-4a81-9f14-2036519622c8");  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
+    const searchedReceipe = await postData.updatePost(req.body.id, title, req.body.image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, "90f50928-3f1a-4a81-9f14-2036519622c8");  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
     res.json(searchedReceipe);
   } catch (e) {
     res.status(404).json({ error: `Server /create Error.` });
