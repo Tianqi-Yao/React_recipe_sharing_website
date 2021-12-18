@@ -19,8 +19,8 @@ export default function Login() {
             setError("")
             setLoading(true)
             let newUserObj = await login(emailRef.current.value, passwordRef.current.value)
-            await axios.post('http://localhost:3001/users', {uid: newUserObj.user.uid})
-            history.push(`/userprofile/${newUserObj.uid}`)
+            // await axios.post('http://localhost:3001/users', {uid: newUserObj.user.uid})
+            history.push(`/userprofile/${newUserObj.user.uid}`)
         } catch {
             setError("Failed to log in")
         }
