@@ -25,16 +25,6 @@ import UserSignLogin from "./components/UserSignLogin"
 
 function App() {
     const {logout} = useAuth()
-    const history = useHistory()
-
-    async function handleLogout() {
-        try {
-            await logout()
-            console.log("Logout")
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
     return (
         <Router>
@@ -54,9 +44,6 @@ function App() {
                     <Link className="showlink" to="/createReceipe">Create Receipe</Link>
                     <Link className="showlink" to="/updateReceipe">Update Receipe</Link>
                     <UserSignLogin/>
-                    {/*<Link className="showlink" to="/signup">Signup</Link>*/}
-                    {/*<Link className="showlink" to="/login">Login</Link>*/}
-                    {/*<PrivateLink className="showlink" to="/logout" onClick={handleLogout}>Logout</PrivateLink>*/}
                 </header>
                 <div
                     className="App-body">  {/* "/shows/page/:pagenum" will generate 'props.match.params.pagenum' and pass it to "components" */}
@@ -74,7 +61,7 @@ function App() {
                                 <div className="w-100" style={{maxWidth: "400px"}}>
                                     <Route exact path="/signup" component={Signup}/>
                                     <Route exact path="/login" component={Login}/>
-                                    <Route path="/forgot-password" component={ForgotPassword}/>
+                                    <PrivateRoute path="/forgot-password" component={ForgotPassword}/>
                                     <PrivateRoute path="/update-profile" component={UpdateProfile}/>
                                 </div>
                             </Container>
