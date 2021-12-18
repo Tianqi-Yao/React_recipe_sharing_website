@@ -3,6 +3,7 @@ import {Alert, Button, Card, Form} from "react-bootstrap"
 import axios from "axios"
 import {useAuth} from "../contexts/AuthContext"
 import {Link, Redirect, useHistory} from "react-router-dom"
+import database from "../config/awsUrl"
 
 export default function Login() {
     const emailRef = useRef()
@@ -32,7 +33,7 @@ export default function Login() {
         e.preventDefault()
         try {
             let newUserObj = await googleSignInWithPopup()
-            await axios.post('http://localhost:3001/users', {
+            await axios.post(`${database}/users`, {
                 uid: newUserObj.user.uid,
                 userName: newUserObj.user.displayName
             })

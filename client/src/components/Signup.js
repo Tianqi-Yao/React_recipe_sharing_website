@@ -3,6 +3,7 @@ import {Alert, Button, Card, Form} from "react-bootstrap"
 import {useAuth} from "../contexts/AuthContext"
 import {Link, Redirect, useHistory} from "react-router-dom"
 import axios from "axios"
+import database from "../config/awsUrl"
 
 export default function Signup() {
     const emailRef = useRef()
@@ -29,7 +30,7 @@ export default function Signup() {
             console.log(newUserObj)
             // newUserObj.userName = userNameRef.current.value
             // newUserObj.email = emailRef.current.value
-            await axios.post('http://localhost:3001/users', {
+            await axios.post(`${database}/users`, {
                 uid: newUserObj.uid,
                 userName: newUserObj.displayName
             })

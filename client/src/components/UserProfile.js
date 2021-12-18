@@ -8,7 +8,7 @@ import testLogo from '../img/image.jpg'
 import '../App.css'
 import {Link, useHistory} from "react-router-dom"
 import {useAuth} from "../contexts/AuthContext"
-
+import database from "../config/awsUrl"
 function UserProfile(props) {
     const [editBtnToggle, setBtnToggle] = useState(false)
     const [key, setKey] = useState('userRecipe')
@@ -24,7 +24,7 @@ function UserProfile(props) {
     const ChangeProfile = async (e) => {
         let userName = document.getElementById('userName').value
         let password = document.getElementById('Password').value
-        let newUser = await axios.patch(`http://localhost:3001/users/updateProfile`, {
+        let newUser = await axios.patch(`${database}/users/updateProfile`, {
             params: {
                 id: props.match.params.uid,
                 userName: userName,
@@ -50,7 +50,7 @@ function UserProfile(props) {
 
             async function fetchData() {
                 try {
-                    const {data} = await axios.get(`http://localhost:3001/users/${props.match.params.uid}`)
+                    const {data} = await axios.get(`${database}/users/${props.match.params.uid}`)
                     // const recipe = await axios.get(`http://localhost:4000/users/recipe/${props.match.params.uid}`);
                     // setRecipeData(recipe.data);
                     setUserData(data)

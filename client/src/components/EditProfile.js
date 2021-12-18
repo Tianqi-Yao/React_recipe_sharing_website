@@ -6,6 +6,7 @@ import axios from "axios";
 import * as imageCmp from 'imagecmp';
 import defaultIcon from '../img/image.jpg';
 import { Link } from "react-router-dom";
+import database from "../config/awsUrl"
 
 var fs = require('fs')
     , gm = require('gm').subClass({ imageMagick: true });
@@ -51,7 +52,7 @@ function EditProfile(props) {
 
     }
     const ChangeProfile = async () => {
-        let newImg = await axios.patch(`http://localhost:3001/users/uploadimg`, { params: { uid: props.match.params.uid, img: imgUrlData } });
+        let newImg = await axios.patch(`${database}/users/uploadimg`, { params: { uid: props.match.params.uid, img: imgUrlData } });
         setImgData(newImg.data.Photo);
     };
 
@@ -61,7 +62,7 @@ function EditProfile(props) {
             console.log("useEffect fired")
             async function fetchData() {
                 try {
-                    const { data } = await axios.get(`http://localhost:3001/users/${props.match.params.uid}`);
+                    const { data } = await axios.get(`${database}/users/${props.match.params.uid}`);
                     if(!data.Photo) {
                         setImgData(data.Photo);
                     } else{
@@ -87,7 +88,7 @@ function EditProfile(props) {
             <div className="add">
                 <div className="input-selection">
                     <Image className="userIcon" src={imgData} thumbnail multiple="multiple" />
-                    
+
                     <br />
                     <label>
                         upload picture:

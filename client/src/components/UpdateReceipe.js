@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../App.css';
 // import ImageUploading from "react-images-uploading";
 import * as imageCmp from 'imagecmp';
+import database from "../config/awsUrl"
 
 const UpdateReceipe = () => {
     const [post, setPost] = useState(undefined);
@@ -12,7 +13,7 @@ const UpdateReceipe = () => {
     // const [images, setImages] = React.useState([]);
     // const maxNumber = 1;
     let receipeID = "3ce9608b-0743-4cb5-b301-2607b0fd35ab"  // ! for test
-    let url = "http://localhost:3001/receipe/mongodb/" + receipeID
+    let url = `${database}/receipe/mongodb/` + receipeID
 
     useEffect(() => {
         const getData = async () => {
@@ -219,7 +220,7 @@ const UpdateReceipe = () => {
         //   }
 
         setPost(post);
-        const { data } = await axios.patch('http://localhost:3001/receipe/update', post, {
+        const { data } = await axios.patch(`${database}/receipe/update`, post, {
             headers: { Accept: 'application/json' }
         });
         console.log("data", data, fields);
