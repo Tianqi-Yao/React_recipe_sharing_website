@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 
 import axios from 'axios';  // query server router
 import { Link, useHistory } from 'react-router-dom';  // for URL synchronization
-
+import database from "../config/awsUrl"
 // import { Card } from 'react-bootstrap';
 import '../App.css';
 import SearchForm from './SearchForm';
@@ -66,7 +66,7 @@ const ReceipePage = (props) => {
     // console.log('Initial loading useeffect() in PokemonPage.js');
     async function fetchData() {
       try {
-        const { data } = await axios.get(`http://localhost:3001/receipe/page/0`);
+        const { data } = await axios.get(`${database}/receipe/page/0`);
         // console.log(data.data.results);
         setInitialData(data.results);
         setLoading(false);
@@ -104,7 +104,7 @@ const ReceipePage = (props) => {
     async function fetchData() {
       try {
         // console.log(props.match.params.page);
-        const { data } = await axios.get(`http://localhost:3001/receipe/page/${props.match.params.page}`);
+        const { data } = await axios.get(`${database}/receipe/page/${props.match.params.page}`);
         // console.log('-------- pagenum useEffect data -----------');
         // console.log(data);
         setPageData(data.results);

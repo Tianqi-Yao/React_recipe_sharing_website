@@ -1,15 +1,19 @@
 const express = require('express')
 const router = express.Router()
 const data = require('../data')
-const userData = data.users
+const userData = data.users;
+
 
 router.get('/:id', async (req, res) => {
     let uid = req.params.id;
     try {
-        const user = await userData.getUserById(uid)
+        if(typeof uid !== 'string') {
+            throw 'userId is invalid';
+        }
+        const user = await userData.getUserById(uid);
         res.json(user)
     } catch (e) {
-        res.status(404).json({ message: 'Not Found!' });
+        res.status(404).json({"ERROR": e.name + ": " + e.message});
     }
 });
 
@@ -35,8 +39,8 @@ router.patch('/updateProfile', async (req, res) => {
         try {
             const newUser = await userData.updateUserInfo(id, updateInfo);
             res.json(newUser);
-        } catch (error) {
-            res.status(500).json({ e: error });
+        } catch (e) {
+            res.status(500).json({"ERROR": e.name + ": " + e.message});
         }
     } else {
         res.status(400).json({
@@ -50,20 +54,26 @@ router.patch('/updateProfile', async (req, res) => {
 router.get('/recipe/:id', async (req, res) => {
     let uid = req.params.id;
     try {
+        if(typeof uid !== 'string') {
+            throw 'userId is invalid';
+        }
         const userRecipe = await userData.getRecipeByUid(uid);
         res.json(userRecipe);
     } catch (error) {
-        res.status(404).json({ message: 'Not Found!' });
+        res.status(404).json({"ERROR": e.name + ": " + e.message});
     }
 });
 
 router.delete('/deleteRecipe', async (req, res) => {
     let uid = req.query.uid;
     let rid = req.query.rid;
-    // let recipeInfo = req.params;
-    // const {uid, rid} = recipeInfo;
-
     try {
+        if(!req.query.uid || typeof uid !== 'string') {
+            throw 'You must provide a valid userId';
+        }
+        if(!req.query.rid || typeof rid !== 'string') {
+            throw 'You must provide a valid postId';
+        }
         const userRecipe = await userData.removeRecipeFromUser(uid, rid);
         res.json(userRecipe);
     } catch (error) {
@@ -74,10 +84,13 @@ router.delete('/deleteRecipe', async (req, res) => {
 router.get('/wishlist/:id', async (req, res) => {
     let id = req.params.id;
     try {
+        if(typeof id !== 'string') {
+            throw 'userId is invalid';
+        }
         const wishList = await userData.getLikesFromUser(id);
         res.json(wishList);
-    } catch (error) {
-        res.status(500).json({ e: error });
+    } catch (e) {
+        res.status(404).json({"ERROR": e.name + ": " + e.message});
     }
 });
 
@@ -86,8 +99,26 @@ router.patch('/unlike', async (req, res) => {
     let rid = req.query.rid;
 
     try {
+        if(!req.query.uid || typeof uid !== 'string') {
+            throw 'You must provide a valid userId';
+        }
+        if(!req.query.rid || typeof rid !== 'string') {
+            throw 'You must provide a valid postId';
+        }
         const wishList = await userData.removeLikesFromUser(uid, rid);
         res.json(wishList);
+    } catch (error) {
+        res.status(500).json({ e: error });
+    }
+});
+
+router.patch('/uploadimg', async (req, res) => {
+    let img = req.body.params.img;
+    let uid = req.body.params.uid;
+
+    try {
+        const user = await userData.uploadUserImg(uid, img);
+        res.json(user);
     } catch (error) {
         res.status(500).json({ e: error });
     }
@@ -107,9 +138,9 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     // Not implemented
-    const {uid, userName} = req.body
+    const { uid, userName } = req.body
     try {
-        const user = await userData.addUserByUidAndUsername(uid, userName)
+        const user = await userData.addNewUser(uid, userName)
         return res.json(user)
     } catch (e) {
         console.log(e)

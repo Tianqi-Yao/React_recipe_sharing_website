@@ -1,57 +1,77 @@
-import React, { useState, useEffect } from "react";
-import { Tabs, Tab, Card, Container, Row, Col, Button } from 'react-bootstrap';
-import axios from "axios";
-import EditProfile from './EditProfile';
-import UserRecipe from './UserRecipe';
-import WishList from './WishList';
-import testLogo from '../img/image.jpg';
-import '../App.css';
-import { Link } from "react-router-dom";
+import React, {useState, useEffect} from "react"
+import {Tabs, Tab, Card, Container, Row, Col, Button} from 'react-bootstrap'
+import axios from "axios"
+// import EditProfile from './EditProfile';
+import UserRecipe from './UserRecipe'
+import WishList from './WishList'
+import testLogo from '../img/image.jpg'
+import '../App.css'
+import {Link, useHistory} from "react-router-dom"
+import {useAuth} from "../contexts/AuthContext"
+import database from "../config/awsUrl"
 
 function UserProfile(props) {
-    const [editBtnToggle, setBtnToggle] = useState(false);
-    const [key, setKey] = useState('userRecipe');
-    const [loading, setLoading] = useState(true);
-    const [userData, setUserData] = useState(undefined);
-    const [recipeData, setRecipeData] = useState(undefined);
-    const [formData, setFormData] = useState({ task: '', taskDesc: '' });
+    const [editBtnToggle, setBtnToggle] = useState(false)
+    const [key, setKey] = useState('userRecipe')
+    const [loading, setLoading] = useState(true)
+    const [userData, setUserData] = useState(undefined)
+    const {currentUser} = useAuth()
+    const [recipeData, setRecipeData] = useState(undefined)
+    const [formData, setFormData] = useState({task: '', taskDesc: ''})
+    const history = useHistory()
     const handleChange = (e) => {
-        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    };
-    const ChangeProfile = async () => {
-        let userName = document.getElementById('userName').value;
-        let password = document.getElementById('Password').value;
-        let newUser = await axios.patch(`http://localhost:3001/users/updateProfile`, { params: { id: props.match.params.uid, userName: userName, password: password } });
-        setBtnToggle(false);
-    };
-    const CancelChange = () => {
-        setBtnToggle(false);
+        setFormData((prev) => ({...prev, [e.target.name]: e.target.value}))
     }
-    let userProfile = null;
+    const ChangeProfile = async (e) => {
+        let userName = document.getElementById('userName').value
+        let password = document.getElementById('Password').value
+        let newUser = await axios.patch(`${database}/users/updateProfile`, {
+            params: {
+                id: props.match.params.uid,
+                userName: userName,
+                password: password
+            }
+        })
+        setBtnToggle(false)
+    }
+
+    function goUpdatePage(e) {
+        e.preventDefault()
+        history.push('/update-profile')
+    }
+
+    const CancelChange = () => {
+        setBtnToggle(false)
+    }
+    let userProfile = null
 
     useEffect(
         () => {
             console.log("useEffect fired")
+
             async function fetchData() {
                 try {
-                    const { data } = await axios.get(`http://localhost:3001/users/${props.match.params.uid}`);
+                    const {data} = await axios.get(`${database}/users/${props.match.params.uid}`)
                     // const recipe = await axios.get(`http://localhost:4000/users/recipe/${props.match.params.uid}`);
                     // setRecipeData(recipe.data);
-                    setUserData(data);
+                    setUserData(data)
                 } catch (e) {
-                    console.log(e);
+                    console.log(e)
                 } finally {
-                    setLoading(false);
+                    setLoading(false)
                 }
             }
-            fetchData();
+
+            fetchData()
         },
-        [userData]
-    );
+        [history]
+    )
 
     const buildProfile = (user) => {
         if (editBtnToggle === false) {
-            return (<Card.Body> <Card.Title>{user.userName}</Card.Title><Button variant="primary" onClick={() => setBtnToggle(!editBtnToggle)}>Edit Profile</Button></Card.Body>);
+            return (<Card.Body> <Card.Title>{user.userName}</Card.Title><Button variant="primary"
+                                                                                onClick={goUpdatePage}>Edit
+                Profile</Button></Card.Body>)
         } else {
             return (
                 <div className="add">
@@ -66,8 +86,8 @@ function UserProfile(props) {
                                 name="userName"
                             />
                         </label>
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
                         <label>
                             Password:
                             <input
@@ -87,24 +107,25 @@ function UserProfile(props) {
                     </div>
                     <button onClick={ChangeProfile}>Submit</button>
                     <button onClick={CancelChange}>Cancel</button>
-                </div>);
+                </div>)
         }
     }
 
-    userProfile = (userData && buildProfile(userData));
+    userProfile = (userData && buildProfile(userData))
 
 
     if (loading) {
         return (<p>loading...</p>)
     } else {
-        console.log(userProfile);
+        console.log(userProfile)
         return (
             <Container>
                 <Row>
                     <Col sm={4}>
                         <Card>
-                            <Link to={`/editprofile/${userData.Photo}`} >
-                                {userData.Photo ? (<Card.Img variant="top" src={userData.Photo} />) : (<Card.Img variant="top" src={testLogo} />)}
+                            <Link to={`/editprofile/${userData._id}`}>
+                                {userData.Photo ? (<Card.Img variant="top" src={userData.Photo} alt="User Icon"/>) : (
+                                    <Card.Img variant="top" src={testLogo} alt="User Icon"/>)}
                             </Link>
                             {userProfile}
                             {/* {!editBtnToggle ? (<Card.Body> <Card.Title>{userData.userName}</Card.Title>
@@ -120,19 +141,19 @@ function UserProfile(props) {
                             className="mb-3"
                         >
                             <Tab eventKey="userRecipe" title="UserRecipe">
-                                <UserRecipe user={userData} />
+                                <UserRecipe user={userData}/>
                             </Tab>
                             <Tab eventKey="wishList" title="WishList">
                                 {/* wishlist */}
-                                <WishList user={userData} />
+                                <WishList user={userData}/>
                             </Tab>
                         </Tabs>
                     </Col>
                 </Row>
             </Container>
-        );
+        )
     }
 
 }
 
-export default UserProfile;
+export default UserProfile

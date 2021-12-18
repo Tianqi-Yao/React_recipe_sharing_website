@@ -5,6 +5,7 @@ import '../App.css';
 import * as imageCmp from 'imagecmp';
 import { useAuth } from "../contexts/AuthContext"
 import noImage from '../img/download.jpeg';
+import database from "../config/awsUrl"
 
 const UpdateReceipe = () => {
     const [post, setPost] = useState(undefined);
@@ -14,8 +15,8 @@ const UpdateReceipe = () => {
     const { currentUser, updatePassword, updateEmail } = useAuth()
     // const [images, setImages] = React.useState([]);
     // const maxNumber = 1;
-    let receipeID = "8d7c5269-29c8-4af3-8708-cc8fcca9a0c9"  // ! for test
-    let url = "http://localhost:3001/receipe/mongodb/" + receipeID
+    let receipeID = "3ce9608b-0743-4cb5-b301-2607b0fd35ab"  // ! for test
+    let url = `${database}/receipe/mongodb/` + receipeID
 
     useEffect(() => {
 
@@ -232,7 +233,7 @@ const UpdateReceipe = () => {
         //   }
 
         setPost(post);
-        const { data } = await axios.patch('http://localhost:3001/receipe/update', post, {
+        const { data } = await axios.patch(`${database}/receipe/update`, post, {
             headers: { Accept: 'application/json' }
         });
         console.log("data", data, fields);

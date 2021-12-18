@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from "react"
 import {auth} from "../config/firebase"
+import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth'
 
 const AuthContext = React.createContext()
 
@@ -10,6 +11,7 @@ export function useAuth() {
 export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
+    const [googleAuth, setGoogleAuth] = useState(new GoogleAuthProvider())
 
     const value = {
         currentUser,
@@ -19,7 +21,8 @@ export function AuthProvider({children}) {
         resetPassword,
         updateEmail,
         updatePassword,
-        getCurrentUser
+        getCurrentUser,
+        googleSignInWithPopup
         // updateCurrentUser
     }
 
@@ -43,6 +46,10 @@ export function AuthProvider({children}) {
         //         displayName: username
         //     })
         // })
+    }
+
+    function googleSignInWithPopup() {
+        return auth.signInWithPopup(googleAuth)
     }
 
     function getCurrentUser() {
