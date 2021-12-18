@@ -20,6 +20,7 @@ import PrivateRoute from "./components/PrivateRoute"
 import UpdateProfile from "./components/UpdateProfile"
 import {Container} from "react-bootstrap"
 import UserProfile from "./components/UserProfile"
+import EditProfile from './components/EditProfile'
 
 function App() {
     return (
@@ -55,8 +56,9 @@ function App() {
                                 <Route exact path="/receipe/:id" component={Receipe}/>
                                 <Route exact path="/createReceipe" component={CreateReceipe}/>
                                 <Route exact path="/updateReceipe" component={UpdateReceipe}/>
-                                <Route exact path="/userprofile/:uid">UserProfile</Route>
-                                <PrivateRoute path="/userprofile/:uid" component={UserProfile}/>
+                                <Route exact path="/userprofile/:uid" component={UserProfile}></Route>
+                                <Route exact path="/editprofile/:uid" component={EditProfile}></Route>
+                                {/* <PrivateRoute path="/userprofile/:uid" component={UserProfile}/> */}
                                 <Container
                                     className="border-0 d-flex align-items-center justify-content-center">
                                     <div className="w-100" style={{maxWidth: "400px"}}>

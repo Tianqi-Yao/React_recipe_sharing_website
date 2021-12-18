@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongodb');
 const mongoCollections = require('../config/mongoCollections');
 const recipes = mongoCollections.recipes;
+const uuid = require('uuid').v4;
 
 let exportedMethods = {
     async addPost(title, postContent) {
@@ -8,7 +9,8 @@ let exportedMethods = {
 
         let newPost = {
             title: title,
-            postContent: postContent
+            postContent: postContent,
+            _id: uuid()
         }
 
         const newInsertInformation = await postCollection.insertOne(newPost)
@@ -16,9 +18,9 @@ let exportedMethods = {
         return await this.getRecipeById(newInsertInformation.insertedId)
     },
     async getRecipeById(id) {
-        if(!ObjectId.isValid(id)) {
-            id = ObjectId(id);
-        }
+        // if(!ObjectId.isValid(id)) {
+        //     id = ObjectId(id);
+        // }
         const recipeCollection = await recipes();
         let recipe = await recipeCollection.findOne({ _id: id });
         console.log(recipe);
@@ -29,9 +31,6 @@ let exportedMethods = {
     },
     async deleteRecipeById(id) {
         if (!id) throw 'You must supply an ID';
-        if(!ObjectId.isValid(id)) {
-            id = ObjectId(id);
-        }
         const recipeCollection = await recipes();
         const deletionInfo = await recipeCollection.deleteOne({ _id: id });
 
