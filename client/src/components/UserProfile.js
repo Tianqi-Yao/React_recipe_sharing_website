@@ -123,8 +123,8 @@ function UserProfile(props) {
                     <Col sm={4}>
                         <Card>
                             <Link to={`/editprofile/${userData._id}`}>
-                                {userData.Photo ? (<Card.Img variant="top" src={userData.Photo}/>) : (
-                                    <Card.Img variant="top" src={testLogo}/>)}
+                                {userData.Photo ? (<Card.Img variant="top" src={userData.Photo} alt="User Icon"/>) : (
+                                    <Card.Img variant="top" src={testLogo} alt="User Icon"/>)}
                             </Link>
                             {userProfile}
                             {/* {!editBtnToggle ? (<Card.Body> <Card.Title>{userData.userName}</Card.Title>

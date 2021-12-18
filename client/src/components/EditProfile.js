@@ -37,6 +37,9 @@ function EditProfile(props) {
             imageCmp.filetoDataURL(res).then(res => {
                 console.log("dataURL", res);
                 setImgUrlData(res);
+                gm(res).resize(240, 240).noProfile().write('../img/to/resize.png', function (err) {
+                    if (!err) console.log('done');
+                });
                 // gm(localUrl, 'img.jpg')
                 //     .write('../img/to/resize.png', function (err) {
                 //         if (!err) console.log('done');
@@ -84,7 +87,7 @@ function EditProfile(props) {
         return (
             <div className="add">
                 <div className="input-selection">
-                    <Image className="userIcon" src={imgData} thumbnail multiple="multiple" />
+                    <Image className="userIcon" src={imgData} thumbnail multiple="multiple" alt="User Icon" />
 
                     <br />
                     <label>

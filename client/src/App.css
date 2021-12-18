@@ -69,7 +69,8 @@ col-md-4 {
 }
 
 .hometext {
-  color:rgb(199, 78, 98);
+  /* color:rgb(199, 78, 98); */
+  color: #d67683;
 	max-width: 60%;
 }
 .showlink {
