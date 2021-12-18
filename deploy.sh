@@ -1,11 +1,15 @@
 #!/bin/bash
+# install tools
 sudo apt update && sudo apt upgrade
 sudo apt-get install -y net-tools
+sudo apt install -y imagemagick
 
+# choose git branch
 read -p "Enter the branch default is master: " doBranch
 doBranch=${doBranch:-master}
 echo $doBranch
 
+# get aws ip
 myAwsIp=$(curl http://checkip.amazonaws.com)
 dataUrl="http://${myAwsIp}:3001"
 echo ${dataUrl}
