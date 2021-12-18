@@ -36,9 +36,6 @@ function EditProfile(props) {
             imageCmp.filetoDataURL(res).then(res => {
                 console.log("dataURL", res);
                 setImgUrlData(res);
-                gm(res).resize(240, 240).noProfile().write('../img/to/resize.png', function (err) {
-                        if (!err) console.log('done');
-                    });
                 // gm(localUrl, 'img.jpg')
                 //     .write('../img/to/resize.png', function (err) {
                 //         if (!err) console.log('done');

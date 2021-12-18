@@ -11,6 +11,7 @@ const UserRecipe = (props) => {
     const [recipeData, setRecipeData] = useState(undefined);
     const [loading, setLoading] = useState(true);
     const [deleteData, setDeleteData] = useState(undefined);
+    let card = null;
     // let deleteData = undefined;
     // const dispatch = useDispatch();
     // const user = useSelector((state) => state.user);
@@ -67,11 +68,16 @@ const UserRecipe = (props) => {
         )
     }
 
-    let card =
+    if(!recipeData) {
+        card =
         recipeData &&
         recipeData.map((recipe) => {
             return buildCard(recipe);
         });
+    } else {
+        card = (<div>Share Your Recipe Now! <Link to={}>Click To Create Recipe</Link></div>)
+
+    }
 
     if (loading) {
         return (

@@ -10,6 +10,7 @@ const WishList = (props) => {
     const [wishListeData, setWishListeData] = useState(undefined);
     const [loading, setLoading] = useState(true);
     const [deleteData, setDeleteData] = useState(undefined);
+    let card = null;
 
     async function removeLike(rid) {
         const { data } = await axios.patch(`http://localhost:3001/users/unlike?uid=${props.user._id}&rid=${rid}`);
@@ -55,11 +56,17 @@ const WishList = (props) => {
         );
     }
 
-    let card =
-        wishListeData &&
-        wishListeData.map((recipe) => {
-            return buildCard(recipe);
-        });
+
+    if (!wishListeData) {
+        card =
+            wishListeData &&
+            wishListeData.map((recipe) => {
+                return buildCard(recipe);
+            });
+    } else {
+        card = (<div>You Like Nothing!</div>)
+
+    }
 
     if (loading) {
         return (

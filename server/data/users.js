@@ -158,7 +158,8 @@ let exportedMethods = {
             _id: uid,
             userName: userName,
             Photo: "",
-            Post: []
+            Post: [],
+            likes: []
         }
         const newInsertInformation = await userCollection.insertOne(newUserScheme)
         return await this.getUserById(newInsertInformation.insertedId)
