@@ -8,7 +8,7 @@ import { Link, useHistory } from 'react-router-dom';  // for URL synchronization
 import '../App.css';
 // import SearchForm from './SearchForm';
 import SubmitForm from './SubmitForm';
-
+import database from  '../config/awsUrl'
 import { Card, CardContent, Grid, Typography, makeStyles } from '@material-ui/core';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -60,7 +60,7 @@ const PopularSearch = (props) => {
     // console.log('Initial loading useeffect() in PokemonPage.js');
     async function fetchData() {
       try {
-        const { data } = await axios.get(`http://localhost:3001/receipe/page/0`);
+        const { data } = await axios.get(`${database}/receipe/page/0`);
         // console.log(data.data.results);
         setInitialData(data.results);
         setLoading(false);
@@ -79,7 +79,7 @@ const PopularSearch = (props) => {
       try {
         // const urlSearchForm = baseUrl + '?nameStartsWith=' + submitTerm + '&ts=' + ts + '&apikey=' + publickey + '&hash=' + hash;
         console.log(`search: ${submitTerm}`);
-        const { data } = await axios.post(`http://localhost:3001/receipe/search`, {
+        const { data } = await axios.post(`${database}/receipe/search`, {
           searchTerm: `${submitTerm}`
         });
         setSearchData(data.results);

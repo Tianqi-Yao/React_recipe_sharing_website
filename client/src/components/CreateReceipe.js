@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import '../App.css';
+import React, {useState, useEffect} from 'react'
+import axios from 'axios'
+import '../App.css'
 // import ImageUploading from "react-images-uploading";
-import * as imageCmp from 'imagecmp';
+import * as imageCmp from 'imagecmp'
+import database from "../config/awsUrl"
 
 const CreateReceipe = () => {
-    const [post, setPost] = useState(undefined);
-    const [fields, setFields] = useState([{ value: null }]);
-    const [imageUrl, setImageUrl] = useState(undefined);
+    const [post, setPost] = useState(undefined)
+    const [fields, setFields] = useState([{value: null}])
+    const [imageUrl, setImageUrl] = useState(undefined)
     // const [images, setImages] = React.useState([]);
     // const maxNumber = 1;
     // const onChange = (imageList, addUpdateIndex) => {
@@ -20,12 +21,12 @@ const CreateReceipe = () => {
         // const dataURL = document.getElementById('image').src;
         // console.log("dataURL",dataURL);
         // const file = imageCmp.dataURLtoFile(dataURL);
-        const file = document.getElementById('image').files[0];
-        console.log("imageCmp ", typeof file, file);
+        const file = document.getElementById('image').files[0]
+        console.log("imageCmp ", typeof file, file)
         imageCmp.compressAccurately(file, 50).then(res => {
-            console.log(res);
+            console.log(res)
             imageCmp.filetoDataURL(res).then(res => {
-                console.log("dataURL",res);
+                console.log("dataURL", res)
                 setImageUrl(res)
             })
         })
@@ -36,8 +37,8 @@ const CreateReceipe = () => {
 
     const showImage = () => {
         return (
-            <img src={imageUrl} alt="" width="100" />
-        );
+            <img src={imageUrl} alt="" width="100"/>
+        )
     }
 
     // const loadimageView = () => {
@@ -119,64 +120,64 @@ const CreateReceipe = () => {
                                 remove
                             </button>
                         </div>
-                    );
+                    )
                 })}
                 <button type="button" onClick={() => handleAdd()}>
                     add a ingredient
                 </button>
             </div>
-        );
+        )
     }
 
     function handleChange(i, event) {
-        const values = [...fields];
-        values[i].value = event.target.value;
-        setFields(values);
+        const values = [...fields]
+        values[i].value = event.target.value
+        setFields(values)
     }
 
     function handleAdd() {
-        const values = [...fields];
-        values.push({ value: null });
-        setFields(values);
+        const values = [...fields]
+        values.push({value: null})
+        setFields(values)
     }
 
     function handleRemove(j) {
-        let values = [...fields];
+        let values = [...fields]
         for (let i = 0; i < values.length - 1; i++) {
             if (i >= j) {
-                console.log(values[i]);
+                console.log(values[i])
                 let temp = values[i]
-                values[i] = values[i + 1];
+                values[i] = values[i + 1]
                 values[i + 1] = null
-                console.log(values, temp);
+                console.log(values, temp)
             }
         }
         values.length = values.length - 1
         // values = values.filter(e=> e.key != i)
-        console.log("log:", j, typeof values[0], values);
+        console.log("log:", j, typeof values[0], values)
         for (let i = 0; i < values.length; i++) {
-            document.getElementById(i).value = values[i].value;
+            document.getElementById(i).value = values[i].value
         }
 
-        setFields(values);
+        setFields(values)
     }
 
     const formSubmit = async (e) => {
         //disable form's default behavior
-        e.preventDefault();
+        e.preventDefault()
         //get references to form fields.
-        let title = document.getElementById('title').value;
-        let image = imageUrl;
-        console.log("imgae", image);
+        let title = document.getElementById('title').value
+        let image = imageUrl
+        console.log("imgae", image)
         // let image = document.getElementById('image').value;
-        let cookingMinutes = document.getElementById('cookingMinutes').value;
-        let instructionsReadOnly = document.getElementById('instructionsReadOnly').value;
-        let ingredients = [];
+        let cookingMinutes = document.getElementById('cookingMinutes').value
+        let instructionsReadOnly = document.getElementById('instructionsReadOnly').value
+        let ingredients = []
 
-        console.log("fields,", fields);
+        console.log("fields,", fields)
         fields.map((item, i) => {
-            ingredients.push(document.getElementById(i).value);
-        });
+            ingredients.push(document.getElementById(i).value)
+        })
 
         let post = {
             title,
@@ -184,26 +185,26 @@ const CreateReceipe = () => {
             cookingMinutes,
             instructionsReadOnly,
             ingredients
-        };
+        }
 
-        console.log("post", post);
+        console.log("post", post)
 
-        setPost(post);
-        const { data } = await axios.post('http://localhost:3001/receipe/create', post, {
-            headers: { Accept: 'application/json' }
-        });
-        console.log("ddddd", data);
+        setPost(post)
+        const {data} = await axios.post(`${database}/receipe/create`, post, {
+            headers: {Accept: 'application/json'}
+        })
+        console.log("ddddd", data)
         // setPostData(data);
-        alert(JSON.stringify(post));
-        document.getElementById('title').value = '';
+        alert(JSON.stringify(post))
+        document.getElementById('title').value = ''
         // document.getElementById('image').value = '';
-        document.getElementById('cookingMinutes').value = '';
-        document.getElementById('instructionsReadOnly').value = '';
+        document.getElementById('cookingMinutes').value = ''
+        document.getElementById('instructionsReadOnly').value = ''
         fields.map((item, i) => {
-            document.getElementById(i).value = '';
-        });
-        setFields([{ value: null }]);
-    };
+            document.getElementById(i).value = ''
+        })
+        setFields([{value: null}])
+    }
 
 
     return (
@@ -219,14 +220,14 @@ const CreateReceipe = () => {
                         required
                     />
                 </label>
-                <br />
+                <br/>
                 <label>
                     image:
-                    <input id="image" type="file" onChange={imageCmpFunc} />
+                    <input id="image" type="file" onChange={imageCmpFunc}/>
                 </label>
-                <br />
-                    {imageUrl !== undefined ? showImage() : ""}
-                <br />
+                <br/>
+                {imageUrl !== undefined ? showImage() : ""}
+                <br/>
                 <label>
                     Cooking Minutes:
                     <input
@@ -236,7 +237,7 @@ const CreateReceipe = () => {
                         placeholder="optional"
                     />
                 </label>
-                <br />
+                <br/>
                 <label>
                     Instructions:
                     <input
@@ -247,16 +248,16 @@ const CreateReceipe = () => {
                         required
                     />
                 </label>
-                <br />
+                <br/>
 
                 {ingredientsView()}
 
-                <br />
-                <br />
-                <input type="submit" value="Submit" />
+                <br/>
+                <br/>
+                <input type="submit" value="Submit"/>
             </form>
         </div>
-    );
+    )
 }
 
 export default CreateReceipe

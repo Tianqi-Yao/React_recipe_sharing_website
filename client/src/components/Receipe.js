@@ -6,6 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 // import { Card } from 'react-bootstrap';
 // import Button from 'react-bootstrap/Button';
 import '../App.css';
+import database from "../config/awsUrl"
 import { makeStyles, Card, CardContent, CardMedia, Typography, CardHeader, CardActionArea, CardActions } from '@material-ui/core';
 // const actions = require('../actions');
 
@@ -58,7 +59,7 @@ const Receipe = (props) => {
     async function fetchData() {
       try {
         setLoading(true);
-        const { data: receipe } = await axios.get(`http://localhost:3001/receipe/${props.match.params.id}`);
+        const { data: receipe } = await axios.get(`${database}/receipe/${props.match.params.id}`);
         setReceipeData(receipe);  // receipeData = receipe
         setLoading(false);
         console.log('receipe:', receipe);

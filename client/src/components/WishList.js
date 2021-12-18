@@ -5,7 +5,7 @@ import '../App.css';
 import axios from 'axios';
 import testLogo from '../img/testFood.jpg';
 import { Link } from "react-router-dom";
-
+import database from "../config/awsUrl"
 const WishList = (props) => {
     const [wishListeData, setWishListeData] = useState(undefined);
     const [loading, setLoading] = useState(true);
@@ -13,7 +13,7 @@ const WishList = (props) => {
     let card = null;
 
     async function removeLike(rid) {
-        const { data } = await axios.patch(`http://localhost:3001/users/unlike?uid=${props.user._id}&rid=${rid}`);
+        const { data } = await axios.patch(`${database}/users/unlike?uid=${props.user._id}&rid=${rid}`);
         setDeleteData(data);
     };
 
@@ -22,7 +22,7 @@ const WishList = (props) => {
             console.log("WishList fired")
             async function fetchData() {
                 try {
-                    const recipe = await axios.get(`http://localhost:3001/users/wishlist/${props.user._id}`);
+                    const recipe = await axios.get(`${database}/users/wishlist/${props.user._id}`);
                     setWishListeData(recipe.data);
                     setLoading(false);
                 } catch (e) {
