@@ -43,3 +43,6 @@ npm install
 awk -i inplace -v awsIP="${dataUrl}" '{sub("http://localhost:3001",awsIP)}1' ./src/config/awsUrl.js
 
 pm2 start --name client npm -- start
+
+cd ~
+pm2 ps
