@@ -5,14 +5,12 @@ sudo apt-get install -y net-tools
 sudo apt install -y imagemagick
 
 # choose git branch
-read -p "Enter the branch default is master: " doBranch
+read -r -p "Enter the branch default is master: " doBranch
 doBranch=${doBranch:-master}
-echo $doBranch
 
 # get aws ip
 myAwsIp=$(curl http://checkip.amazonaws.com)
 dataUrl="http://${myAwsIp}:3001"
-echo ${dataUrl}
 
 # install nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
@@ -32,21 +30,21 @@ sudo apt-get install -y mongodb-org
 sudo systemctl start mongod
 
 # install pm2 and start project
-cd ~
+cd ~ || exit
 sudo apt install -y git
 npm install pm2@latest -g
-git clone -b $doBranch https://github.com/Tianqi-Yao/CS554_Final_Project_2021Fall.git
+git clone -b "$doBranch" https://github.com/Tianqi-Yao/CS554_Final_Project_2021Fall.git
 
-cd CS554_Final_Project_2021Fall
-cd server
+cd CS554_Final_Project_2021Fall || exit
+cd server || exit
 npm install
 pm2 start --name server npm -- start
 
-cd ../client
+cd ../client || exit
 npm install
 awk -i inplace -v awsIP="${dataUrl}" '{sub("http://localhost:3001",awsIP)}1' ./src/config/awsUrl.js
 
 pm2 start --name client npm -- start
 
-cd ~
+cd ~ || exit
 pm2 ps
