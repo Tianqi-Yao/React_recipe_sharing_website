@@ -17,7 +17,8 @@ const UpdateReceipe = (props) => {
     const { currentUser, updatePassword, updateEmail } = useAuth()
     // const [images, setImages] = React.useState([]);
     // const maxNumber = 1;
-    let receipeID = "c77d9075-afc6-4f2e-adaa-d20b11e85335"  // ! for test  props.match.params.id
+    let receipeID = props.match.params.id
+    // let receipeID = "c77d9075-afc6-4f2e-adaa-d20b11e85335"  // ! for test  props.match.params.id
     let url = `${database}/receipe/mongodb/` + receipeID
 
     useEffect(() => {

@@ -111,6 +111,9 @@ const ReceipePage = (props) => {
     async function fetchData() {
       try {
         // console.log(props.match.params.page);
+
+        
+
         const { data } = await axios.get(`${database}/receipe/page/${props.match.params.page}`);
         // console.log('-------- pagenum useEffect data -----------');
         // console.log(data);

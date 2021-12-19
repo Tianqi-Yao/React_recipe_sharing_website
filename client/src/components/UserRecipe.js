@@ -65,6 +65,7 @@ const UserRecipe = (props) => {
                             {recipe.instructionsReadOnly}
                         </Card.Text>
                         <Button variant="danger" onClick={() => deleteRecipe(recipe._id)}>Delete</Button>
+                        <Button variant="danger" onClick={() => window.location.href = `/updateReceipe/${recipe._id}`}>Edit</Button>
                     </Card.Body>
                 </Card>
             </Col>

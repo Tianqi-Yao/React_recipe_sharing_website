@@ -12,6 +12,11 @@ let usersJS = require('./users');  // we need use async method of users ❤add t
 
 
 let exportedMethods = {
+
+    async getAllPosts() {
+        const postCollection = await recipes();
+        return await postCollection.find({}).toArray();
+    },
     async addPost(title, postContent) {
         const postCollection = await recipes();
 

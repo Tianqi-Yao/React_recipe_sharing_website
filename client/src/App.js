@@ -55,7 +55,7 @@ function App() {
                                 <Route exact path="/receipe/page/:page" component={ReceipePage}/>
                                 <Route exact path="/receipe/:id" component={Receipe}/>
                                 <Route exact path="/createReceipe" component={CreateReceipe}/>
-                                <Route exact path="/updateReceipe" component={UpdateReceipe}/>
+                                <Route exact path="/updateReceipe/:id" component={UpdateReceipe}/>
                                 <PrivateRoute exact path="/editprofile/:uid" component={EditProfile}/>
                                 <PrivateRoute exact path="/userprofile/:uid" component={UserProfile}/>
                                 <Container
