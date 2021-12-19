@@ -141,11 +141,11 @@ function UserProfile(props) {
                             className="mb-3"
                         >
                             <Tab eventKey="userRecipe" title="UserRecipe">
-                                <UserRecipe user={userData} />
+                                <UserRecipe user={userData} key="recipe" />
                             </Tab>
                             <Tab eventKey="wishList" title="WishList">
                                 {/* wishlist */}
-                                <WishList user={userData} />
+                                <WishList user={userData} key="wishlist" />
                             </Tab>
                             <Tab eventKey="createRecipe" title="Create Recipe">
                                 <Link to={`/createReceipe`}>Click To Create Recipe</Link>
