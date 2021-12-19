@@ -88,7 +88,7 @@ const Receipe = (props) => {
     if (!receipeData) {
       return (<ErrorComponent></ErrorComponent>);
     }
-   
+
     return (
       <div>
         <h2>Loading....</h2>
@@ -102,25 +102,25 @@ const Receipe = (props) => {
     return (
       <Card className={classes.card} variant="outlined">
         <CardHeader className={classes.titleHead} title={receipeData.title} />
-        <img 
-          class="card-img-top" 
+        <img
+          class="card-img-top"
           src={receipeData.image}
           // onError={(e)=>{e.target.onerror = null; e.target.src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.match.params.id}.png`}}
           alt={receipeData.title}>
         </img>
 
-        <br/>
+        <br />
         <dl>
           <dt>Id:</dt> {(receipeData && receipeData.id) || 'No Summary'}
-          <br/>
-          <dt>Title:</dt> {( receipeData && receipeData.title) || 'No Title'}
-          <br/>
+          <br />
+          <dt>Title:</dt> {(receipeData && receipeData.title) || 'No Title'}
+          <br />
           <dt>ReadyInMinutes:</dt> {(receipeData && receipeData.readyInMinutes) || 'No ReadyInMinutes'}
-          <br/>
-          <dt>SourceUrl:</dt> {( receipeData && <a href={`${receipeData.sourceUrl}`}>{`${receipeData.sourceUrl}`}</a>) || 'No SourceUrl'}
-          <br/>
-          <dt>SpoonacularUrl:</dt> {( receipeData && <a href={`${receipeData.spoonacularSourceUrl}`}>{`${receipeData.spoonacularSourceUrl}`}</a>) || 'No SpoonacularUrl'}
-          <br/>
+          <br />
+          <dt>SourceUrl:</dt> {(receipeData && <a href={`${receipeData.sourceUrl}`}>{`${receipeData.sourceUrl}`}</a>) || 'No SourceUrl'}
+          <br />
+          <dt>SpoonacularUrl:</dt> {(receipeData && <a href={`${receipeData.spoonacularSourceUrl}`}>{`${receipeData.spoonacularSourceUrl}`}</a>) || 'No SpoonacularUrl'}
+          <br />
           <dt>DishTypes:</dt> {(receipeData && receipeData.dishTypes) || 'No DishTypes'}
         </dl>
         {/* <dl>
@@ -131,15 +131,15 @@ const Receipe = (props) => {
             'No Cuisines'}
         </dl> */}
         <p>
-          <dt>Summary:</dt> {(receipeData && 
-            receipeData.summary && 
-            receipeData.summary.replace(regex, '')) || 
+          <dt>Summary:</dt> {(receipeData &&
+            receipeData.summary &&
+            receipeData.summary.replace(regex, '')) ||
             'No Summary'}
         </p>
         <p>
-          <dt>Instructions</dt> {(receipeData && 
-            receipeData.instructions && 
-            receipeData.instructions.replace(regex, '')) || 
+          <dt>Instructions</dt> {(receipeData &&
+            receipeData.instructions &&
+            receipeData.instructions.replace(regex, '')) ||
             'No Instructions'}
         </p>
         {/* <dl>
@@ -154,7 +154,8 @@ const Receipe = (props) => {
         </dl> */}
         <CardContent>
           <Typography>
-            <Link to={`/receipe/page/0`}>Back to all receipe list...</Link>
+            <button className='showlink' onClick={() => { window.history.back(-1); }}>Back to last page</button>
+            {/* <Link to={`/receipe/page/0`}>Back to all receipe list...</Link> */}
           </Typography>
         </CardContent>
 
