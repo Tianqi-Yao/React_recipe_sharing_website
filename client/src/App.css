@@ -143,6 +143,10 @@ ul {
   object-fit: cover;
 }
 
+.like-icon {
+	color: #eac54f;
+}
+
 @keyframes App-logo-spin {
 	from {
 		transform: rotate(0deg);
