@@ -38,6 +38,23 @@ const Todo = (props) => {
       }
     ]
   );
+  // const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const { data } = await axios.get(`${database}/todos/${currentUser.uid}`);
+        // console.log(data.data.results);
+        console.log("todo data in Todo.js: ", data);
+        setTasks(data);
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    fetchData()  // call fetchData()
+  }, []);
+
 
   const addTask = async (task) => { // add Task
     let id = Math.floor(Math.random() * 10000) + 1;  // create a random Id
@@ -50,8 +67,8 @@ const Todo = (props) => {
     let newTodoObj = await axios.post(`${database}/todos/${currentUser.uid}`, { params: {   // currentUser.uid is userId
       uid: currentUser.uid,  
       todoId: id, 
-      todoContent: newTask.text, 
-      dateOfTodo: newTask.day, 
+      text: newTask.text, 
+      day: newTask.day, 
       reminder: newTask.reminder 
     }});  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js' 
     console.log('newTodoObj: ', newTodoObj);
@@ -75,6 +92,7 @@ const Todo = (props) => {
     <div className='container'>
       <Header title='To Do List' onAdd={() => setShowAddTodo(!showAddTodo)} showAdd={showAddTodo} />
       {showAddTodo && <AddTask onAdd={addTask} />}
+
       {tasks.length > 0 ? <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder}/> : ('No Todo. Add Your Todo Now !')}
 
       <Footer />

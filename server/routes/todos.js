@@ -20,12 +20,12 @@ router.get('/:id', async (req, res) => {  // :id is userId. return an array of a
 router.post('/:id', async (req, res) => {  // :id is userId  // SUCCESS: create todo to user 
   const aTodoData = req.body.params;  // get data that need to be posted. Pass by client side './src/components/Todo.js'
   
-  if (!aTodoData.todoContent || typeof aTodoData.todoContent != 'string' ) {
-    res.status(400).json({ error: 'You must provide todo todoContent in string type' });
+  if (!aTodoData.text || typeof aTodoData.text != 'string' ) {
+    res.status(400).json({ error: 'You must provide todo text in string type' });
     return;
   }
-  if (!aTodoData.dateOfTodo || typeof aTodoData.dateOfTodo != 'string' ) {
-    res.status(400).json({ error: 'You must provide dateOfTodo in string type' });
+  if (!aTodoData.day || typeof aTodoData.day != 'string' ) {
+    res.status(400).json({ error: 'You must provide day in string type' });
     return;
   }
 
@@ -38,8 +38,8 @@ router.post('/:id', async (req, res) => {  // :id is userId  // SUCCESS: create 
   
   // Json is valid and Todo can be created successful
   try {
-    const { todoId, todoContent, dateOfTodo, reminder } = aTodoData;  //! Creates a todo sub-document with the supplied data in the request body
-    const userThatTodo = await todoData.createTodo(req.params.id, todoId, todoContent, dateOfTodo, reminder)  //! req.params.id is "userId", userId is a string, thus we can add todo to correspnding user  
+    const { todoId, text, day, reminder } = aTodoData;  //! Creates a todo sub-document with the supplied data in the request body
+    const userThatTodo = await todoData.createTodo(req.params.id, todoId, text, day, reminder)  //! req.params.id is "userId", userId is a string, thus we can add todo to correspnding user  
     res.status(200).json(userThatTodo);
   } catch (e) {
     res.status(500).json({ error: e });
