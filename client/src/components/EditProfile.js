@@ -8,8 +8,8 @@ import noImg from '../img/download.jpeg';
 import { Link } from "react-router-dom";
 import database from "../config/awsUrl"
 
-var fs = require('fs')
-    , gm = require('gm').subClass({ imageMagick: true });
+// var fs = require('fs')
+//     , gm = require('gm').subClass({ imageMagick: true });
 
 function EditProfile(props) {
     const [imgData, setImgData] = useState(undefined);
