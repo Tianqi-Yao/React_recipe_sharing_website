@@ -31,7 +31,7 @@ input {
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -67,6 +67,7 @@ td {
 col-md-4 {
 	border: 1px;
 }
+
 
 .hometext {
   /* color:rgb(199, 78, 98); */
