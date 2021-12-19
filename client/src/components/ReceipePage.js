@@ -186,7 +186,7 @@ const ReceipePage = (props) => {
     let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
     console.log('likesOfUser: ', likesOfUser)
 
-    setLikes(likes.filter((like) => like.id !== receipeId))  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+    setLikes(likes.filter((like) => like !== receipeId))  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
 
     let deleteLikeObj = await axios.delete(`${database}/likes/${receipeId}`, {
       params: {   // currentUser.uid is userId

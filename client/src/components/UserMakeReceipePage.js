@@ -149,45 +149,107 @@ const ReceipePage = (props) => {
 
 
   const decrePageNum = async () => {
-    props.match.params.page = props.match.params.page - 1;
-  };
+    props.match.params.page = props.match.params.page - 1
+  }
 
   const increPageNum = async () => {
-    props.match.params.page = props.match.params.page + 1;
-  };
+    props.match.params.page = props.match.params.page + 1
+  }
 
   const buttonChangeUrl = async () => {
-    history.push(`/receipe/user/page/${props.match.params.page}`);
+    history.push(`/receipe/user/page/${props.match.params.page}`)
   }
 
   const searchReceipeTerm = async (searchTerm) => {  // SearchForm
-    setReceipeTerm(searchTerm);
+    setReceipeTerm(searchTerm)
   }
 
 
-  const [likes, setLikes] = useState([]);  // state is immutable, you cannot directly change it, only use setTask() to change it
+  // get likes from database
+  const [likes, setLikes] = useState([])  // state is immutable, you cannot directly change it, only use setTask() to change it
+  // const [clike, setClike] = useState(undefined)
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
+        console.log('likesOfUser: ', likesArrayInUser)
+        setLikes(likesArrayInUser.data)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
+  //       console.log('likesOfUser: ', likesArrayInUser)
+  //       setLikes(likesArrayInUser.data)
+  //       console.log("click~~~~~~~~~~~~~~~",clike);
+  //     } catch (e) {
+  //       console.log(e)
+  //     }
+  //   }
+
+  //   fetchData()
+  // }, [clike])
 
   const addReceipeToUser = async (receipeId) => {
-    console.log("addReceipeToUser() ", receipeId);
-    let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`);  // currentUser.uid is userId.
-    console.log('likesOfUser: ', likesOfUser);
-    if (likesOfUser.length > 0) {
-      setLikes([...likesOfUser, receipeId]);
-    }
+    receipeId = receipeId.toString()   //! receipeId store in MongoDB with String type
+    console.log("addReceipeToUser() ", receipeId)
+    let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
+    console.log('likesOfUser: ', likesOfUser)
+
+    setLikes([...likes, receipeId])
+
     let newLikeObj = await axios.post(`${database}/likes/${currentUser.uid}`, {
       params: {   // currentUser.uid is userId
-        receipeIdNeedToBeAdded: receipeId,
+        receipeIdNeedToBeAdded: receipeId
       }
-    });  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js' 
-    console.log('newLikeObj: ', newLikeObj);
+    })  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js'
+    console.log('newLikeObj: ', newLikeObj)
+  }
+
+
+  const deleteReceipeFromUserLikes = async (receipeId) => {
+    receipeId = receipeId.toString()
+    // console.log("deleteReceipeFromUserLikes() ", receipeId)
+    let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
+    // console.log('likesOfUser: ', likesOfUser)
+
+    let temp = likes.filter((like) => like !== receipeId)
+    // console.log("tmep",temp,likes);
+    setLikes(temp)  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+
+    let deleteLikeObj = await axios.delete(`${database}/likes/${receipeId}`, {
+      params: {   // currentUser.uid is userId
+        userId: currentUser.uid
+      }
+    })  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js'
+    // console.log('newLikeObj: ', deleteLikeObj)
+    // window.location.reload(false);
   }
 
   // const submitReceipeTerm = async (submitTerm) => {  //! SubmitForm, I need a hook that is triggered by 'submitTerm', and in this hook, I need axios to call /search in server side and store returned json
   //   setReceipeTerm(submitTerm);
   // }
 
+  // let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`);  // currentUser.uid is userId.
+  // console.log('likesOfUser: ', likesOfUser);
+
   // card UI
   const buildCard = (receipe) => {
+    //! for toggle button between Collect and UnCollect
+    // console.log('likes of user in buildCard:', likes)
+    const isReceipeIdInLikes = likes && likes.findIndex(x => x == receipe._id)  // is ReceipeId in Likes ?
+    if (isReceipeIdInLikes) {
+      console.log('likes of user in buildCard:', likes)
+      console.log('isReceipeIdInLikes:', isReceipeIdInLikes)
+    }
+
     return (
       <Grid item xs={12} sm={4} md={2} lg={2} xl={2} key={receipe._id}>
         <Card className={classes.card} variant="outlined">
@@ -208,29 +270,34 @@ const ReceipePage = (props) => {
           </Link>
 
           <CardActions>
-            {/* {isFavoriated !=-1 ? 
-              <button onClick={() => { releasePokemonFromSelectedTrainer(pokemonState);}}>unFavoriated</button> :  */}
-            <button onClick={() => { addReceipeToUser(receipe._id); }}>Collect</button>
+            {isReceipeIdInLikes != -1 ?
+              <button onClick={() => { deleteReceipeFromUserLikes(receipe._id); }}>Uncollect</button> :
+              <button onClick={() => {
+                addReceipeToUser(receipe._id);
+              }}>Collect
+              </button>}
+            {/* <button onClick={() => {
+                            deleteReceipeFromUserLikes(receipe.id)
+                        }}>Uncollect
+                        </button> */}
           </CardActions>
         </Card>
       </Grid>
-    );
-  };
+    )
+  }
 
 
   if (receipeTerm) {
     card = searchData && searchData.map((char) => {
-      return buildCard(char);
-    });
-  }
-  else if (props.match.params.page && props.match.params.page >= 0) {
+      return buildCard(char)
+    })
+  } else if (props.match.params.page && props.match.params.page >= 0) {
     card = pageData && pageData.map((receipe) => {
-      console.log('page data-receipe',receipe);
-      return buildCard(receipe);
-    });
-    // console.log('pageData:', card);
-  }
-  else {
+      // console.log('page data:\n');
+      return buildCard(receipe)
+    })
+    console.log('pageData:', card)
+  } else {
     // console.log(initialData)
     // console.log('initial data:\n');
     // {
@@ -240,8 +307,11 @@ const ReceipePage = (props) => {
     //   "imageType": "jpg"
     // },
     card = initialData && initialData.map((receipe) => {
-      return buildCard(receipe);
-    });
+      // let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`);  // currentUser.uid is userId.
+      // console.log('likesOfUser: ', likesArrayInUser);
+      // setLikes(likesArrayInUser);
+      return buildCard(receipe)
+    })
     // console.log('initialData:', card);
   }
 
@@ -260,14 +330,14 @@ const ReceipePage = (props) => {
       <div>
         <h2>Loading....</h2>
       </div>
-    );
+    )
   } else {
     if (props.match.params.page < 0 || props.match.params.page > lastPageNum) {
       return (
         <ErrorComponent></ErrorComponent>
-      );
+      )
     }
-    else if (lastPageNum === 0) {  // 1st page{
+    else if (lastPageNum === 0) {
       return <div>
         <SearchForm searchValue={searchReceipeTerm} />
         <br />
@@ -275,12 +345,15 @@ const ReceipePage = (props) => {
         <Grid container className={classes.grid} spacing={5}>
           {card}
         </Grid>
-      </div>;
+      </div>
     }
     else if (props.match.params.page === 0) {  // 1st page
       return <div>
         <SearchForm searchValue={searchReceipeTerm} />
-        <button onClick={() => { increPageNum(); buttonChangeUrl(); }} className='btn'>
+        <button onClick={() => {
+          increPageNum()
+          buttonChangeUrl()
+        }} className="btn">
           Next Page
         </button>
         <br />
@@ -288,13 +361,15 @@ const ReceipePage = (props) => {
         <Grid container className={classes.grid} spacing={5}>
           {card}
         </Grid>
-      </div>;
-    }
-    else if (props.match.params.page === lastPageNum) {  // last page
+      </div>
+    } else if (props.match.params.page === lastPageNum) {  // last page
       return (
         <div>
           <SearchForm searchValue={searchReceipeTerm} />
-          <button onClick={() => { decrePageNum(); buttonChangeUrl(); }} className='btn'>
+          <button onClick={() => {
+            decrePageNum()
+            buttonChangeUrl()
+          }} className="btn">
             Previous Page
           </button>
           <br />
@@ -303,7 +378,7 @@ const ReceipePage = (props) => {
             {card}
           </Grid>
         </div>
-      );
+      )
     }
 
     return (
@@ -311,10 +386,18 @@ const ReceipePage = (props) => {
         {props.match.params.page < lastPageNum && props.match.params.page > 0 && (
           <div>
             <SearchForm searchValue={searchReceipeTerm} />
-            <button onClick={() => { decrePageNum(); buttonChangeUrl(); }} className='btn'>   {/* https://upmostly.com/tutorials/multiple-onclick-events-in-react-with-examples#call-multiple-functions */}
+            <button onClick={() => {
+              decrePageNum()
+              buttonChangeUrl()
+            }}
+              className="btn">   {/* https://upmostly.com/tutorials/multiple-onclick-events-in-react-with-examples#call-multiple-functions */}
               Previous Page
-            </button> &nbsp;&nbsp;
-            <button onClick={() => { increPageNum(); buttonChangeUrl(); }} className='btn'>
+            </button>
+            &nbsp;&nbsp;
+            <button onClick={() => {
+              increPageNum()
+              buttonChangeUrl()
+            }} className="btn">
               Next Page
             </button>
             <br />
@@ -327,7 +410,7 @@ const ReceipePage = (props) => {
       </div>
     )
   }
-};
+}
 
 export default ReceipePage
 
