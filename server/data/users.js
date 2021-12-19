@@ -51,6 +51,9 @@ let exportedMethods = {
         if (newUser.password) {
             updateInfo.password = newUser.password
         }
+        if (newUser.Post) {
+            updateInfo.Post = newUser.Post
+        }
 
         let updateInformation = await userCollection.updateOne({_id: id}, {$set: updateInfo})
         if (updateInformation.modifiedCount === 0) {

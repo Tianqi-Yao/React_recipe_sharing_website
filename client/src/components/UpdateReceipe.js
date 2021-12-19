@@ -7,23 +7,27 @@ import { useAuth } from "../contexts/AuthContext"
 import noImage from '../img/download.jpeg';
 import database from "../config/awsUrl"
 
-const UpdateReceipe = () => {
+const UpdateReceipe = (props) => {
     const [post, setPost] = useState(undefined);
     const [id, setID] = useState([]);
     const [fields, setFields] = useState([]);
     const [imageUrl, setImageUrl] = useState(undefined);
+    const [updateImage, setUpdateImage] = useState(false);
+    const [userID, setUserID] = useState(undefined);
     const { currentUser, updatePassword, updateEmail } = useAuth()
     // const [images, setImages] = React.useState([]);
     // const maxNumber = 1;
-    let receipeID = "3ce9608b-0743-4cb5-b301-2607b0fd35ab"  // ! for test
+    let receipeID = "c77d9075-afc6-4f2e-adaa-d20b11e85335"  // ! for test  props.match.params.id
     let url = `${database}/receipe/mongodb/` + receipeID
 
     useEffect(() => {
 
-        // if (currentUser === null) {
-        //     alert("please login");
-        //     window.history.back(-1);
-        // }
+        if (currentUser === null) {
+            alert("please login");
+            window.history.back(-1);
+        }
+        setUserID(currentUser.multiFactor.user.uid);
+        setUpdateImage(false);
 
         const getData = async () => {
             const { data } = await axios.get(url, {
@@ -42,16 +46,9 @@ const UpdateReceipe = () => {
     }, []);
 
 
-    // const onChange = (imageList, addUpdateIndex) => {
-    //     // data for submit
-    //     console.log(imageList, addUpdateIndex);
-    //     setImages(imageList);
-    // };
 
     const imageCmpFunc = () => {
-        // const dataURL = document.getElementById('image').src;
-        // console.log("dataURL",dataURL);
-        // const file = imageCmp.dataURLtoFile(dataURL);
+
         const file = document.getElementById('image').files[0];
         console.log("imageCmp ", typeof file, file);
         if (file == null) {
@@ -63,11 +60,11 @@ const UpdateReceipe = () => {
             imageCmp.filetoDataURL(res).then(res => {
                 console.log("dataURL", res);
                 setImageUrl(res)
+                setUpdateImage(true);
             })
         })
-        // console.log("fileCmp",fileCmp);
-        // const dataURL = imageCmp.filetoDataURL(fileCmp)
-        // setImageUrl(dataURL)
+        
+
     }
 
     const showImage = () => {
@@ -75,65 +72,6 @@ const UpdateReceipe = () => {
             <img src={imageUrl === undefined ? noImage : imageUrl} alt="" />
         );
     }
-
-    // const loadimageView = () => {
-    //     return (
-    //         <div className="App">
-    //             <ImageUploading
-    //                 multiple
-    //                 value={images}
-    //                 onChange={onChange}
-    //                 maxNumber={maxNumber}
-    //                 dataURLKey="data_url"
-    //             >
-    //                 {({
-    //                     imageList,
-    //                     onImageUpload,
-    //                     onImageRemoveAll,
-    //                     onImageUpdate,
-    //                     onImageRemove,
-    //                     isDragging,
-    //                     dragProps
-    //                 }) => (
-    //                     // write your building UI
-    //                     <div className="upload__image-wrapper">
-    //                         <button
-    //                             style={isDragging ? { color: "red" } : null}
-    //                             onClick={(e) => {
-    //                                 e.preventDefault();
-    //                                 onImageUpload();
-    //                             }}
-    //                             {...dragProps}
-    //                         >
-    //                             Click or Drop here
-    //                         </button>
-    //                         {imageList.map((image, index) => (
-    //                             <div key={index} className="image-item">
-    //                                 <img src={image.data_url} alt="" width="100" />
-    //                                 <div className="image-item__btn-wrapper">
-    //                                     <button onClick={(e) => {
-    //                                         e.preventDefault();
-    //                                         setImageUrl(image.data_url)
-    //                                     }}>upload</button>
-    //                                     <button onClick={(e) => {
-    //                                         e.preventDefault();
-    //                                         onImageUpdate(index)
-    //                                         setImageUrl(undefined)
-    //                                     }}>Edit</button>
-    //                                     <button onClick={(e) => {
-    //                                         e.preventDefault();
-    //                                         onImageRemove(index)
-    //                                         setImageUrl(undefined)
-    //                                     }}>Remove</button>
-    //                                 </div>
-    //                             </div>
-    //                         ))}
-    //                     </div>
-    //                 )}
-    //             </ImageUploading>
-    //         </div>
-    //     );
-    // }
 
     let ingredientsView = () => {
         return (
@@ -189,7 +127,6 @@ const UpdateReceipe = () => {
             }
         }
         values.length = values.length - 1
-        // values = values.filter(e=> e.key != i)
         console.log("log:", j, typeof values[0], values);
         for (let i = 0; i < values.length; i++) {
             document.getElementById(i).value = values[i];
@@ -203,8 +140,10 @@ const UpdateReceipe = () => {
         e.preventDefault();
         //get references to form fields.
         let title = document.getElementById('title').value;
-        // let image = document.getElementById('image').value;
-        let image = imageUrl;
+        let image = undefined
+        if (updateImage) {
+            image = imageUrl;
+        }
         let cookingMinutes = document.getElementById('cookingMinutes').value;
         let instructionsReadOnly = document.getElementById('instructionsReadOnly').value;
         let ingredients = [];
@@ -219,34 +158,18 @@ const UpdateReceipe = () => {
             image,
             cookingMinutes,
             instructionsReadOnly,
-            ingredients
+            ingredients,
+            userID
         };
 
-        //   let receipeData = {
-        //     id,
-        //     title,
-        //     image,
-        //     instructionsReadOnly,
-        //     cookingMinutes,
-        //     ingredients,
-        //     author
-        //   }
 
         setPost(post);
+        console.log("222:",post.image);
         const { data } = await axios.patch(`${database}/receipe/update`, post, {
             headers: { Accept: 'application/json' }
         });
         console.log("data", data, fields);
-        // setPostData(data);
         alert(JSON.stringify(post));
-        // document.getElementById('title').value = '';
-        // document.getElementById('image').value = '';
-        // document.getElementById('cookingMinutes').value = '';
-        // document.getElementById('instructionsReadOnly').value = '';
-        // fields.map((item, i) => {
-        //     document.getElementById(i).value = '';
-        // });
-        // setFields([undefined]);
         window.location.href = "/";
     };
 
@@ -275,7 +198,6 @@ const UpdateReceipe = () => {
                     </div>
                     <div className="img">
                         {showImage()}
-                        {/* {loadimageView()} */}
                     </div>
                 </div>
                 <div className="receipeDetile">
