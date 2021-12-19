@@ -10,6 +10,11 @@ async function main() {
 
     await db.dropDatabase()
 
+    // firebase default user testuser1@email.com testuser2@email.com, pass 123456
+    const testUser1 = await users.addNewUser("viGis3WFRlfFeqRahIlVTOVqbpi2", "testUser1")
+    const testUser2 = await users.addNewUser("hwqMhUHuYDcaU7DuJHedzpwTtYs1", "testUser2")
+    const testUser3 = await users.addNewUser("QuIUSEuTAzLii7DLeQmufuOZN4l2", "testUser3")
+
     // const patrick = await users.addUser('Patrick', 'Hill')
     // const id = patrick._id
 
@@ -47,8 +52,8 @@ async function main() {
     let p3 = await recipes.addPost("1", "111")
     let p4 = await recipes.addPost("1", "111")
 
-    let u1 = await users.addUser("user", "123", [p1._id, p2._id, p3._id, p4._id], [p1._id, p2._id, p3._id, p4._id])
-    console.log(u1)
+    // let u1 = await users.addUser("user", "123", [p1._id, p2._id, p3._id, p4._id], [p1._id, p2._id, p3._id, p4._id])
+    // console.log(u1)
 
     await db.serverConfig.close()
     console.log('Done!')
