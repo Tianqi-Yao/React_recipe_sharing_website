@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongodb');
 const mongoCollections = require('../config/mongoCollections');
 const recipes = mongoCollections.recipes;
-const posts = mongoCollections.posts;
+// const posts = mongoCollections.posts;
 const uuid = require('uuid').v4;
 // const data = require('../data');
 // const userData = data.users;
@@ -21,7 +21,7 @@ let exportedMethods = {
         return await this.getRecipeById(newInsertInformation.insertedId)
     },
     async getPostById(id) {
-        const postCollection = await posts();
+        const postCollection = await recipes();
         const post = await postCollection.findOne({ _id: id });
 
         if (!post) throw 'Post not found';
@@ -63,7 +63,7 @@ let exportedMethods = {
         // const userThatPosted = await userData.getUserById(authorId);
         console.log(userThatPosted);
 
-        const postCollection = await posts();
+        const postCollection = await recipes();
 
         const newPost = {
             title: title,
@@ -85,7 +85,7 @@ let exportedMethods = {
         return await this.getPostById(newId);
     },
     async updatePost(id, title, image, cookingMinutes, instructionsReadOnly, ingredients, authorId) {
-        const postCollection = await posts();
+        const postCollection = await recipes();
 
         const updatedPostData = {};
 
