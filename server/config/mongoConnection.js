@@ -19,7 +19,7 @@ module.exports = async () => {
         try {
             const postCollection = _connection
                 .db(mongoConfig.database)
-                .collection('posts');
+                .collection('recipes');
             await postCollection.createIndex({ title: 'text' });
             const indexes = await postCollection.indexes();
         } catch (e) {

@@ -41,8 +41,6 @@ function App() {
                     <Link className="showlink" to="/">Home</Link>
                     <Link className="showlink" to="/todo">TodoList</Link>
                     <Link className="showlink" to="/receipe/page/0">ReceipePage</Link>
-                    <Link className="showlink" to="/createReceipe">Create Receipe</Link>
-                    <Link className="showlink" to="/updateReceipe">Update Receipe</Link>
                     <UserSignLogin/>
                 </header>
                 <br/>

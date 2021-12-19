@@ -51,6 +51,9 @@ let exportedMethods = {
         if (newUser.password) {
             updateInfo.password = newUser.password
         }
+        if (newUser.Post) {
+            updateInfo.Post = newUser.Post
+        }
 
         let updateInformation = await userCollection.updateOne({_id: id}, {$set: updateInfo})
         if (updateInformation.modifiedCount === 0) {
@@ -112,8 +115,15 @@ let exportedMethods = {
         let userLikes = user.likes
         let result = []
         for (let i of userLikes) {
-            let recipeInformation = await recipesData.getRecipeById(i)
-            result.push(recipeInformation)
+            let recipeInformation = null;
+            try {
+                recipeInformation = await recipesData.getRecipeById(i)
+            } catch (error) {
+                await this.removeLikesFromUser(uid, i);
+            }
+            if(recipeInformation !== null){
+                result.push(recipeInformation)
+            }
         }
         return result
     },
