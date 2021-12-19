@@ -1,11 +1,9 @@
 import React from "react"
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
-import {useDispatch, useSelector} from 'react-redux'
-import {Tabs, Tab, Card, Container, Row, Col, Button} from 'react-bootstrap'
-import testLogo from '../img/testFood.jpg'
-import testTwo from '../img/image.jpg'
-import {Link} from "react-router-dom"
+import { Tabs, Tab, Card, Container, Row, Col, Button } from 'react-bootstrap'
+import noImg from '../img/download.jpeg';
+import { Link } from "react-router-dom"
 import database from "../config/awsUrl"
 
 const UserRecipe = (props) => {
@@ -20,7 +18,7 @@ const UserRecipe = (props) => {
     async function deleteRecipe(rid) {
         // dispatch(actions.deleteRecipeByUser(props.userData._id, rid));
         // document.getElementById('trainerName').value = '';
-        const {data} = await axios.delete(`${database}/users/deleteRecipe?uid=${props.user._id}&rid=${rid}`)
+        const { data } = await axios.delete(`${database}/users/deleteRecipe?uid=${props.user._id}&rid=${rid}`)
         setDeleteData(data)
         // setRecipeData(data);
     }
@@ -49,21 +47,21 @@ const UserRecipe = (props) => {
         return (
             <Col sm={4} key={recipe._id}>
                 <Card className="mb-3"
-                      style={{
-                          maxWidth: 250,
-                          height: 'auto',
-                          marginLeft: 'auto',
-                          marginRight: 'auto',
-                          borderRadius: 5
-                      }}
+                    style={{
+                        maxWidth: 250,
+                        height: 'auto',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        borderRadius: 5
+                    }}
                 >
-                    <Card.Img variant="top" src={recipe.image} className="recipeImg" alt="recipe image"/>
+                    {recipe.image ? (<Card.Img variant="top" src={recipe.image} className="recipeImg" alt="recipe image" />) : (<Card.Img variant="top" src={noImg} className="recipeImg" alt="recipe image" />)}
+
                     {/* <Card.Img variant="top" src={testLogo} className="recipeImg" /> */}
                     <Card.Body>
                         <Link to={`/receipe/${recipe._id}`}><Card.Title>{recipe.title}</Card.Title></Link>
-                        <Card.Text>
-                            {recipe.instructionsReadOnly}
-                        </Card.Text>
+                        <Card.Text>{recipe.instructionsReadOnly}</Card.Text>
+                        
                         <Button variant="danger" onClick={() => deleteRecipe(recipe._id)}>Delete</Button>
                         <Button variant="danger" onClick={() => window.location.href = `/updateReceipe/${recipe._id}`}>Edit</Button>
                     </Card.Body>
@@ -72,12 +70,12 @@ const UserRecipe = (props) => {
         )
     }
 
-    if(recipeData && recipeData.length !== 0) {
+    if (recipeData && recipeData.length !== 0) {
         card =
-        recipeData &&
-        recipeData.map((recipe) => {
-            return buildCard(recipe);
-        });
+            recipeData &&
+            recipeData.map((recipe) => {
+                return buildCard(recipe);
+            });
     } else {
         card = (<div>Share Your Recipe Now! <Link to="/createReceipe">Click To Create Recipe</Link></div>)
 
