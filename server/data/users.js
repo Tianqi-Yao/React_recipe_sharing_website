@@ -193,20 +193,7 @@ let exportedMethods = {
         if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed'
 
         return await this.getUserById(id)
-    },
-    async getUserByUserId(userId) {  // for Todo List
-        if (!userId) throw 'You must provide an userId to get'
-        if (typeof userId !== 'string' || userId.length === 0) throw "for getTodoByUid(userId), the userId must be string type and not an empty string"
-        if (!ObjectId.isValid(userId)) throw "the userId provided is not a valid ObjectId"  //MongoDB Node check if objectid is valid. https://stackoverflow.com/questions/11985228/mongodb-node-check-if-objectid-is-valid
-        let parsedId = ObjectId(userId)
-
-        const userCollection = await users()
-        let user = await userCollection.findOne({_id: parsedId})  //return a document
-        if (user === null) throw "No user with that userId"
-        user._id = user._id.toString()
-        return user  //user object
     }
-
 }
 
 module.exports = exportedMethods
