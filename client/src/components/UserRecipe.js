@@ -71,7 +71,7 @@ const UserRecipe = (props) => {
         )
     }
 
-    if(!recipeData) {
+    if(recipeData) {
         card =
         recipeData &&
         recipeData.map((recipe) => {

@@ -57,7 +57,7 @@ const WishList = (props) => {
     }
 
 
-    if (!wishListeData) {
+    if (wishListeData) {
         card =
             wishListeData &&
             wishListeData.map((recipe) => {

@@ -3,6 +3,7 @@
 sudo apt update && sudo apt upgrade
 sudo apt-get install -y net-tools
 sudo apt install -y imagemagick
+sudo apt install -y graphicsmagick
 
 # choose git branch
 read -r -p "Enter the branch default is master: " doBranch
@@ -15,7 +16,7 @@ dataUrl="http://${myAwsIp}:3001"
 # install nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 source ~/.bashrc
-nvm install --lts
+nvm install 14.18.2
 
 # install redis
 sudo apt install -y redis-server
@@ -38,6 +39,7 @@ git clone -b "$doBranch" https://github.com/Tianqi-Yao/CS554_Final_Project_2021F
 cd CS554_Final_Project_2021Fall || exit
 cd server || exit
 npm install
+mkdir public
 pm2 start --name server npm -- start
 
 cd ../client || exit

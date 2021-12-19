@@ -35,7 +35,7 @@ export default function Signup() {
                 userName: newUserObj.displayName
             })
             // updateCurrentUser(newUserObj)
-            window.location.href = "/";
+            window.location.href = "/"
         } catch (e) {
             console.log(e)
             setError("Failed to create an account")
@@ -62,20 +62,20 @@ export default function Signup() {
                         {error && <Alert variant="danger">{error}</Alert>}
                         <Form onSubmit={handleSubmit} onChange={handleChange}>
                             <Form.Group id="username">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control type="username" ref={userNameRef} required/>
+                                <Form.Label htmlFor="usernameinput">Username</Form.Label>
+                                <Form.Control id="usernameinput" type="username" ref={userNameRef} required/>
                             </Form.Group>
                             <Form.Group id="email">
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control type="email" ref={emailRef} required/>
+                                <Form.Label htmlFor="emailinput">Email</Form.Label>
+                                <Form.Control id="emailinput" type="email" ref={emailRef} required/>
                             </Form.Group>
                             <Form.Group id="password">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control type="password" ref={passwordRef} required/>
+                                <Form.Label htmlFor="passwordinput">Password</Form.Label>
+                                <Form.Control id="passwordinput" type="password" ref={passwordRef} required/>
                             </Form.Group>
                             <Form.Group id="password-confirm">
-                                <Form.Label>Password Confirmation</Form.Label>
-                                <Form.Control type="password" ref={passwordConfirmRef} required/>
+                                <Form.Label htmlFor="passconfinput">Password Confirmation</Form.Label>
+                                <Form.Control id="passconfinput" type="password" ref={passwordConfirmRef} required/>
                             </Form.Group>
                             <Button disabled={loading} className="w-100" type="submit">
                                 Sign Up
