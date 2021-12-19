@@ -60,7 +60,7 @@ const UserRecipe = (props) => {
                     <Card.Img variant="top" src={recipe.image} className="recipeImg"/>
                     {/* <Card.Img variant="top" src={testLogo} className="recipeImg" /> */}
                     <Card.Body>
-                        <Link to=""><Card.Title>{recipe.title}</Card.Title></Link>
+                        <Link to={`/receipe/${recipe._id}`}><Card.Title>{recipe.title}</Card.Title></Link>
                         <Card.Text>
                             {recipe.instructionsReadOnly}
                         </Card.Text>

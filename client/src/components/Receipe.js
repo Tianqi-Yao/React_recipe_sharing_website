@@ -48,7 +48,7 @@ const useStyles = makeStyles({
 
 
 const Receipe = (props) => {
-  props.match.params.id = parseInt(props.match.params.id);  // ❤ 
+  // props.match.params.id = parseInt(props.match.params.id);  // ❤ 
   const classes = useStyles();
   const [receipeData, setReceipeData] = useState(undefined);
   const [loading, setLoading] = useState(true);

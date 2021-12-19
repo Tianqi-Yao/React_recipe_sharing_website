@@ -50,13 +50,16 @@ router.get('/:id', async (req, res) => {
     if (!req.params.id) throw 'You must specify a receipeId to get';
 
     let cacheOfReceipe = await client.getAsync(`recepieId${req.params.id}`);
-    if (cacheOfReceipe) {
-      res.send(JSON.parse(cacheOfReceipe));
-    } else {  // receipe not in cache
-      const singleReceipe = await receipeData.getRecipesById(req.params.id);
+    // if (false) {
+    //   res.send(JSON.parse(cacheOfReceipe));
+    // } else {  // receipe not in cache
+      let singleReceipe = await receipeData.getRecipesById(req.params.id);
+      if (singleReceipe === undefined) {
+        singleReceipe = await postData.getPostById(req.params.id);
+      }
       res.json(singleReceipe);
       let cacheReceipe = await client.setAsync(`recepieId${req.params.id}`, JSON.stringify(singleReceipe));  // store pokemonPage in cache
-    }
+    // }
   } catch (e) {
     console.log(e);
     res.status(404).json({ message: 'Server /receipe/:id Error. Receipe not found with id' });
@@ -214,7 +217,7 @@ router.patch('/update', async (req, res) => {
       // })
 
       // fs.unlinkSync('./public/uploadImage.png');
-      
+
     }
 
     const searchedReceipe = await postData.updatePost(req.body.id, title, image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, req.body.userID);  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
