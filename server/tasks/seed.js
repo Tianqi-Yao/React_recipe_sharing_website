@@ -11,9 +11,9 @@ async function main() {
     await db.dropDatabase()
 
     // firebase default user testuser1@email.com testuser2@email.com, pass 123456
-    const testUser1 = await users.addNewUser("viGis3WFRlfFeqRahIlVTOVqbpi2", "testUser1")
-    const testUser2 = await users.addNewUser("hwqMhUHuYDcaU7DuJHedzpwTtYs1", "testUser2")
-    const testUser3 = await users.addNewUser("QuIUSEuTAzLii7DLeQmufuOZN4l2", "testUser3")
+    const testUser1 = await users.addNewUser("JfX3Kuv8y1gLJt8UhdROrbGYOt22", "testuser1")
+    const testUser2 = await users.addNewUser("tUNPj9UVGqPjNgW3icOnxxCjcGr2", "testuser2")
+    const testUser3 = await users.addNewUser("mIHxaOKW3cODb7TgMs6aRmz6LZS2", "testuser3")
 
     // const patrick = await users.addUser('Patrick', 'Hill')
     // const id = patrick._id
