@@ -60,7 +60,7 @@ router.get('/recipe/:id', async (req, res) => {
         const userRecipe = await userData.getRecipeByUid(uid);
         res.json(userRecipe);
     } catch (error) {
-        res.status(404).json({"ERROR": e.name + ": " + e.message});
+        res.status(404).json({"ERROR": error.name + ": " + error.message});
     }
 });
 

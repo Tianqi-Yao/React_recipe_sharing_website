@@ -1,13 +1,20 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from "axios";
+import { Link } from "react-router-dom";
+import database from "../config/awsUrl"
+
+// for userId
+import {useAuth} from "../contexts/AuthContext"
 
 import Header from '../todo/Header';
 import Footer from '../todo/Footer';
 import Tasks from '../todo/Tasks';
 import AddTask from '../todo/AddTask';
 
-const Todo = () => {
+const Todo = (props) => {
   const [showAddTodo, setShowAddTodo] = useState(false);
+  const {currentUser}  = useAuth()
 
   const [tasks, setTasks] = useState(  // state is immutable, you cannot directly change it, only use setTask() to change it
     [
@@ -32,20 +39,36 @@ const Todo = () => {
     ]
   );
 
-  const addTask = (task) => { // add Task
-    const id = Math.floor(Math.random() * 10000) + 1;  // create a random Id
+  const addTask = async (task) => { // add Task
+    let id = Math.floor(Math.random() * 10000) + 1;  // create a random Id
+    console.log(typeof id);
+    id = id.toString();
     const newTask = {id, ...task };
 
-    setTasks([...tasks, newTask])
+    console.log("current userId: ", currentUser.uid);
+    setTasks([...tasks, newTask]);
+    let newTodoObj = await axios.post(`${database}/todos/${currentUser.uid}`, { params: {   // currentUser.uid is userId
+      uid: currentUser.uid,  
+      todoId: id, 
+      todoContent: newTask.text, 
+      dateOfTodo: newTask.day, 
+      reminder: newTask.reminder 
+    }});  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js' 
+    console.log('newTodoObj: ', newTodoObj);
   }
 
-  const deleteTask = (id) => {  // delete Todo
+  const deleteTask = async (id) => {  // delete Todo. id is todoId
     // console.log('delete', id)
     setTasks(tasks.filter((task) => task.id !== id));  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter . This delete Todo by click 'x'
+    console.log(id);
+    let isDeletedTask = await axios.delete(`${database}/todos/todo/${id}`);
+    console.log('deleteTodo: ', isDeletedTask);
   }
 
-  const toggleReminder = (id) => {  // toggle Reminder
+  const toggleReminder = async (id) => {  // toggle Reminder. id is todoId
     setTasks(tasks.map((task) => task.id === id ? { ...task, reminder: !task.reminder } : task))  // implement !task.reminder 
+    let isToggledReminder = await axios.patch(`${database}/todos/todo/${id}`, { params: { todos : tasks.map((task) => task.id === id)}});
+    console.log('toggleTodo: ', isToggledReminder);
   }
 
   return (

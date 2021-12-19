@@ -124,18 +124,18 @@ router.post('/create', async (req, res) => {
       // image = 'data:image/png;base64,' + imageData;
 
 
-      imageCmp.dataURLtoImage(image).then(res => {
-        imageCmp.compressAccurately(res, 50).then(res => {
-          console.log(res);
-          imageCmp.filetoDataURL(res).then(res => {
-            console.log("dataURL", res);
-            image = res;
-          })
-        })
-      })
+      // imageCmp.dataURLtoImage(image).then(res => {
+      //   imageCmp.compressAccurately(res, 50).then(res => {
+      //     console.log(res);
+      //     imageCmp.filetoDataURL(res).then(res => {
+      //       console.log("dataURL", res);
+      //       image = res;
+      //     })
+      //   })
+      // })
 
 
-      fs.unlinkSync('./public/uploadImage.png');
+      // fs.unlinkSync('./public/uploadImage.png');
       // fs.unlinkSync('./public/uploadImage_new.png');
     }
     //get userInfo
@@ -203,17 +203,17 @@ router.patch('/update', async (req, res) => {
       // imageData = new Buffer(bitmap).toString('base64');
       // image = 'data:image/png;base64,' + imageData;
 
-      imageCmp.dataURLtoImage(image).then(res => {
-        imageCmp.compressAccurately(res, 50).then(res => {
-          console.log(res);
-          imageCmp.filetoDataURL(res).then(res => {
-            console.log("dataURL", res);
-            image = res;
-          })
-        })
-      })
+      // imageCmp.dataURLtoImage(image).then(res => {
+      //   imageCmp.compressAccurately(res, 50).then(res => {
+      //     console.log(res);
+      //     imageCmp.filetoDataURL(res).then(res => {
+      //       console.log("dataURL", res);
+      //       image = res;
+      //     })
+      //   })
+      // })
 
-      fs.unlinkSync('./public/uploadImage.png');
+      // fs.unlinkSync('./public/uploadImage.png');
       
     }
 
