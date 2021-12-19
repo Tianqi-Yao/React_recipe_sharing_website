@@ -3,11 +3,12 @@ const router = express.Router();
 
 const data = require('../data');
 const receipeData = data.receipes;  // "../data/pokemons" through ../data/index.js
-const postData = data.posts;
+const postData = data.recipes;
+const userData = data.users;
 const base64ToImage = require('base64-to-image');
+const imageCmp = require("imagecmp");
 var fs = require('fs');
 var gm = require('gm');
-const imageCmp = require("imagecmp");
 
 // connect to redis
 const redis = require('redis');
@@ -105,15 +106,51 @@ router.post('/create', async (req, res) => {
         .fill('#95a5a6')
         .drawText(0, 50, "Fall2021WEB_Team_Watermark", 'Center')
         .write("./public/uploadImage_new.png", function (err) {
-          // ...
+          if (err) {
+            console.log("write error");
+            reject(err);
+          } else {
+            console.log("write success");
+            let bitmap = fs.readFileSync('./public/uploadImage_new.png');
+            imageData = new Buffer(bitmap).toString('base64');
+            image = 'data:image/png;base64,' + imageData;
+            fs.unlinkSync('./public/uploadImage_new.png');
+          }
         });
 
-      let bitmap = fs.readFileSync('./public/uploadImage_new.png');
-      imageData = new Buffer(bitmap).toString('base64');
-      image = 'data:image/png;base64,' + imageData;
-    }
+      // let bitmap = fs.readFileSync('./public/uploadImage_new.png');
+      // // console.log("bitmap", bitmap);
+      // imageData = new Buffer(bitmap).toString('base64');
+      // image = 'data:image/png;base64,' + imageData;
 
-    const searchedReceipe = await postData.addPost(title, image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, "90f50928-3f1a-4a81-9f14-2036519622c8");  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
+
+      imageCmp.dataURLtoImage(image).then(res => {
+        imageCmp.compressAccurately(res, 50).then(res => {
+          console.log(res);
+          imageCmp.filetoDataURL(res).then(res => {
+            console.log("dataURL", res);
+            image = res;
+          })
+        })
+      })
+
+
+      fs.unlinkSync('./public/uploadImage.png');
+      // fs.unlinkSync('./public/uploadImage_new.png');
+    }
+    //get userInfo
+    const userThatPosted = await userData.getUserById(req.body.userID);
+    //add post
+    const searchedReceipe = await postData.addPost(title, image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, userThatPosted);  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
+    console.log(searchedReceipe);
+    //update user post list
+    const postList = userThatPosted.Post;
+    postList.push(searchedReceipe._id)
+    const newUser = { Post: postList }
+
+
+    await userData.updateUserInfo(req.body.userID, newUser);      //todo 这个菜谱的id添加到对应的user里
+
     res.json(searchedReceipe);
   } catch (e) {
     res.status(404).json({ error: `Server /create Error.` });
@@ -134,7 +171,53 @@ router.patch('/update', async (req, res) => {
       throw '"You should input instructions.';
     }
 
-    const searchedReceipe = await postData.updatePost(req.body.id, title, req.body.image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, "90f50928-3f1a-4a81-9f14-2036519622c8");  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
+    let image = req.body.image;
+    console.log("image", image);
+    if (image) {
+      //save image to public
+      let base64Str = image;
+      let path = 'public/';
+      let optionalObj = { 'fileName': 'uploadImage', 'type': 'png' };
+      let imageInfo = base64ToImage(base64Str, path, optionalObj);
+      console.log("imageInfo", imageInfo);
+
+      //add Watermark
+      let readStream = fs.createReadStream('public/uploadImage.png');
+      gm(readStream, 'uploadImage.png')
+        .fontSize(40)
+        .fill('#95a5a6')
+        .drawText(0, 50, "Fall2021WEB_Team_Watermark", 'Center')
+        .write("./public/uploadImage_new.png", function (err) {
+          if (err) {
+            console.log("write error");
+            reject(err);
+          } else {
+            console.log("write success");
+            let bitmap = fs.readFileSync('./public/uploadImage_new.png');
+            imageData = new Buffer(bitmap).toString('base64');
+            image = 'data:image/png;base64,' + imageData;
+            fs.unlinkSync('./public/uploadImage_new.png');
+          }
+        });
+      // let bitmap = fs.readFileSync('./public/uploadImage_new.png');
+      // imageData = new Buffer(bitmap).toString('base64');
+      // image = 'data:image/png;base64,' + imageData;
+
+      imageCmp.dataURLtoImage(image).then(res => {
+        imageCmp.compressAccurately(res, 50).then(res => {
+          console.log(res);
+          imageCmp.filetoDataURL(res).then(res => {
+            console.log("dataURL", res);
+            image = res;
+          })
+        })
+      })
+
+      fs.unlinkSync('./public/uploadImage.png');
+      
+    }
+
+    const searchedReceipe = await postData.updatePost(req.body.id, title, image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, req.body.userID);  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
     res.json(searchedReceipe);
   } catch (e) {
     res.status(404).json({ error: `Server /create Error.` });

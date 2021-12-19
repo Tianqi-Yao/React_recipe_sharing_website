@@ -11,29 +11,22 @@ const CreateReceipe = () => {
     const [post, setPost] = useState(undefined);
     const [fields, setFields] = useState([{ value: null }]);
     const [imageUrl, setImageUrl] = useState(undefined);
+    const [userID, setUserID] = useState(undefined);
     const { currentUser, updatePassword, updateEmail } = useAuth()
-    // const classes = useStyles(); 
+    
 
-    // const [images, setImages] = React.useState([]);
-    // const maxNumber = 1;
-    // const onChange = (imageList, addUpdateIndex) => {
-    //     // data for submit
-    //     console.log(imageList, addUpdateIndex);
-    //     setImages(imageList);
-    // };
+    useEffect(() => {
+        if (currentUser === null){
+            alert("please login");
+            window.history.back(-1);
+            return 
+        }
+        console.log("currentUser",currentUser);
+        console.log("currentUserID",currentUser.multiFactor.user.uid);
+        setUserID(currentUser.multiFactor.user.uid);
+    }, []);
 
-    // useEffect(() => {
-    //     console.log("currentUser",currentUser);
-    //     if (currentUser === null){
-    //         alert("please login");
-    //         window.history.back(-1);
-    //     }
-
-    // }, []);
     const imageCmpFunc = () => {
-        // const dataURL = document.getElementById('image').src;
-        // console.log("dataURL",dataURL);
-        // const file = imageCmp.dataURLtoFile(dataURL);
         const file = document.getElementById('image').files[0];
         console.log("imageCmp ", typeof file, file);
         if (file == null) {
@@ -48,9 +41,6 @@ const CreateReceipe = () => {
                 setImageUrl(res)
             })
         })
-        // console.log("fileCmp",fileCmp);
-        // const dataURL = imageCmp.filetoDataURL(fileCmp)
-        // setImageUrl(dataURL)
     }
 
     const showImage = () => {
@@ -59,65 +49,6 @@ const CreateReceipe = () => {
         );
     }
 
-    // const loadimageView = () => {
-    //     return (
-    //         <div className="App">
-    //             <ImageUploading
-    //                 multiple
-    //                 value={images}
-    //                 onChange={onChange}
-    //                 maxNumber={maxNumber}
-    //                 dataURLKey="data_url"
-    //             >
-    //                 {({
-    //                     imageList,
-    //                     onImageUpload,
-    //                     onImageRemoveAll,
-    //                     onImageUpdate,
-    //                     onImageRemove,
-    //                     isDragging,
-    //                     dragProps
-    //                 }) => (
-    //                     // write your building UI
-    //                     <div className="upload__image-wrapper">
-    //                         <button
-    //                             style={isDragging ? { color: "red" } : null}
-    //                             onClick={(e) => {
-    //                                 e.preventDefault();
-    //                                 onImageUpload();
-    //                             }}
-    //                             {...dragProps}
-    //                         >
-    //                             Click or Drop here
-    //                         </button>
-    //                         {imageList.map((image, index) => (
-    //                             <div key={index} className="image-item">
-    //                                 <img id="image" src={image.data_url} alt="" width="100" />
-    //                                 <div className="image-item__btn-wrapper">
-    //                                     <button onClick={(e) => {
-    //                                         e.preventDefault();
-    //                                         setImageUrl(image.data_url)
-    //                                         imageCmpFunc()
-    //                                     }}>upload</button>
-    //                                     <button onClick={(e) => {
-    //                                         e.preventDefault();
-    //                                         onImageUpdate(index)
-    //                                         setImageUrl(undefined)
-    //                                     }}>Edit</button>
-    //                                     <button onClick={(e) => {
-    //                                         e.preventDefault();
-    //                                         onImageRemove(index)
-    //                                         setImageUrl(undefined)
-    //                                     }}>Remove</button>
-    //                                 </div>
-    //                             </div>
-    //                         ))}
-    //                     </div>
-    //                 )}
-    //             </ImageUploading>
-    //         </div>
-    //     );
-    // }
 
     const ingredientsView = () => {
         return (
@@ -202,7 +133,8 @@ const CreateReceipe = () => {
             image,
             cookingMinutes,
             instructionsReadOnly,
-            ingredients
+            ingredients,
+            userID
         }
 
         console.log("post", post)
