@@ -6,6 +6,11 @@ const uuid = require('uuid').v4;
 // const data = require('../data');
 // const userData = data.users;
 
+//! add recipe to user ↓
+const users = mongoCollections.users;
+let usersJS = require('./users');  // we need use async method of users ❤add todo to user
+
+
 let exportedMethods = {
     async addPost(title, postContent) {
         const postCollection = await recipes();
@@ -113,7 +118,8 @@ let exportedMethods = {
         await postCollection.updateOne({ _id: id }, { $set: updatedPostData });
 
         return await this.getPostById(id);
-    }
+    },
+
 }
 
 module.exports = exportedMethods;

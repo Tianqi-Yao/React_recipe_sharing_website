@@ -13,6 +13,9 @@ import { Card, CardContent, Grid, Typography, makeStyles } from '@material-ui/co
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 
+// for userId
+import {useAuth} from "../contexts/AuthContext"
+
 
 const useStyles = makeStyles({
   card: {
@@ -61,6 +64,10 @@ const ReceipePage = (props) => {
   const history = useHistory();  // update URL with button. https://stackoverflow.com/questions/66721132/trying-to-update-url-parameter-with-onclick-in-react
   const [ lastPageNum, setLastPageNum ] = useState(undefined);
 
+  // 3 - For userId
+  const {currentUser}  = useAuth();
+
+  
   // 1 - initial loading data
   useEffect(() => {
     // console.log('Initial loading useeffect() in PokemonPage.js');
@@ -136,6 +143,22 @@ const ReceipePage = (props) => {
     setReceipeTerm(searchTerm);
   }
 
+
+  const [likes, setLikes] = useState([]);  // state is immutable, you cannot directly change it, only use setTask() to change it
+  
+  const addReceipeToUser = async (receipeId) => {
+    console.log("addReceipeToUser() ", receipeId);
+    let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`);  // currentUser.uid is userId.
+    console.log('likesOfUser: ', likesOfUser);
+    if (likesOfUser.length > 0) {
+      setLikes([...likesOfUser, receipeId]);
+    }
+    let newLikeObj = await axios.post(`${database}/likes/${currentUser.uid}`, { params: {   // currentUser.uid is userId
+      receipeIdNeedToBeAdded: receipeId,  
+    }});  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js' 
+    console.log('newLikeObj: ', newLikeObj);
+  }
+  
   // const submitReceipeTerm = async (submitTerm) => {  //! SubmitForm, I need a hook that is triggered by 'submitTerm', and in this hook, I need axios to call /search in server side and store returned json
   //   setReceipeTerm(submitTerm);
   // }
@@ -164,7 +187,7 @@ const ReceipePage = (props) => {
           <CardActions>
             {/* {isFavoriated !=-1 ? 
               <button onClick={() => { releasePokemonFromSelectedTrainer(pokemonState);}}>unFavoriated</button> :  */}
-                <button onClick={() => {}}>Collect</button>
+                <button onClick={() => { addReceipeToUser(receipe.id); }}>Collect</button>
           </CardActions>
         </Card>
       </Grid>
@@ -196,7 +219,7 @@ const ReceipePage = (props) => {
     card = initialData && initialData.map((receipe) => {
       return buildCard(receipe);
     });
-    console.log('initialData:', card);
+    // console.log('initialData:', card);
   }
 
   // Error Component

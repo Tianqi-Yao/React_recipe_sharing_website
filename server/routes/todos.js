@@ -5,7 +5,7 @@ const userData = data.users;  // ../data/books
 const todoData = data.todos;  // ../data/reviews
 
 
-router.get('/:id', async (req, res) => {  // :id is userId. return an array of all reviews for this userId
+router.get('/:id', async (req, res) => {  // :id is userId. return an array of all todos for this userId
   try {
       const todoOfUser = await todoData.getAllTodosOfUser(req.params.id);  // req.params.id is userId
       res.status(200).json(todoOfUser);
