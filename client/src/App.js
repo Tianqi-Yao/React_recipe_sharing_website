@@ -62,7 +62,7 @@ function App() {
                                 <Route path="/updateReceipe/:id" component={UpdateReceipe}/>
                                 <PrivateRoute path="/editprofile/:uid" component={EditProfile}/>
                                 <PrivateRoute path="/userprofile/:uid" component={UserProfile}/>
-                                <Route path="*" component={NoMatch}/>
+                                {/*<Route path="*" component={NoMatch}/>*/}
                                 <Container
                                     className="border-0 d-flex align-items-center justify-content-center">
                                     <div className="w-100" style={{maxWidth: "400px"}}>
