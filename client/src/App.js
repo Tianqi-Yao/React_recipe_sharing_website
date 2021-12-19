@@ -25,6 +25,7 @@ import PrivateLink from "./components/PrivateLink"
 import UserSignLogin from "./components/UserSignLogin"
 
 import EditProfile from "./components/EditProfile"
+import NoMatch from "./components/NoMatch"
 
 function App() {
     return (
@@ -49,31 +50,32 @@ function App() {
                 <br/>
                 <div
                     className="App-body">  {/* "/shows/page/:pagenum" will generate 'props.match.params.pagenum' and pass it to "components" */}
-                    <Switch>
-                        <React.Fragment>
-                            <AuthProvider>
+                    <React.Fragment>
+                        <AuthProvider>
+                            <Switch>
                                 <Route exact path="/" component={Home}/>
-                                <Route exact path="/todo" component={TodoList}/>
-                                <Route exact path="/receipe/page/:page" component={ReceipePage}/>
-                                <Route exact path="/receipe/user/page/:page" component={UserMakeReceipePage}/>
-                                <Route exact path="/receipe/:id" component={Receipe}/>
-                                <Route exact path="/createReceipe" component={CreateReceipe}/>
-                                <Route exact path="/updateReceipe/:id" component={UpdateReceipe}/>
-                                <PrivateRoute exact path="/editprofile/:uid" component={EditProfile}/>
-                                <PrivateRoute exact path="/userprofile/:uid" component={UserProfile}/>
+                                <Route path="/todo" component={TodoList}/>
+                                <Route path="/receipe/page/:page" component={ReceipePage}/>
+                                <Route path="/receipe/user/page/:page" component={UserMakeReceipePage}/>
+                                <Route path="/receipe/:id" component={Receipe}/>
+                                <Route path="/createReceipe" component={CreateReceipe}/>
+                                <Route path="/updateReceipe/:id" component={UpdateReceipe}/>
+                                <PrivateRoute path="/editprofile/:uid" component={EditProfile}/>
+                                <PrivateRoute path="/userprofile/:uid" component={UserProfile}/>
+                                <Route path="*" component={NoMatch}/>
                                 <Container
                                     className="border-0 d-flex align-items-center justify-content-center">
                                     <div className="w-100" style={{maxWidth: "400px"}}>
-                                        <Route exact path="/signup" component={Signup}/>
-                                        <Route exact path="/login" component={Login}/>
+                                        <Route path="/signup" component={Signup}/>
+                                        <Route path="/login" component={Login}/>
                                         <Route path="/forgot-password" component={ForgotPassword}/>
                                         <PrivateRoute path="/update-profile" component={UpdateProfile}/>
                                     </div>
                                 </Container>
                                 {/* <Route exact path="/search" component={ReceipeSearch} /> */}
-                            </AuthProvider>
-                        </React.Fragment>
-                    </Switch>
+                            </Switch>
+                        </AuthProvider>
+                    </React.Fragment>
                 </div>
             </div>
         </Router>
