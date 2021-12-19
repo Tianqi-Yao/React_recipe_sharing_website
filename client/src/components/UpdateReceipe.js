@@ -171,8 +171,9 @@ const UpdateReceipe = (props) => {
             headers: { Accept: 'application/json' }
         });
         console.log("data", data, fields);
-        alert(JSON.stringify(post));
-        window.location.href = "/";
+        // alert(JSON.stringify(post));
+        window.history.back(-1);
+        // window.location.href = "/";
     };
 
 
