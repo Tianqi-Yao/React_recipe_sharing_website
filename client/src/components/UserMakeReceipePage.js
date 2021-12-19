@@ -9,7 +9,8 @@ import '../App.css';
 import SearchForm from './SearchForm';
 import SubmitForm from './SubmitForm';
 
-import { Card, CardContent, Grid, Typography, makeStyles } from '@material-ui/core';
+import { Button, Card, CardContent, Grid, Typography, makeStyles } from '@material-ui/core';
+
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 
@@ -271,11 +272,11 @@ const ReceipePage = (props) => {
 
           <CardActions>
             {isReceipeIdInLikes != -1 ?
-              <button onClick={() => { deleteReceipeFromUserLikes(receipe._id); }}>Uncollect</button> :
-              <button onClick={() => {
+              <Button onClick={() => { deleteReceipeFromUserLikes(receipe._id); }}>Uncollect</Button> :
+              <Button onClick={() => {
                 addReceipeToUser(receipe._id);
               }}>Collect
-              </button>}
+              </Button>}
             {/* <button onClick={() => {
                             deleteReceipeFromUserLikes(receipe.id)
                         }}>Uncollect
