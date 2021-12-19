@@ -42,7 +42,23 @@ router.get('/page/:page', async (req, res) => {
   } catch (e) {
     res.status(404).json({ message: 'Server /page/:page Error. Receipe Page not found' });
   }
-})
+});
+
+router.get('/user/allRecipe', async (req, res) => {
+  try {
+    // let cacheOfReceipePage = await client.getAsync(`allRecipe`);
+    // if (cacheOfReceipePage) {
+    //   res.send(JSON.parse(cacheOfReceipePage));
+    // } else {
+
+    const allRecipe = await postData.getAllPosts();
+    res.json(allRecipe);
+    //   let cacheReceipePage = await client.setAsync(`allRecipe`, JSON.stringify(allRecipe));  // store receipePage in cache
+    // }
+  } catch (e) {
+    res.status(404).json({ message: 'Server Error. User All Receipe not found' });
+  }
+});
 
 
 router.get('/:id', async (req, res) => {
@@ -53,12 +69,12 @@ router.get('/:id', async (req, res) => {
     // if (false) {
     //   res.send(JSON.parse(cacheOfReceipe));
     // } else {  // receipe not in cache
-      let singleReceipe = await receipeData.getRecipesById(req.params.id);
-      if (singleReceipe === undefined) {
-        singleReceipe = await postData.getPostById(req.params.id);
-      }
-      res.json(singleReceipe);
-      let cacheReceipe = await client.setAsync(`recepieId${req.params.id}`, JSON.stringify(singleReceipe));  // store pokemonPage in cache
+    let singleReceipe = await receipeData.getRecipesById(req.params.id);
+    if (singleReceipe === undefined) {
+      singleReceipe = await postData.getPostById(req.params.id);
+    }
+    res.json(singleReceipe);
+    let cacheReceipe = await client.setAsync(`recepieId${req.params.id}`, JSON.stringify(singleReceipe));  // store pokemonPage in cache
     // }
   } catch (e) {
     console.log(e);

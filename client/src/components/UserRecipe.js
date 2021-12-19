@@ -47,7 +47,7 @@ const UserRecipe = (props) => {
 
     const buildCard = (recipe) => {
         return (
-            <Col sm={4}>
+            <Col sm={4} key={recipe._id}>
                 <Card className="mb-3"
                       style={{
                           maxWidth: 250,

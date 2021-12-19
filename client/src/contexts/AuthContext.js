@@ -10,11 +10,13 @@ export function useAuth() {
 
 export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState()
+    const [Likes, setLikes] = useState()
     const [loading, setLoading] = useState(true)
     const [googleAuth, setGoogleAuth] = useState(new GoogleAuthProvider())
 
     const value = {
         currentUser,
+        storeLikes,
         login,
         signup,
         logout,
@@ -46,6 +48,10 @@ export function AuthProvider({children}) {
         //         displayName: username
         //     })
         // })
+    }
+
+    function storeLikes(likes) {
+        setLikes(likes)
     }
 
     function googleSignInWithPopup() {

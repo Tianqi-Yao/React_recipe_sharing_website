@@ -14,7 +14,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 
 // for userId
-import {useAuth} from "../contexts/AuthContext"
+import { useAuth } from "../contexts/AuthContext"
 
 
 const useStyles = makeStyles({
@@ -51,38 +51,43 @@ const ReceipePage = (props) => {
   const apiKey = '01378051ff2c4d99846649b53b91835a';
   // 1 - For fetch data
   const classes = useStyles();  // for using '@material-ui/core'
-  const [ loading, setLoading ] = useState(true);  // ❤ setting my initial state is just like constructor(props) in Class-Based Compoennt
-  const [ initialData, setInitialData ] = useState(undefined);
-  const [ pageData, setPageData ] = useState(undefined);
+  const [loading, setLoading] = useState(true);  // ❤ setting my initial state is just like constructor(props) in Class-Based Compoennt
+  const [initialData, setInitialData] = useState(undefined);
+  const [pageData, setPageData] = useState(undefined);
   // For search
-  const [ searchData, setSearchData] = useState(undefined);
-  const [ receipeTerm, setReceipeTerm ] = useState('');
+  const [searchData, setSearchData] = useState(undefined);
+  const [receipeTerm, setReceipeTerm] = useState('');
+  const eachPageNum = 3
   let card = null;
 
   // 2 - For pagination
   props.match.params.page = parseInt(props.match.params.page);  // ❤ 
   const history = useHistory();  // update URL with button. https://stackoverflow.com/questions/66721132/trying-to-update-url-parameter-with-onclick-in-react
-  const [ lastPageNum, setLastPageNum ] = useState(undefined);
+  const [lastPageNum, setLastPageNum] = useState(undefined);
 
   // 3 - For userId
-  const {currentUser}  = useAuth();
+  const { currentUser } = useAuth();
 
-  
+
   // 1 - initial loading data
   useEffect(() => {
     // console.log('Initial loading useeffect() in PokemonPage.js');
-    async function fetchData() {
+    async function fetchAllData() {
       try {
-        const { data } = await axios.get(`${database}/receipe/page/0`);
-        // console.log(data.data.results);
-        setInitialData(data.results);
+        const { data } = await axios.get(`${database}/receipe/user/allRecipe`);
+        console.log("data", data);
+        let showData = data.slice(0, eachPageNum);
+        console.log("showData", showData);
+        setInitialData(showData);
         setLoading(false);
-        setLastPageNum(Math.floor(data.totalResults/ data.number));  // set last page number. //! actually last page number could be 30, after that will repeat
+        const lastPage = Math.floor(data.length / eachPageNum);
+        console.log("lastPage", lastPage);
+        setLastPageNum(lastPage);  // set last page number. //! actually last page number could be 30, after that will repeat
       } catch (e) {
         console.log(e);
       }
     }
-    fetchData();  // call fetchData()
+    fetchAllData();  // call fetchData()
   }, []);
 
 
@@ -92,8 +97,18 @@ const ReceipePage = (props) => {
       try {
         // const urlSearchForm = baseUrl + '?nameStartsWith=' + receipeTerm + '&ts=' + ts + '&apikey=' + publickey + '&hash=' + hash;
         console.log(`search: ${receipeTerm}`);
-        const { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=${receipeTerm}`);
-        setSearchData(data.results);
+        const { data } = await axios.get(`${database}/receipe/user/allRecipe`);
+        console.log("data", data);
+        let searchData = []
+        let receipeTermUpper = receipeTerm.toUpperCase();
+        data.forEach(element => {
+          let eachTitle = element.title.toUpperCase();
+          if (eachTitle.includes(receipeTermUpper)) {
+            searchData.push(element);
+          }
+        });
+        console.log("searchData", searchData);
+        setSearchData(searchData);
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -106,15 +121,21 @@ const ReceipePage = (props) => {
 
 
   // 3 - 'props.match.params.page' fire this
-  useEffect(() => {  
+  useEffect(() => {
     // console.log(`'props.match.params.page' useEffect() fired'`);
     async function fetchData() {
       try {
         // console.log(props.match.params.page);
-        const { data } = await axios.get(`${database}/receipe/page/${props.match.params.page}`);
+        const { data } = await axios.get(`${database}/receipe/user/allRecipe`);
+        console.log("data-page", data);
+        let firstDataIndex = props.match.params.page * eachPageNum
+        let lastDataIndex = props.match.params.page * eachPageNum + eachPageNum
+        let showData = data.slice(firstDataIndex, lastDataIndex);
+        console.log("showData", showData);
+        // const { data } = await axios.get(`${database}/receipe/page/${props.match.params.page}`);
         // console.log('-------- pagenum useEffect data -----------');
         // console.log(data);
-        setPageData(data.results);
+        setPageData(showData);
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -136,7 +157,7 @@ const ReceipePage = (props) => {
   };
 
   const buttonChangeUrl = async () => {
-    history.push(`/receipe/page/${props.match.params.page}`);
+    history.push(`/receipe/user/page/${props.match.params.page}`);
   }
 
   const searchReceipeTerm = async (searchTerm) => {  // SearchForm
@@ -145,60 +166,38 @@ const ReceipePage = (props) => {
 
 
   const [likes, setLikes] = useState([]);  // state is immutable, you cannot directly change it, only use setTask() to change it
-  
+
   const addReceipeToUser = async (receipeId) => {
-    receipeId = receipeId.toString();   //! receipeId store in MongoDB with String type
     console.log("addReceipeToUser() ", receipeId);
     let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`);  // currentUser.uid is userId.
     console.log('likesOfUser: ', likesOfUser);
-
-    setLikes([...likes, receipeId]);
-
-    let newLikeObj = await axios.post(`${database}/likes/${currentUser.uid}`, { params: {   // currentUser.uid is userId
-      receipeIdNeedToBeAdded: receipeId,  
-    }});  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js' 
+    if (likesOfUser.length > 0) {
+      setLikes([...likesOfUser, receipeId]);
+    }
+    let newLikeObj = await axios.post(`${database}/likes/${currentUser.uid}`, {
+      params: {   // currentUser.uid is userId
+        receipeIdNeedToBeAdded: receipeId,
+      }
+    });  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js' 
     console.log('newLikeObj: ', newLikeObj);
   }
-  
 
-  const deleteReceipeFromUserLikes = async (receipeId) => {
-    receipeId = receipeId.toString(); 
-    console.log("deleteReceipeFromUserLikes() ", receipeId);
-    let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`);  // currentUser.uid is userId.
-    console.log('likesOfUser: ', likesOfUser);
-
-    setLikes(likes.filter((like) => like.id !== receipeId));  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter 
-    
-    let deleteLikeObj = await axios.delete(`${database}/likes/${receipeId}`, { params: {   // currentUser.uid is userId
-      userId: currentUser.uid,  
-    }});  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js' 
-    console.log('newLikeObj: ', deleteLikeObj);
-  }
-  
   // const submitReceipeTerm = async (submitTerm) => {  //! SubmitForm, I need a hook that is triggered by 'submitTerm', and in this hook, I need axios to call /search in server side and store returned json
   //   setReceipeTerm(submitTerm);
   // }
 
-  // let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`);  // currentUser.uid is userId.
-  // console.log('likesOfUser: ', likesOfUser);
-
   // card UI
   const buildCard = (receipe) => {
-    //! for toggle button between Collect and UnCollect
-    console.log('likes of user in buildCard:', likes);
-    const isReceipeIdInLikes = likes && likes.findIndex(x => x === receipe.id);  // is ReceipeId in Likes ?
-    console.log('isReceipeIdInLikes:', isReceipeIdInLikes);
-
     return (
-      <Grid item xs={12} sm={4} md={2} lg={2} xl={2} key={receipe.id}>
+      <Grid item xs={12} sm={4} md={2} lg={2} xl={2} key={receipe._id}>
         <Card className={classes.card} variant="outlined">
-          <Link to={`/receipe/${receipe.id}`}>
-            <img 
-              className="card-img-top" 
+          <Link to={`/receipe/${receipe._id}`}>
+            <img
+              className="card-img-top"
               src={receipe.image}
               alt={receipe.title}
             ></img> {/* https://stackoverflow.com/questions/34097560/react-js-replace-img-src-onerror */}
-            
+
             <CardActionArea>
               <CardContent>
                 <Typography className={classes.titleHead} gutterBottom variant="h6" component="h2">
@@ -209,10 +208,9 @@ const ReceipePage = (props) => {
           </Link>
 
           <CardActions>
-            {/* {isReceipeIdInLikes !=-1 ? 
-              <button onClick={() => { deleteReceipeFromUserLikes(receipe.id);}}>Uncollect</button> :  */}
-                <button onClick={() => { addReceipeToUser(receipe.id); }}>Collect</button>
-                <button onClick={() => { deleteReceipeFromUserLikes(receipe.id);}}>Uncollect</button>
+            {/* {isFavoriated !=-1 ? 
+              <button onClick={() => { releasePokemonFromSelectedTrainer(pokemonState);}}>unFavoriated</button> :  */}
+            <button onClick={() => { addReceipeToUser(receipe._id); }}>Collect</button>
           </CardActions>
         </Card>
       </Grid>
@@ -227,10 +225,10 @@ const ReceipePage = (props) => {
   }
   else if (props.match.params.page && props.match.params.page >= 0) {
     card = pageData && pageData.map((receipe) => {
-      // console.log('page data:\n');
+      console.log('page data-receipe',receipe);
       return buildCard(receipe);
     });
-    console.log('pageData:', card);
+    // console.log('pageData:', card);
   }
   else {
     // console.log(initialData)
@@ -242,9 +240,6 @@ const ReceipePage = (props) => {
     //   "imageType": "jpg"
     // },
     card = initialData && initialData.map((receipe) => {
-      // let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`);  // currentUser.uid is userId.
-      // console.log('likesOfUser: ', likesArrayInUser);
-      // setLikes(likesArrayInUser);
       return buildCard(receipe);
     });
     // console.log('initialData:', card);
@@ -259,7 +254,7 @@ const ReceipePage = (props) => {
     )
   }
 
-  
+
   if (loading) {
     return (
       <div>
@@ -272,24 +267,34 @@ const ReceipePage = (props) => {
         <ErrorComponent></ErrorComponent>
       );
     }
+    else if (lastPageNum === 0) {  // 1st page{
+      return <div>
+        <SearchForm searchValue={searchReceipeTerm} />
+        <br />
+        <br />
+        <Grid container className={classes.grid} spacing={5}>
+          {card}
+        </Grid>
+      </div>;
+    }
     else if (props.match.params.page === 0) {  // 1st page
       return <div>
-          <SearchForm searchValue={searchReceipeTerm}/>
-          <button onClick={() => { increPageNum(); buttonChangeUrl();}} className='btn'>
-            Next Page
-          </button>
-          <br />
-          <br />
-          <Grid container className={classes.grid} spacing={5}>
-            {card}
-          </Grid>
-        </div>;
+        <SearchForm searchValue={searchReceipeTerm} />
+        <button onClick={() => { increPageNum(); buttonChangeUrl(); }} className='btn'>
+          Next Page
+        </button>
+        <br />
+        <br />
+        <Grid container className={classes.grid} spacing={5}>
+          {card}
+        </Grid>
+      </div>;
     }
     else if (props.match.params.page === lastPageNum) {  // last page
       return (
         <div>
-          <SearchForm searchValue={searchReceipeTerm}/>
-          <button onClick={() => { decrePageNum(); buttonChangeUrl();}} className='btn'>
+          <SearchForm searchValue={searchReceipeTerm} />
+          <button onClick={() => { decrePageNum(); buttonChangeUrl(); }} className='btn'>
             Previous Page
           </button>
           <br />
@@ -299,17 +304,17 @@ const ReceipePage = (props) => {
           </Grid>
         </div>
       );
-    } 
-  
+    }
+
     return (
       <div>
         {props.match.params.page < lastPageNum && props.match.params.page > 0 && (
           <div>
-            <SearchForm searchValue={searchReceipeTerm}/>
-            <button onClick={() => { decrePageNum(); buttonChangeUrl();}} className='btn'>   {/* https://upmostly.com/tutorials/multiple-onclick-events-in-react-with-examples#call-multiple-functions */}
+            <SearchForm searchValue={searchReceipeTerm} />
+            <button onClick={() => { decrePageNum(); buttonChangeUrl(); }} className='btn'>   {/* https://upmostly.com/tutorials/multiple-onclick-events-in-react-with-examples#call-multiple-functions */}
               Previous Page
             </button> &nbsp;&nbsp;
-            <button onClick={() => { increPageNum(); buttonChangeUrl();}} className='btn'>
+            <button onClick={() => { increPageNum(); buttonChangeUrl(); }} className='btn'>
               Next Page
             </button>
             <br />

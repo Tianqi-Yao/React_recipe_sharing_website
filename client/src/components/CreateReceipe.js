@@ -145,7 +145,7 @@ const CreateReceipe = () => {
         })
         console.log("ddddd", data)
         // setPostData(data);
-        alert(JSON.stringify(post))
+        // alert(JSON.stringify(post))
         document.getElementById('title').value = ''
         // document.getElementById('image').value = '';
         document.getElementById('cookingMinutes').value = '';
