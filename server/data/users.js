@@ -1,9 +1,10 @@
-const {ObjectId} = require('mongodb')
+const { ObjectId } = require('mongodb')
 const mongoCollections = require('../config/mongoCollections')
 const users = mongoCollections.users
 const recipesData = require('./recipes')
 const uuid = require('uuid').v4
 // const recipes = mongoCollections.recipes;
+const apiRecipeData = require('./receipes');
 
 let exportedMethods = {
     async getUserById(id) {
@@ -12,7 +13,7 @@ let exportedMethods = {
         }
         const userCollection = await users()
 
-        let user = await userCollection.findOne({_id: id})
+        let user = await userCollection.findOne({ _id: id })
         if (user === null) {
             throw "No user found"
         }
@@ -55,7 +56,7 @@ let exportedMethods = {
             updateInfo.Post = newUser.Post
         }
 
-        let updateInformation = await userCollection.updateOne({_id: id}, {$set: updateInfo})
+        let updateInformation = await userCollection.updateOne({ _id: id }, { $set: updateInfo })
         if (updateInformation.modifiedCount === 0) {
             throw 'could not edit the username successfully'
         }
@@ -67,7 +68,7 @@ let exportedMethods = {
         }
 
         const userCollection = await users()
-        let user = await userCollection.findOne({_id: uid})
+        let user = await userCollection.findOne({ _id: uid })
 
         let userRecipes = user.Post
         let result = []
@@ -86,7 +87,7 @@ let exportedMethods = {
         }
 
         const userCollection = await users()
-        let user = await userCollection.findOne({_id: uid})
+        let user = await userCollection.findOne({ _id: uid })
         let recipeIds = user.Post
         let newList = []
         for (let i of recipeIds) {
@@ -98,7 +99,7 @@ let exportedMethods = {
         }
         // user.Post = newList;
 
-        let updateInformation = await userCollection.updateOne({_id: uid}, {$set: {Post: newList}})
+        let updateInformation = await userCollection.updateOne({ _id: uid }, { $set: { Post: newList } })
         if (updateInformation.modifiedCount === 0) {
             throw 'could not edit the username successfully'
         }
@@ -110,18 +111,39 @@ let exportedMethods = {
             throw 'You must provide a valid uid'
         }
         const userCollection = await users()
-        let user = await userCollection.findOne({_id: uid})
+        let user = await userCollection.findOne({ _id: uid })
 
         let userLikes = user.likes
         let result = []
         for (let i of userLikes) {
             let recipeInformation = null;
             try {
-                recipeInformation = await recipesData.getRecipeById(i)
+                if (i.length !== 28) {
+                    recipeInformation = await apiRecipeData.getRecipesById(i);
+                    // recipeInformation._id = recipe.id;
+                    // recipeInformation.image = recipe.image;
+                    // recipeInformation.title = recipe.title;
+                } else {
+                    recipeInformation = await recipesData.getRecipeById(i)
+                }
             } catch (error) {
                 await this.removeLikesFromUser(uid, i);
             }
-            if(recipeInformation !== null){
+            // if (i.length !== 28) {
+            //     recipeInformation = await apiRecipeData.getRecipesById(i);
+            // } else {
+            //     // let recipeInformation = null;
+            //     recipeInformation = await recipesData.getRecipeById(i)
+            //     // try {
+            //     //     recipeInformation = await recipesData.getRecipeById(i)
+            //     // } catch (error) {
+            //     //     await this.removeLikesFromUser(uid, i);
+            //     // }
+            //     // if (recipeInformation !== null) {
+            //     //     result.push(recipeInformation)
+            //     // }
+            // }
+            if (recipeInformation !== null) {
                 result.push(recipeInformation)
             }
         }
@@ -135,17 +157,17 @@ let exportedMethods = {
             throw 'You must provide a valid postId'
         }
         const userCollection = await users()
-        let user = await userCollection.findOne({_id: uid})
+        let user = await userCollection.findOne({ _id: uid })
 
         let userLikes = user.likes
         let newList = []
         for (let i of userLikes) {
-            if (rid !== i) {
+            if (rid !== i && rid !== i.toString()) {
                 newList.push(i)
             }
         }
 
-        let updateInformation = await userCollection.updateOne({_id: uid}, {$set: {likes: newList}})
+        let updateInformation = await userCollection.updateOne({ _id: uid }, { $set: { likes: newList } })
         if (updateInformation.modifiedCount === 0) {
             throw 'could not edit the username successfully'
         }
@@ -156,7 +178,7 @@ let exportedMethods = {
         const userCollection = await users()
         // let user = await userCollection.findOne({ _id: ObjectId(uid) });
 
-        let updateInformation = await userCollection.updateOne({_id: uid}, {$set: {Photo: img}})
+        let updateInformation = await userCollection.updateOne({ _id: uid }, { $set: { Photo: img } })
         if (updateInformation.modifiedCount === 0) {
             throw 'could not edit the username successfully'
         }
@@ -177,14 +199,14 @@ let exportedMethods = {
     },
     async addUserByUidAndUsername(uid, userName) {
         const userCollection = await users()
-        const newInsertInformation = await userCollection.insertOne({_id: uid, userName: userName})
+        const newInsertInformation = await userCollection.insertOne({ _id: uid, userName: userName })
         if (newInsertInformation.insertedCount === 0) throw 'Insert failed!'
         return await this.getUserById(newInsertInformation.insertedId)
     },
 
     async removeUser(id) {
         const userCollection = await users()
-        const deletionInfo = await userCollection.deleteOne({_id: id})
+        const deletionInfo = await userCollection.deleteOne({ _id: id })
         if (deletionInfo.deletedCount === 0) {
             throw `Could not delete user with id of ${id}`
         }
@@ -199,7 +221,7 @@ let exportedMethods = {
         }
 
         const userCollection = await users()
-        const updateInfo = await userCollection.updateOne({_id: id}, {$set: userUpdateInfo})
+        const updateInfo = await userCollection.updateOne({ _id: id }, { $set: userUpdateInfo })
         if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed'
 
         return await this.getUserById(id)
