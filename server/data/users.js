@@ -118,7 +118,7 @@ let exportedMethods = {
         for (let i of userLikes) {
             let recipeInformation = null;
             try {
-                if (i.length !== 28) {
+                if (i.length < 20) {
                     recipeInformation = await apiRecipeData.getRecipesById(i);
                     // recipeInformation._id = recipe.id;
                     // recipeInformation.image = recipe.image;
@@ -162,7 +162,7 @@ let exportedMethods = {
         let userLikes = user.likes
         let newList = []
         for (let i of userLikes) {
-            if (rid !== i && rid !== i.toString()) {
+            if (rid !== i) {
                 newList.push(i)
             }
         }
