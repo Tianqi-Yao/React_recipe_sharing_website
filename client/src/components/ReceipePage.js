@@ -111,9 +111,6 @@ const ReceipePage = (props) => {
     async function fetchData() {
       try {
         // console.log(props.match.params.page);
-
-        
-
         const { data } = await axios.get(`${database}/receipe/page/${props.match.params.page}`);
         // console.log('-------- pagenum useEffect data -----------');
         // console.log(data);
@@ -150,24 +147,48 @@ const ReceipePage = (props) => {
   const [likes, setLikes] = useState([]);  // state is immutable, you cannot directly change it, only use setTask() to change it
   
   const addReceipeToUser = async (receipeId) => {
+    receipeId = receipeId.toString();   //! receipeId store in MongoDB with String type
     console.log("addReceipeToUser() ", receipeId);
     let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`);  // currentUser.uid is userId.
     console.log('likesOfUser: ', likesOfUser);
-    if (likesOfUser.length > 0) {
-      setLikes([...likesOfUser, receipeId]);
-    }
+
+    setLikes([...likes, receipeId]);
+
     let newLikeObj = await axios.post(`${database}/likes/${currentUser.uid}`, { params: {   // currentUser.uid is userId
       receipeIdNeedToBeAdded: receipeId,  
     }});  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js' 
     console.log('newLikeObj: ', newLikeObj);
   }
   
+
+  const deleteReceipeFromUserLikes = async (receipeId) => {
+    receipeId = receipeId.toString(); 
+    console.log("deleteReceipeFromUserLikes() ", receipeId);
+    let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`);  // currentUser.uid is userId.
+    console.log('likesOfUser: ', likesOfUser);
+
+    setLikes(likes.filter((like) => like.id !== receipeId));  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter 
+    
+    let deleteLikeObj = await axios.delete(`${database}/likes/${receipeId}`, { params: {   // currentUser.uid is userId
+      userId: currentUser.uid,  
+    }});  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js' 
+    console.log('newLikeObj: ', deleteLikeObj);
+  }
+  
   // const submitReceipeTerm = async (submitTerm) => {  //! SubmitForm, I need a hook that is triggered by 'submitTerm', and in this hook, I need axios to call /search in server side and store returned json
   //   setReceipeTerm(submitTerm);
   // }
 
+  // let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`);  // currentUser.uid is userId.
+  // console.log('likesOfUser: ', likesOfUser);
+
   // card UI
   const buildCard = (receipe) => {
+    //! for toggle button between Collect and UnCollect
+    console.log('likes of user in buildCard:', likes);
+    const isReceipeIdInLikes = likes && likes.findIndex(x => x === receipe.id);  // is ReceipeId in Likes ?
+    console.log('isReceipeIdInLikes:', isReceipeIdInLikes);
+
     return (
       <Grid item xs={12} sm={4} md={2} lg={2} xl={2} key={receipe.id}>
         <Card className={classes.card} variant="outlined">
@@ -188,9 +209,10 @@ const ReceipePage = (props) => {
           </Link>
 
           <CardActions>
-            {/* {isFavoriated !=-1 ? 
-              <button onClick={() => { releasePokemonFromSelectedTrainer(pokemonState);}}>unFavoriated</button> :  */}
+            {/* {isReceipeIdInLikes !=-1 ? 
+              <button onClick={() => { deleteReceipeFromUserLikes(receipe.id);}}>Uncollect</button> :  */}
                 <button onClick={() => { addReceipeToUser(receipe.id); }}>Collect</button>
+                <button onClick={() => { deleteReceipeFromUserLikes(receipe.id);}}>Uncollect</button>
           </CardActions>
         </Card>
       </Grid>
@@ -220,6 +242,9 @@ const ReceipePage = (props) => {
     //   "imageType": "jpg"
     // },
     card = initialData && initialData.map((receipe) => {
+      // let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`);  // currentUser.uid is userId.
+      // console.log('likesOfUser: ', likesArrayInUser);
+      // setLikes(likesArrayInUser);
       return buildCard(receipe);
     });
     // console.log('initialData:', card);

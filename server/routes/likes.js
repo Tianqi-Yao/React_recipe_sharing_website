@@ -37,22 +37,23 @@ router.post('/:id', async (req, res) => {  // :id is userId
 });
 
 
-// router.delete('/likes/:id', async (req, res) => {  // :id is receipeId
-//   if (!req.params.id) throw 'You must specify an receipeId to delete';
-//   try {
-//     const aLike = await likeData.getLikeByLikeId(req.params.id);
-//   } catch (e) {
-//     res.status(404).json({ error: 'Like not found' });
-//     return;
-//   }
+router.delete('/:id', async (req, res) => {  // :id is receipeId
+  if (!req.params.id) throw 'You must specify an receipeId to delete';
 
-//   try {
-//     const deleteLike = await likeData.deleteReceipeFromLike(req.params.id);
-//     res.json({"receipeId": req.params.id, "deleted": true});
-//   } catch (e) {
-//     // console.log(e);
-//     res.status(500).json( {error: e });
-//   }
-// });
+  try {  // check userId is valid
+    const aLike = await likeData.getLikeByLikeId(req.params.id)
+  } catch (e) {
+    res.status(400).json({ error: 'Like not found' });
+    return;
+  }
+
+  try {
+    const deleteLike = await likeData.deleteReceipeFromLike(req.params.id);  //! req.params.id is "userId", userId is a string
+    res.json({"receipeId": req.params.id, "deleted": true});
+  } catch (e) {
+    // console.log(e);
+    res.status(500).json( {error: e });
+  }
+});
 
 module.exports = router;
