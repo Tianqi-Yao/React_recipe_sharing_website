@@ -25,6 +25,7 @@ const UpdateReceipe = (props) => {
         if (currentUser === null) {
             alert("please login");
             window.history.back(-1);
+            return 
         }
         setUserID(currentUser.multiFactor.user.uid);
         setUpdateImage(false);

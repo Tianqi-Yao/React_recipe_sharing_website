@@ -19,6 +19,7 @@ const CreateReceipe = () => {
         if (currentUser === null){
             alert("please login");
             window.history.back(-1);
+            return 
         }
         console.log("currentUser",currentUser);
         console.log("currentUserID",currentUser.multiFactor.user.uid);
