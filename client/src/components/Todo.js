@@ -67,8 +67,8 @@ const Todo = (props) => {
     let newTodoObj = await axios.post(`${database}/todos/${currentUser.uid}`, { params: {   // currentUser.uid is userId
       uid: currentUser.uid,  
       todoId: id, 
-      todoContent: newTask.text, 
-      dateOfTodo: newTask.day, 
+      text: newTask.text, 
+      day: newTask.day, 
       reminder: newTask.reminder 
     }});  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js' 
     console.log('newTodoObj: ', newTodoObj);
