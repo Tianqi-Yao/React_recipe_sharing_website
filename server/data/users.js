@@ -112,8 +112,15 @@ let exportedMethods = {
         let userLikes = user.likes
         let result = []
         for (let i of userLikes) {
-            let recipeInformation = await recipesData.getRecipeById(i)
-            result.push(recipeInformation)
+            let recipeInformation = null;
+            try {
+                recipeInformation = await recipesData.getRecipeById(i)
+            } catch (error) {
+                await this.removeLikesFromUser(uid, i);
+            }
+            if(recipeInformation !== null){
+                result.push(recipeInformation)
+            }
         }
         return result
     },
