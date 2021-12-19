@@ -153,7 +153,7 @@ const ReceipePage = (props) => {
     async function fetchData() {
       try {
         let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
-        console.log('likesOfUser: ', likesArrayInUser)
+        // console.log('likesOfUser: ', likesArrayInUser)
         setLikes(likesArrayInUser.data)
       } catch (e) {
         console.log(e)
@@ -161,13 +161,13 @@ const ReceipePage = (props) => {
     }
 
     fetchData()
-  }, [])
+  }, [likes])
 
   const addReceipeToUser = async (receipeId) => {
     receipeId = receipeId.toString()   //! receipeId store in MongoDB with String type
-    console.log("addReceipeToUser() ", receipeId)
+    // console.log("addReceipeToUser() ", receipeId)
     let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
-    console.log('likesOfUser: ', likesOfUser)
+    // console.log('likesOfUser: ', likesOfUser)
 
     setLikes([...likes, receipeId])
 
@@ -182,9 +182,9 @@ const ReceipePage = (props) => {
 
   const deleteReceipeFromUserLikes = async (receipeId) => {
     receipeId = receipeId.toString()
-    console.log("deleteReceipeFromUserLikes() ", receipeId)
+    // console.log("deleteReceipeFromUserLikes() ", receipeId)
     let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
-    console.log('likesOfUser: ', likesOfUser)
+    // console.log('likesOfUser: ', likesOfUser)
 
     setLikes(likes.filter((like) => like.id !== receipeId))  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
 
@@ -193,7 +193,7 @@ const ReceipePage = (props) => {
         userId: currentUser.uid
       }
     })  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js'
-    console.log('newLikeObj: ', deleteLikeObj)
+    // console.log('newLikeObj: ', deleteLikeObj)
   }
 
   // const submitReceipeTerm = async (submitTerm) => {  //! SubmitForm, I need a hook that is triggered by 'submitTerm', and in this hook, I need axios to call /search in server side and store returned json
