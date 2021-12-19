@@ -57,10 +57,10 @@ const UserRecipe = (props) => {
                           borderRadius: 5
                       }}
                 >
-                    <Card.Img variant="top" src={recipe.image} className="recipeImg"/>
+                    <Card.Img variant="top" src={recipe.image} className="recipeImg" alt="recipe image"/>
                     {/* <Card.Img variant="top" src={testLogo} className="recipeImg" /> */}
                     <Card.Body>
-                        <Link to=""><Card.Title>{recipe.title}</Card.Title></Link>
+                        <Link to={`/receipe/${recipe._id}`}><Card.Title>{recipe.title}</Card.Title></Link>
                         <Card.Text>
                             {recipe.instructionsReadOnly}
                         </Card.Text>
@@ -71,7 +71,7 @@ const UserRecipe = (props) => {
         )
     }
 
-    if(recipeData) {
+    if(recipeData && recipeData.length !== 0) {
         card =
         recipeData &&
         recipeData.map((recipe) => {

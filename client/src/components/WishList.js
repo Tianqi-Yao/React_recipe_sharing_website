@@ -41,7 +41,7 @@ const WishList = (props) => {
                 height: 300
             }}
                 className="mb-3">
-                <Card.Img variant="top" src={recipe.image} className="wishImg" />
+                <Card.Img variant="top" src={recipe.image} className="wishImg" alt="recipe image"/>
                 <Card.Body>
                     <Card.Text>
                         <Link>{recipe.title}</Link>
@@ -57,7 +57,7 @@ const WishList = (props) => {
     }
 
 
-    if (wishListeData) {
+    if (wishListeData && wishListeData.length !== 0) {
         card =
             wishListeData &&
             wishListeData.map((recipe) => {
