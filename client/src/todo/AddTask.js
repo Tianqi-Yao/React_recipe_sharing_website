@@ -25,18 +25,21 @@ const AddTask = (props) => {
   return (
     <form className='add-form' onSubmit={onSubmit}>
       <div className='form-control'>
-        <label>Todo</label>
+        <label>Todo
         <input type='text' placeholder='Add Todo' value={text} onChange={(e) => setText(e.target.value)}></input>
+        </label>
       </div>
 
       <div className='form-control'>
-        <label>Time</label>
+        <label>Time
         <input type='text' placeholder='Add Time' value={day} onChange={(e) => setDay(e.target.value)}></input>
+        </label>
       </div>
 
       <div className='form-control form-control-check'>
-        <label>Set Reminder</label>
+        <label>Set Reminder
         <input type='checkbox' checked={reminder} value={reminder} onChange={(e) => setReminder(e.currentTarget.checked)}></input>
+        </label>
       </div>
 
       <input type='submit' value='Save Todo' className='btn btn-block' />
