@@ -45,7 +45,7 @@ const CreateReceipe = () => {
 
     const showImage = () => {
         return (
-            <img src={imageUrl === undefined ? noImage : imageUrl} alt="" />
+            <img src={imageUrl === undefined ? noImage : imageUrl} alt="image" />
         );
     }
 

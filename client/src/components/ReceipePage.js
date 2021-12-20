@@ -92,7 +92,7 @@ const ReceipePage = (props) => {
         async function fetchData() {
             try {
                 // const urlSearchForm = baseUrl + '?nameStartsWith=' + receipeTerm + '&ts=' + ts + '&apikey=' + publickey + '&hash=' + hash;
-                console.log(`search: ${receipeTerm}`)
+                // console.log(`search: ${receipeTerm}`)
                 const {data} = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=${receipeTerm}`)
                 setSearchData(data.results)
                 setLoading(false)
@@ -152,9 +152,11 @@ const ReceipePage = (props) => {
     useEffect(() => {
         async function fetchData() {
             try {
-                let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
-                console.log('likesOfUser: ', likesArrayInUser)
-                setLikes(likesArrayInUser.data)
+                if (currentUser){
+                    let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
+                    // console.log('likesOfUser: ', likesArrayInUser)
+                    setLikes(likesArrayInUser.data)
+                }
             } catch (e) {
                 console.log(e)
             }
@@ -165,9 +167,9 @@ const ReceipePage = (props) => {
 
     const addReceipeToUser = async (receipeId) => {
         receipeId = receipeId.toString()   //! receipeId store in MongoDB with String type
-        console.log("addReceipeToUser() ", receipeId)
+        // console.log("addReceipeToUser() ", receipeId)
         let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
-        console.log('likesOfUser: ', likesOfUser)
+        // console.log('likesOfUser: ', likesOfUser)
 
         setLikes([...likes, receipeId])
 
@@ -176,15 +178,15 @@ const ReceipePage = (props) => {
                 receipeIdNeedToBeAdded: receipeId
             }
         })  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js'
-        console.log('newLikeObj: ', newLikeObj)
+        // console.log('newLikeObj: ', newLikeObj)
     }
 
 
     const deleteReceipeFromUserLikes = async (receipeId) => {
         receipeId = receipeId.toString()
-        console.log("deleteReceipeFromUserLikes() ", receipeId)
+        // console.log("deleteReceipeFromUserLikes() ", receipeId)
         let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
-        console.log('likesOfUser: ', likesOfUser)
+        // console.log('likesOfUser: ', likesOfUser)
 
         setLikes(likes.filter((like) => like !== receipeId))  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
 
@@ -193,7 +195,7 @@ const ReceipePage = (props) => {
                 userId: currentUser.uid
             }
         })  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js'
-        console.log('newLikeObj: ', deleteLikeObj)
+        // console.log('newLikeObj: ', deleteLikeObj)
     }
 
     // const submitReceipeTerm = async (submitTerm) => {  //! SubmitForm, I need a hook that is triggered by 'submitTerm', and in this hook, I need axios to call /search in server side and store returned json
@@ -208,10 +210,10 @@ const ReceipePage = (props) => {
         //! for toggle button between Collect and UnCollect
         // console.log('likes of user in buildCard:', likes)
         const isReceipeIdInLikes = likes && likes.findIndex(x => x == receipe.id)  // is ReceipeId in Likes ?
-        if (isReceipeIdInLikes) {
-            console.log('likes of user in buildCard:', likes)
-            console.log('isReceipeIdInLikes:', isReceipeIdInLikes)
-        }
+        // if (isReceipeIdInLikes) {
+        //     console.log('likes of user in buildCard:', likes)
+        //     console.log('isReceipeIdInLikes:', isReceipeIdInLikes)
+        // }
 
         return (
             <Grid item xs={12} sm={4} md={2} lg={2} xl={2} key={receipe.id}>
@@ -231,8 +233,8 @@ const ReceipePage = (props) => {
                             </CardContent>
                         </CardActionArea>
                     </Link>
-
-                    <CardActions>
+                    {currentUser && (<CardActions>
+                        
                         {isReceipeIdInLikes != -1 ?
                             <Button onClick={() => {
                                 deleteReceipeFromUserLikes(receipe.id)
@@ -245,7 +247,8 @@ const ReceipePage = (props) => {
                             deleteReceipeFromUserLikes(receipe.id)
                         }}>Uncollect
                         </button> */}
-                    </CardActions>
+                    </CardActions>)}
+                    
                 </Card>
             </Grid>
         )
@@ -261,7 +264,7 @@ const ReceipePage = (props) => {
             // console.log('page data:\n');
             return buildCard(receipe)
         })
-        console.log('pageData:', card)
+        // console.log('pageData:', card)
     } else {
         // console.log(initialData)
         // console.log('initial data:\n');

@@ -172,9 +172,11 @@ const ReceipePage = (props) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
-        // console.log('likesOfUser: ', likesArrayInUser)
-        setLikes(likesArrayInUser.data)
+        if (currentUser){
+          let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
+          // console.log('likesOfUser: ', likesArrayInUser)
+          setLikes(likesArrayInUser.data)
+        }  
       } catch (e) {
         console.log(e)
       }
@@ -270,7 +272,7 @@ const ReceipePage = (props) => {
             </CardActionArea>
           </Link>
 
-          <CardActions>
+          {currentUser && (<CardActions>
             {isReceipeIdInLikes != -1 ?
               <Button onClick={() => { deleteReceipeFromUserLikes(receipe._id); }}>Uncollect</Button> :
               <Button onClick={() => {
@@ -281,7 +283,7 @@ const ReceipePage = (props) => {
                             deleteReceipeFromUserLikes(receipe.id)
                         }}>Uncollect
                         </button> */}
-          </CardActions>
+          </CardActions>)}
         </Card>
       </Grid>
     )
