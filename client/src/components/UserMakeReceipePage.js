@@ -58,7 +58,7 @@ const ReceipePage = (props) => {
   // For search
   const [searchData, setSearchData] = useState(undefined);
   const [receipeTerm, setReceipeTerm] = useState('');
-  const eachPageNum = 3
+  const eachPageNum = 30
   let card = null;
 
   // 2 - For pagination
@@ -76,12 +76,12 @@ const ReceipePage = (props) => {
     async function fetchAllData() {
       try {
         const { data } = await axios.get(`${database}/receipe/user/allRecipe`);
-        console.log("data", data);
+        // console.log("data", data);
         let showData = data.slice(0, eachPageNum);
-        console.log("showData", showData);
+        // console.log("showData", showData);
         setInitialData(showData);
         setLoading(false);
-        const lastPage = Math.floor(data.length / eachPageNum);
+        const lastPage = Math.floor((data.length -1 ) / eachPageNum);
         console.log("lastPage", lastPage);
         setLastPageNum(lastPage);  // set last page number. //! actually last page number could be 30, after that will repeat
       } catch (e) {
@@ -97,9 +97,9 @@ const ReceipePage = (props) => {
     async function fetchData() {
       try {
         // const urlSearchForm = baseUrl + '?nameStartsWith=' + receipeTerm + '&ts=' + ts + '&apikey=' + publickey + '&hash=' + hash;
-        console.log(`search: ${receipeTerm}`);
+        // console.log(`search: ${receipeTerm}`);
         const { data } = await axios.get(`${database}/receipe/user/allRecipe`);
-        console.log("data", data);
+        // console.log("data", data);
         let searchData = []
         let receipeTermUpper = receipeTerm.toUpperCase();
         data.forEach(element => {
@@ -108,7 +108,7 @@ const ReceipePage = (props) => {
             searchData.push(element);
           }
         });
-        console.log("searchData", searchData);
+        // console.log("searchData", searchData);
         setSearchData(searchData);
         setLoading(false);
       } catch (e) {
@@ -128,11 +128,11 @@ const ReceipePage = (props) => {
       try {
         // console.log(props.match.params.page);
         const { data } = await axios.get(`${database}/receipe/user/allRecipe`);
-        console.log("data-page", data);
+        // console.log("data-page", data);
         let firstDataIndex = props.match.params.page * eachPageNum
         let lastDataIndex = props.match.params.page * eachPageNum + eachPageNum
         let showData = data.slice(firstDataIndex, lastDataIndex);
-        console.log("showData", showData);
+        // console.log("showData", showData);
         // const { data } = await axios.get(`${database}/receipe/page/${props.match.params.page}`);
         // console.log('-------- pagenum useEffect data -----------');
         // console.log(data);
@@ -173,7 +173,7 @@ const ReceipePage = (props) => {
     async function fetchData() {
       try {
         let likesArrayInUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
-        console.log('likesOfUser: ', likesArrayInUser)
+        // console.log('likesOfUser: ', likesArrayInUser)
         setLikes(likesArrayInUser.data)
       } catch (e) {
         console.log(e)
@@ -200,9 +200,9 @@ const ReceipePage = (props) => {
 
   const addReceipeToUser = async (receipeId) => {
     receipeId = receipeId.toString()   //! receipeId store in MongoDB with String type
-    console.log("addReceipeToUser() ", receipeId)
+    // console.log("addReceipeToUser() ", receipeId)
     let likesOfUser = await axios.get(`${database}/likes/${currentUser.uid}`)  // currentUser.uid is userId.
-    console.log('likesOfUser: ', likesOfUser)
+    // console.log('likesOfUser: ', likesOfUser)
 
     setLikes([...likes, receipeId])
 
@@ -211,7 +211,7 @@ const ReceipePage = (props) => {
         receipeIdNeedToBeAdded: receipeId
       }
     })  // uid is name in server side. This will be passed to corresponding router in Server Side './routes/todos.js'
-    console.log('newLikeObj: ', newLikeObj)
+    // console.log('newLikeObj: ', newLikeObj)
   }
 
 
@@ -246,10 +246,10 @@ const ReceipePage = (props) => {
     //! for toggle button between Collect and UnCollect
     // console.log('likes of user in buildCard:', likes)
     const isReceipeIdInLikes = likes && likes.findIndex(x => x == receipe._id)  // is ReceipeId in Likes ?
-    if (isReceipeIdInLikes) {
-      console.log('likes of user in buildCard:', likes)
-      console.log('isReceipeIdInLikes:', isReceipeIdInLikes)
-    }
+    // if (isReceipeIdInLikes) {
+    //   console.log('likes of user in buildCard:', likes)
+    //   console.log('isReceipeIdInLikes:', isReceipeIdInLikes)
+    // }
 
     return (
       <Grid item xs={12} sm={4} md={2} lg={2} xl={2} key={receipe._id}>
@@ -297,7 +297,7 @@ const ReceipePage = (props) => {
       // console.log('page data:\n');
       return buildCard(receipe)
     })
-    console.log('pageData:', card)
+    // console.log('pageData:', card)
   } else {
     // console.log(initialData)
     // console.log('initial data:\n');

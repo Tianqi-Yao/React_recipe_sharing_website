@@ -31,6 +31,10 @@ const UserRecipe = (props) => {
                 try {
                     // const { data } = await axios.get(`http://localhost:4000/users/${props.match.params.uid}`);
                     const recipe = await axios.get(`${database}/users/recipe/${props.user._id}`)
+<<<<<<< HEAD
+=======
+                    console.log("recipe",recipe.data);
+>>>>>>> 1e44a8a24530ffa36ff12b00d187b2f35c111247
                     setRecipeData(recipe.data)
                     setLoading(false)
                 } catch (e) {

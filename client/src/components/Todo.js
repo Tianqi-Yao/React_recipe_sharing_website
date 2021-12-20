@@ -16,29 +16,29 @@ const Todo = (props) => {
   const [showAddTodo, setShowAddTodo] = useState(false);
   const {currentUser}  = useAuth()
 
-  const [tasks, setTasks] = useState(  // state is immutable, you cannot directly change it, only use setTask() to change it
-    [
-      {
-        id: 1,
-        text: 'Buy 3 potatos, 1 vegetable',
-        day: 'Jan 1st at 5:30pm',
-        reminder: true,
-      },
-      {
-        id: 2,
-        text: 'Order barrelled water',
-        day: 'Feb 2nd at 1:00pm',
-        reminder: true,
-      },
-      {
-        id: 3,
-        text: 'Pay electricity bill',
-        day: 'Feb 15th at 12:00pm',
-        reminder: false,
-      }
-    ]
-  );
-  // const [tasks, setTasks] = useState([]);
+  // const [tasks, setTasks] = useState(  // state is immutable, you cannot directly change it, only use setTask() to change it
+  //   [
+  //     {
+  //       id: 1,
+  //       text: 'Buy 3 potatos, 1 vegetable',
+  //       day: 'Jan 1st at 5:30pm',
+  //       reminder: true,
+  //     },
+  //     {
+  //       id: 2,
+  //       text: 'Order barrelled water',
+  //       day: 'Feb 2nd at 1:00pm',
+  //       reminder: true,
+  //     },
+  //     {
+  //       id: 3,
+  //       text: 'Pay electricity bill',
+  //       day: 'Feb 15th at 12:00pm',
+  //       reminder: false,
+  //     }
+  //   ]
+  // );
+  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
