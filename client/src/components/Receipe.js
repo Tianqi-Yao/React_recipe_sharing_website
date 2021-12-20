@@ -94,7 +94,96 @@ const Receipe = (props) => {
         <h2>Loading....</h2>
       </div>
     );
-  } else {
+  }
+  else if (receipeData && receipeData._id && receipeData._id.length > 15) {
+    const regex = /(<([^>]+)>)/gi;  // for summary
+    let card = receipeData && receipeData.ingredients && receipeData.ingredients.map((char) => {
+      return <p>{char}</p>
+    })
+    return (
+      <Card className={classes.card} variant="outlined">
+        <CardHeader className={classes.titleHead} title={receipeData.title} />
+        <img
+          class="card-img-top"
+          src={receipeData.image}
+          // onError={(e)=>{e.target.onerror = null; e.target.src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.match.params.id}.png`}}
+          alt={receipeData.title}>
+        </img>
+
+        <br />
+        <dl>
+          <dt>Id:</dt> <dd>{(receipeData && receipeData._id) || 'No id'}</dd>
+        </dl>
+        <dl>
+          <dt>Title:</dt> <dd>{(receipeData && receipeData.title) || 'No Title'}</dd>
+        </dl>
+        <dl>
+          <dt>author:</dt> <dd>{(receipeData && receipeData.author.name) || 'No author'}</dd>
+        </dl>
+        <dl>
+          <dt>ReadyInMinutes:</dt> <dd>{(receipeData && receipeData.cookingMinutes) || 'No ReadyInMinutes'}</dd>
+
+        </dl>
+
+        <dl>
+          <dt>ingredients:</dt> <dd>{card || 'No DishTypes'}</dd>
+        </dl>
+        {/* <dl>
+          <dt>SourceUrl:</dt> <dd>{(receipeData && <a href={`${receipeData.sourceUrl}`}>{`${receipeData.sourceUrl}`}</a>) || 'No SourceUrl'}</dd>
+
+        </dl> */}
+        {/* <dl>
+          <dt>SpoonacularUrl:</dt> <dd>{(receipeData && <a href={`${receipeData.spoonacularSourceUrl}`}>{`${receipeData.spoonacularSourceUrl}`}</a>) || 'No SpoonacularUrl'}</dd>
+        </dl> */}
+
+        {/* <dl>
+          <dt>Cuisines:</dt> {(receipeData && receipeData.cuisines &&
+            receipeData.cuisines.map((cuisine) => {
+              return <dt key={cuisine}>{cuisine}&nbsp;&nbsp;</dt> ;
+            })) ||
+            'No Cuisines'}
+        </dl> */}
+        {/* <dl>
+          <dt>Summary:</dt> <dd>{(receipeData &&
+            receipeData.summary &&
+            receipeData.summary.replace(regex, '')) ||
+            'No Summary'}</dd>
+
+        </dl> */}
+        <dl>
+
+          <dt>Instructions</dt> <dd>{(receipeData &&
+            receipeData.instructionsReadOnly &&
+            receipeData.instructionsReadOnly.replace(regex, '')) ||
+            'No Instructions'}</dd>
+        </dl>
+        {/* <dl>
+          <dt>Instructions Step:</dt> {(receipeData && 
+          receipeData.analyzedInstructions &&
+          receipeData.analyzedInstructions.steps &&
+            receipeData.analyzedInstructions.steps.map((step) => {
+              return (
+                <div>{step.step}</div>
+              );
+            }))}
+        </dl> */}
+        <CardContent>
+          <Typography>
+            <button className='showlink' onClick={() => { window.history.back(-1); }}>Back to last page</button>
+            {/* <Link to={`/receipe/page/0`}>Back to all receipe list...</Link> */}
+          </Typography>
+        </CardContent>
+
+        {/* <CardActions>
+          {isFavoriated !=-1 ? 
+            <button onClick={() => { releasePokemonFromSelectedTrainer(pokemonState);}}>unFavoriated</button> : 
+              <button onClick={() => { catchPokemonFromSelectedTrainer(pokemonState);}}>Bin</button>}
+        </CardActions> */}
+      </Card>
+    );
+  }
+  else {
+    console.log("receipeData", receipeData);
     // receipeData.types.forEach((obj) => {
     //   typeList.push(obj.type.name);
     // })
