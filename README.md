@@ -69,3 +69,7 @@ The google login auth can only use in domain localhost, for we don't have a cust
 
 # How to go to AWS
 url: http://3.144.108.161:3000/
+
+
+
+
