@@ -81,7 +81,7 @@ module.exports = {
       }
     }
 
-    let toggledUserObj = await userCollection.updateOne({ 'todos._id' : todoId }, { $set: toggleReminderTodo });
+    let toggledUserObj = await userCollection.updateOne({ 'todos._id' : todoId }, { $set: { 'reminder' : toggleReminderTodo.reminder }});
     return toggledUserObj;
   },
 
