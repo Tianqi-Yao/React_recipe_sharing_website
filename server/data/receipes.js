@@ -1,6 +1,6 @@
 const axios = require('axios');
 // const apiKey = 'a2f86f878dad4601946b9e165e361de7';  // receipe API key  https://spoonacular.com/food-api/console#Profile
-const apiKey = '40bc520c4367417595c89efc2eee89e1'
+const apiKey = '825b49a0554542c9afe8cbfa011f6820'
 
 let exportedMethods = {
 

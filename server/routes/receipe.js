@@ -124,7 +124,7 @@ router.post('/create', async (req, res) => {
         .fontSize(40)
         .fill('#95a5a6')
         .drawText(0, 50, "Fall2021WEB_Team_Watermark", 'Center')
-        .write("./public/uploadImage_new.png", function (err) {
+        .write("./public/uploadImage_new.png", async function (err) {
           if (err) {
             console.log("write error");
             reject(err);
@@ -133,7 +133,23 @@ router.post('/create', async (req, res) => {
             let bitmap = fs.readFileSync('./public/uploadImage_new.png');
             imageData = new Buffer(bitmap).toString('base64');
             image = 'data:image/png;base64,' + imageData;
+
+
+            const userThatPosted = await userData.getUserById(req.body.userID);
+            //add post
+            const searchedReceipe = await postData.addPost(title, image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, userThatPosted);  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
+            console.log(searchedReceipe);
+            //update user post list
+            const postList = userThatPosted.Post;
+            postList.push(searchedReceipe._id)
+            const newUser = { Post: postList }
+
+
+            await userData.updateUserInfo(req.body.userID, newUser);      //todo 这个菜谱的id添加到对应的user里
+
             fs.unlinkSync('./public/uploadImage_new.png');
+
+            return res.json(searchedReceipe);
           }
         });
 
@@ -158,19 +174,19 @@ router.post('/create', async (req, res) => {
       // fs.unlinkSync('./public/uploadImage_new.png');
     }
     //get userInfo
-    const userThatPosted = await userData.getUserById(req.body.userID);
-    //add post
-    const searchedReceipe = await postData.addPost(title, image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, userThatPosted);  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
-    console.log(searchedReceipe);
-    //update user post list
-    const postList = userThatPosted.Post;
-    postList.push(searchedReceipe._id)
-    const newUser = { Post: postList }
-
-
-    await userData.updateUserInfo(req.body.userID, newUser);      //todo 这个菜谱的id添加到对应的user里
-
-    res.json(searchedReceipe);
+    // const userThatPosted = await userData.getUserById(req.body.userID);
+    // //add post
+    // const searchedReceipe = await postData.addPost(title, image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, userThatPosted);  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
+    // console.log(searchedReceipe);
+    // //update user post list
+    // const postList = userThatPosted.Post;
+    // postList.push(searchedReceipe._id)
+    // const newUser = { Post: postList }
+    //
+    //
+    // await userData.updateUserInfo(req.body.userID, newUser);      //todo 这个菜谱的id添加到对应的user里
+    //
+    // res.json(searchedReceipe);
   } catch (e) {
     res.status(404).json({ error: `Server /create Error.` });
   }
