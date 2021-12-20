@@ -1,6 +1,5 @@
 # CS554_Final_Project_2021Fall
 
-## This is YujieHe branch
 
 Group Name: Fall2021WEB Team
 
