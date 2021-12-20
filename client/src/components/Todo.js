@@ -43,10 +43,13 @@ const Todo = (props) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { data } = await axios.get(`${database}/todos/${currentUser.uid}`);
-        // console.log(data.data.results);
-        console.log("todo data in Todo.js: ", data);
-        setTasks(data);
+        if (currentUser){
+          const { data } = await axios.get(`${database}/todos/${currentUser.uid}`);
+          // console.log(data.data.results);
+          console.log("todo data in Todo.js: ", data);
+          setTasks(data);
+        }
+        
       } catch (e) {
         console.log(e)
       }
