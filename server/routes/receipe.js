@@ -222,7 +222,7 @@ router.patch('/update', async (req, res) => {
         .fontSize(40)
         .fill('#95a5a6')
         .drawText(0, 50, "Fall2021WEB_Team_Watermark", 'Center')
-        .write("./public/uploadImage_new.png", function (err) {
+        .write("./public/uploadImage_new.png", async function (err) {
           if (err) {
             console.log("write error");
             reject(err);
@@ -232,6 +232,8 @@ router.patch('/update', async (req, res) => {
             imageData = new Buffer(bitmap).toString('base64');
             image = 'data:image/png;base64,' + imageData;
             fs.unlinkSync('./public/uploadImage_new.png');
+            const searchedReceipe = await postData.updatePost(req.body.id, title, image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, req.body.userID);  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
+            return res.json(searchedReceipe);
           }
         });
       // let bitmap = fs.readFileSync('./public/uploadImage_new.png');
@@ -250,10 +252,11 @@ router.patch('/update', async (req, res) => {
 
       // fs.unlinkSync('./public/uploadImage.png');
 
-    }
+    } else {
 
-    const searchedReceipe = await postData.updatePost(req.body.id, title, image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, req.body.userID);  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
-    res.json(searchedReceipe);
+      const searchedReceipe = await postData.updatePost(req.body.id, title, image, req.body.cookingMinutes, instructionsReadOnly, req.body.ingredients, req.body.userID);  // --title, cookingMinutes, instructionsReadOnly,ingredients, authorId
+      res.json(searchedReceipe);
+    }
   } catch (e) {
     res.status(404).json({ error: `Server /create Error.` });
   }
