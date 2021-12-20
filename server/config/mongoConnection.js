@@ -2,7 +2,7 @@ const MongoClient = require('mongodb').MongoClient;
 const settings = {
     mongoConfig: {
         serverUrl: 'mongodb://localhost:27017/',
-        database: 'Fall2021WEB Team' //database name
+        database: 'Fall2021WEB_Team' //database name
     }
 };
 const mongoConfig = settings.mongoConfig;
@@ -19,7 +19,7 @@ module.exports = async () => {
         try {
             const postCollection = _connection
                 .db(mongoConfig.database)
-                .collection('posts');
+                .collection('recipes');
             await postCollection.createIndex({ title: 'text' });
             const indexes = await postCollection.indexes();
         } catch (e) {
