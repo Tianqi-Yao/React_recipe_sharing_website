@@ -111,17 +111,24 @@ const Receipe = (props) => {
 
         <br />
         <dl>
-          <dt>Id:</dt> {(receipeData && receipeData.id) || 'No Summary'}
-          <br />
-          <dt>Title:</dt> {(receipeData && receipeData.title) || 'No Title'}
-          <br />
-          <dt>ReadyInMinutes:</dt> {(receipeData && receipeData.readyInMinutes) || 'No ReadyInMinutes'}
-          <br />
-          <dt>SourceUrl:</dt> {(receipeData && <a href={`${receipeData.sourceUrl}`}>{`${receipeData.sourceUrl}`}</a>) || 'No SourceUrl'}
-          <br />
-          <dt>SpoonacularUrl:</dt> {(receipeData && <a href={`${receipeData.spoonacularSourceUrl}`}>{`${receipeData.spoonacularSourceUrl}`}</a>) || 'No SpoonacularUrl'}
-          <br />
-          <dt>DishTypes:</dt> {(receipeData && receipeData.dishTypes) || 'No DishTypes'}
+          <dt>Id:</dt> <dd>{(receipeData && receipeData.id) || 'No Summary'}</dd>
+        </dl>
+        <dl>
+          <dt>Title:</dt> <dd>{(receipeData && receipeData.title) || 'No Title'}</dd>
+        </dl>
+        <dl>
+          <dt>ReadyInMinutes:</dt> <dd>{(receipeData && receipeData.readyInMinutes) || 'No ReadyInMinutes'}</dd>
+
+        </dl>
+        <dl>
+          <dt>SourceUrl:</dt> <dd>{(receipeData && <a href={`${receipeData.sourceUrl}`}>{`${receipeData.sourceUrl}`}</a>) || 'No SourceUrl'}</dd>
+
+        </dl>
+        <dl>
+          <dt>SpoonacularUrl:</dt> <dd>{(receipeData && <a href={`${receipeData.spoonacularSourceUrl}`}>{`${receipeData.spoonacularSourceUrl}`}</a>) || 'No SpoonacularUrl'}</dd>
+        </dl>
+        <dl>
+          <dt>DishTypes:</dt> <dd>{(receipeData && receipeData.dishTypes) || 'No DishTypes'}</dd>
         </dl>
         {/* <dl>
           <dt>Cuisines:</dt> {(receipeData && receipeData.cuisines &&
@@ -130,18 +137,20 @@ const Receipe = (props) => {
             })) ||
             'No Cuisines'}
         </dl> */}
-        <p>
-          <dt>Summary:</dt> {(receipeData &&
+        <dl>
+          <dt>Summary:</dt> <dd>{(receipeData &&
             receipeData.summary &&
             receipeData.summary.replace(regex, '')) ||
-            'No Summary'}
-        </p>
-        <p>
-          <dt>Instructions</dt> {(receipeData &&
+            'No Summary'}</dd>
+
+        </dl>
+        <dl>
+
+          <dt>Instructions</dt> <dd>{(receipeData &&
             receipeData.instructions &&
             receipeData.instructions.replace(regex, '')) ||
-            'No Instructions'}
-        </p>
+            'No Instructions'}</dd>
+        </dl>
         {/* <dl>
           <dt>Instructions Step:</dt> {(receipeData && 
           receipeData.analyzedInstructions &&

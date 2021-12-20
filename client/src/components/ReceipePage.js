@@ -1,20 +1,20 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 // import { useSelector, useDispatch } from 'react-redux';
 
 import axios from 'axios'  // query server router
-import {Link, useHistory} from 'react-router-dom'  // for URL synchronization
+import { Link, useHistory } from 'react-router-dom'  // for URL synchronization
 import database from "../config/awsUrl"
 // import { Card } from 'react-bootstrap';
 import '../App.css'
 import SearchForm from './SearchForm'
 import SubmitForm from './SubmitForm'
 
-import {Button, Card, CardContent, Grid, Typography, makeStyles} from '@material-ui/core'
+import { Button, Card, CardContent, Grid, Typography, makeStyles } from '@material-ui/core'
 import CardActionArea from '@material-ui/core/CardActionArea'
 import CardActions from '@material-ui/core/CardActions'
 
 // for userId
-import {useAuth} from "../contexts/AuthContext"
+import { useAuth } from "../contexts/AuthContext"
 
 
 const useStyles = makeStyles({
@@ -65,7 +65,7 @@ const ReceipePage = (props) => {
     const [lastPageNum, setLastPageNum] = useState(undefined)
 
     // 3 - For userId
-    const {currentUser} = useAuth()
+    const { currentUser } = useAuth()
 
 
     // 1 - initial loading data
@@ -73,7 +73,7 @@ const ReceipePage = (props) => {
         // console.log('Initial loading useeffect() in PokemonPage.js');
         async function fetchData() {
             try {
-                const {data} = await axios.get(`${database}/receipe/page/0`)
+                const { data } = await axios.get(`${database}/receipe/page/0`)
                 // console.log(data.data.results);
                 setInitialData(data.results)
                 setLoading(false)
@@ -93,7 +93,7 @@ const ReceipePage = (props) => {
             try {
                 // const urlSearchForm = baseUrl + '?nameStartsWith=' + receipeTerm + '&ts=' + ts + '&apikey=' + publickey + '&hash=' + hash;
                 console.log(`search: ${receipeTerm}`)
-                const {data} = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=${receipeTerm}`)
+                const { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=${receipeTerm}`)
                 setSearchData(data.results)
                 setLoading(false)
             } catch (e) {
@@ -113,7 +113,7 @@ const ReceipePage = (props) => {
         async function fetchData() {
             try {
                 // console.log(props.match.params.page);
-                const {data} = await axios.get(`${database}/receipe/page/${props.match.params.page}`)
+                const { data } = await axios.get(`${database}/receipe/page/${props.match.params.page}`)
                 // console.log('-------- pagenum useEffect data -----------');
                 // console.log(data);
                 setPageData(data.results)
@@ -223,13 +223,11 @@ const ReceipePage = (props) => {
                             alt={receipe.title}
                         ></img> {/* https://stackoverflow.com/questions/34097560/react-js-replace-img-src-onerror */}
 
-                        <CardActionArea>
-                            <CardContent>
-                                <Typography className={classes.titleHead} gutterBottom variant="h6" component="h2">
-                                    {receipe.title}
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea>
+
+                        <Typography className={classes.titleHead} gutterBottom variant="h6" component="h2">
+                            {receipe.title}
+                        </Typography>
+
                     </Link>
 
                     <CardActions>
@@ -303,15 +301,15 @@ const ReceipePage = (props) => {
             )
         } else if (props.match.params.page === 0) {  // 1st page
             return <div>
-                <SearchForm searchValue={searchReceipeTerm}/>
+                <SearchForm searchValue={searchReceipeTerm} />
                 <button onClick={() => {
                     increPageNum()
                     buttonChangeUrl()
                 }} className="btn">
                     Next Page
                 </button>
-                <br/>
-                <br/>
+                <br />
+                <br />
                 <Grid container className={classes.grid} spacing={5}>
                     {card}
                 </Grid>
@@ -319,15 +317,15 @@ const ReceipePage = (props) => {
         } else if (props.match.params.page === lastPageNum) {  // last page
             return (
                 <div>
-                    <SearchForm searchValue={searchReceipeTerm}/>
+                    <SearchForm searchValue={searchReceipeTerm} />
                     <button onClick={() => {
                         decrePageNum()
                         buttonChangeUrl()
                     }} className="btn">
                         Previous Page
                     </button>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
                     <Grid container className={classes.grid} spacing={5}>
                         {card}
                     </Grid>
@@ -339,12 +337,12 @@ const ReceipePage = (props) => {
             <div>
                 {props.match.params.page < lastPageNum && props.match.params.page > 0 && (
                     <div>
-                        <SearchForm searchValue={searchReceipeTerm}/>
+                        <SearchForm searchValue={searchReceipeTerm} />
                         <button onClick={() => {
                             decrePageNum()
                             buttonChangeUrl()
                         }}
-                                className="btn">   {/* https://upmostly.com/tutorials/multiple-onclick-events-in-react-with-examples#call-multiple-functions */}
+                            className="btn">   {/* https://upmostly.com/tutorials/multiple-onclick-events-in-react-with-examples#call-multiple-functions */}
                             Previous Page
                         </button>
                         &nbsp;&nbsp;
@@ -354,8 +352,8 @@ const ReceipePage = (props) => {
                         }} className="btn">
                             Next Page
                         </button>
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
                         <Grid container className={classes.grid} spacing={5}>
                             {card}
                         </Grid>

@@ -261,13 +261,13 @@ const ReceipePage = (props) => {
               alt={receipe.title}
             ></img> {/* https://stackoverflow.com/questions/34097560/react-js-replace-img-src-onerror */}
 
-            <CardActionArea>
-              <CardContent>
+            {/* <CardActionArea>
+              <CardContent> */}
                 <Typography className={classes.titleHead} gutterBottom variant="h6" component="h2">
                   {receipe.title}
                 </Typography>
-              </CardContent>
-            </CardActionArea>
+              {/* </CardContent>
+            </CardActionArea> */}
           </Link>
 
           <CardActions>

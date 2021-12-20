@@ -31,7 +31,7 @@ const UserRecipe = (props) => {
                 try {
                     // const { data } = await axios.get(`http://localhost:4000/users/${props.match.params.uid}`);
                     const recipe = await axios.get(`${database}/users/recipe/${props.user._id}`)
-                    setRecipeData(recipe.likes)
+                    setRecipeData(recipe.data)
                     setLoading(false)
                 } catch (e) {
                     console.log(e)
