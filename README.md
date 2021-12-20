@@ -26,3 +26,37 @@ AWS
 
 Github repo link: 
 https://github.com/Tianqi-Yao/CS554_Final_Project_2021Fall
+
+
+
+# How to run the project
+
+## need to install
+
+install mongoDB
+
+install imagemagick
+
+install graphicsmagick
+
+install redis
+
+## Programs that need to be run in advance
+
+redis-server
+
+mongoDB
+
+## Running Projects
+
+### go to server folder
+
+npm install
+
+npm start
+
+### go to client folder
+
+npm install
+
+npm start
