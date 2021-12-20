@@ -178,7 +178,7 @@ const CreateReceipe = () => {
                     <div className="imageInput">
                         <label>
                             image:
-                            <input id="image" type="file" onChange={imageCmpFunc} />
+                            <input required id="image" type="file" onChange={imageCmpFunc} />
                         </label>
                     </div>
                     <div className="img">
