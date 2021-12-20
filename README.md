@@ -66,3 +66,6 @@ test name is testuser1@email.com  password 123456
 
 # google login
 The google login auth can only use in domain localhost, for we don't have a custom domain the firebase can't auth the domain. So the google sign can't use in the aws
+
+# how go to aws
+url: http://3.144.108.161:3000/
