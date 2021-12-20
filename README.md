@@ -60,3 +60,7 @@ npm start
 npm install
 
 npm start
+
+# about seed.js
+There are three test user in seed file and 
+test name is testuser1@email.com  password 123456
