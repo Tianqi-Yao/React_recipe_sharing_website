@@ -37,7 +37,8 @@ export default function Login() {
                 uid: newUserObj.user.uid,
                 userName: newUserObj.user.displayName
             })
-            history.push(`/userprofile/${newUserObj.user.uid}`)
+            // history.push(`/userprofile/${newUserObj.user.uid}`)
+            window.location.href = "/"
         } catch {
             setError("Failed to log in")
         }
