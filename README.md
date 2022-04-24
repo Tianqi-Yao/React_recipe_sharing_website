@@ -1,4 +1,4 @@
-# React framework based recipe sharing software
+# React framework based recipe sharing website
 
 Project​​ Description
 The project is for people sharing their recipe and finding local restaurants, which help people become better cooks in the future. People can upload their recipe and make todo list for 
